@@ -1,0 +1,44 @@
+package com.summer.mq.spring.annotation;
+
+import com.summer.mq.constant.QueueConstant;
+import com.summer.mq.spring.autoconfigure.SummerMQAutoConfiguration;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+@Target({java.lang.annotation.ElementType.TYPE})
+@Documented
+@Import(SummerMQAutoConfiguration.class)
+@Configuration
+public @interface EnableSummerMq {
+
+    /**
+     * Group name of producer.
+     */
+    String producerNamespace() default QueueConstant.DEFAULT_GROUP_NAME;
+
+    /**
+     * Set ExecutorService params -- corePoolSize
+     */
+    int producerCorePoolSize() default 4;
+
+    /**
+     * Set ExecutorService params -- maximumPoolSize
+     */
+    int producerMaximumPoolSize() default 4;
+
+    /**
+     * Set ExecutorService params -- keepAliveTime
+     */
+    long producerKeepAliveTime() default 60; //60s
+
+    /**
+     * Set ExecutorService params -- blockingQueueSize
+     */
+    int producerBlockingQueueSize() default 2000;
+
+}
