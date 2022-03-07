@@ -9,8 +9,7 @@
 
     <property name="LOG_HOME" value="${LOG_HOME_DIR}"/>
     <property name="LOG_HISTORY_HOME" value="${LOG_HOME}/history"/>
-    <property name="BIZ_LOG"
-              value="%d{HH:mm:ss.SSS} [${LOCALHOST_IP},%X{spanId},%X{traceId}] %-5level %-32.32logger{32} %X{CURRENT_METHOD_NAME} %msg%n"/>
+    <property name="BIZ_LOG" value="%d{HH:mm:ss.SSS} [${LOCALHOST_IP},%X{spanId},%X{traceId}] %-5level %-32.32logger{32} %X{CURRENT_METHOD_NAME} %msg%n"/>
 
     <!--业务日志-->
     <appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
