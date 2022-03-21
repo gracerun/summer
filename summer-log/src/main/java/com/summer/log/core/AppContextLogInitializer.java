@@ -10,6 +10,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
 
+import java.util.Enumeration;
+import java.util.Properties;
 import java.util.Random;
 
 @Slf4j
@@ -45,6 +47,21 @@ public class AppContextLogInitializer implements ApplicationContextInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         log.info(LOCALHOST_IP);
+        try {
+            printSystemProperties();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    public void printSystemProperties() {
+        final Properties properties = System.getProperties();
+        final Enumeration<?> enumeration = properties.propertyNames();
+        while (enumeration.hasMoreElements()) {
+            final Object o = enumeration.nextElement();
+            final String property = properties.getProperty((String) o);
+            log.info("{}: {}", o, property);
+        }
     }
 
     public static void logStartedSpan(TraceContext traceContext) {
