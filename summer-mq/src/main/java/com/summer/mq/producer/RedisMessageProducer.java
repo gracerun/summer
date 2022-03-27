@@ -41,7 +41,7 @@ public class RedisMessageProducer implements InitializingBean, DisposableBean {
 
     @Getter
     @Setter
-    private String producerGroup;
+    private String producerNamespace;
 
     @Getter
     @Setter
@@ -65,8 +65,8 @@ public class RedisMessageProducer implements InitializingBean, DisposableBean {
 
     private ServiceState serviceState = ServiceState.CREATE_JUST;
 
-    public RedisMessageProducer(String producerGroup, StringRedisTemplate redisTemplate) {
-        this.producerGroup = producerGroup;
+    public RedisMessageProducer(String producerNamespace, StringRedisTemplate redisTemplate) {
+        this.producerNamespace = producerNamespace;
         this.stringRedisTemplate = redisTemplate;
     }
 
@@ -84,10 +84,10 @@ public class RedisMessageProducer implements InitializingBean, DisposableBean {
 
                 this.mqClientInstance = MQClientInstance.getInstance();
 
-                boolean registerOK = mqClientInstance.registerProducer(producerGroup, this);
+                boolean registerOK = mqClientInstance.registerProducer(producerNamespace, this);
                 if (!registerOK) {
                     this.serviceState = ServiceState.CREATE_JUST;
-                    throw new MQClientException("The producer group[" + producerGroup + "] has been created before, specify another name please.", null);
+                    throw new MQClientException("The producer namespace[" + producerNamespace + "] has been created before, specify another name please.", null);
                 }
                 if (startFactory) {
                     mqClientInstance.start();
@@ -136,7 +136,7 @@ public class RedisMessageProducer implements InitializingBean, DisposableBean {
             stringRedisTemplate.executePipelined((RedisCallback<?>) (connection) -> {
                 list.forEach(m -> {
                     if (!StringUtils.hasText(m.getNamespace())) {
-                        m.setNamespace(producerGroup);
+                        m.setNamespace(producerNamespace);
                     }
                     final String queueName = nextQueueName(m);
                     final String body = JSON.toJSONString(m);

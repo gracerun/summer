@@ -12,16 +12,16 @@ import com.summer.mq.constant.QueueConstant;
  */
 public class QueueNameService {
 
-    public static String fmtTopicQueueName(String group, String topic) {
-        return group + QueueConstant.DELIMITER + topic;
+    public static String fmtTopicQueueName(String namespace, String topic) {
+        return namespace + QueueConstant.DELIMITER + topic;
     }
 
-    public static String fmtDelayQueueName(String group, int delayLevel) {
-        return group + QueueConstant.DELIMITER + QueueConstant.DELAY + DelayRule.fmtLevelName(delayLevel);
+    public static String fmtDelayQueueName(String namespace, int delayLevel) {
+        return namespace + QueueConstant.DELIMITER + QueueConstant.DELAY + DelayRule.fmtLevelName(delayLevel);
     }
 
-    public static String fmtDelayIndexQueueName(String group, int delayLevel) {
-        return group + QueueConstant.DELIMITER + QueueConstant.DELAY_INDEX + DelayRule.fmtLevelName(delayLevel);
+    public static String fmtDelayIndexQueueName(String namespace, int delayLevel) {
+        return namespace + QueueConstant.DELIMITER + QueueConstant.DELAY_INDEX + DelayRule.fmtLevelName(delayLevel);
     }
 
 }

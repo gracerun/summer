@@ -59,7 +59,7 @@ public class MessageDelayPullConsumer implements InitializingBean, DisposableBea
 
     @Getter
     @Setter
-    private String consumerGroup;
+    private String consumerNamespace;
 
     public MessageDelayPullConsumer() {
         this.registrar = new ScheduledTaskRegistrar();
@@ -68,7 +68,7 @@ public class MessageDelayPullConsumer implements InitializingBean, DisposableBea
     @Override
     public void afterPropertiesSet() throws Exception {
         final CustomizableThreadFactory scheduledThreadFactory = new CustomizableThreadFactory();
-        scheduledThreadFactory.setThreadNamePrefix(ExecutorUtil.fmtThreadNamePrefix(consumerGroup));
+        scheduledThreadFactory.setThreadNamePrefix(ExecutorUtil.fmtThreadNamePrefix(consumerNamespace));
         ScheduledExecutorService localExecutor = Executors.newScheduledThreadPool(DelayRule.DEFAULT_RULE.size(), scheduledThreadFactory);
         registrar.setScheduler(localExecutor);
         addCronTask();
@@ -88,7 +88,7 @@ public class MessageDelayPullConsumer implements InitializingBean, DisposableBea
         }
         log.info("initMessageDelayQueue start");
         for (int i = 0; i < DelayRule.DEFAULT_RULE.size(); i++) {
-            String threadNamePrefix = ExecutorUtil.fmtThreadNamePrefix(consumerGroup, i);
+            String threadNamePrefix = ExecutorUtil.fmtThreadNamePrefix(consumerNamespace, i);
             ThreadPoolExecutor threadPoolExecutor;
             if (i <= 5) {
                 threadPoolExecutor = ExecutorUtil.createExecutor(threadNamePrefix, 2, 2, 0, 2000, callerRunsPolicy);
@@ -96,7 +96,7 @@ public class MessageDelayPullConsumer implements InitializingBean, DisposableBea
                 threadPoolExecutor = ExecutorUtil.createExecutor(threadNamePrefix, 1, 1, 0, 2000, callerRunsPolicy);
             }
             delayQueueExecutorMap.put(i, threadPoolExecutor);
-            registrar.addCronTask(new TraceRunnableWrapper(new SyncConsumer(consumerGroup, i, threadPoolExecutor)), DelayRule.DEFAULT_RULE.getCronExpression(i));
+            registrar.addCronTask(new TraceRunnableWrapper(new SyncConsumer(consumerNamespace, i, threadPoolExecutor)), DelayRule.DEFAULT_RULE.getCronExpression(i));
         }
         log.info("initMessageDelayQueue end");
 

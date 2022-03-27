@@ -11,7 +11,7 @@ public @interface SummerMQMessageListener {
 
     String topic();
 
-    String consumerGroup() default QueueConstant.DEFAULT_GROUP_NAME;
+    String consumerNamespace() default QueueConstant.DEFAULT_NAMASPACE;
 
     String delayExpression() default QueueConstant.DELAY_EXPRESSION;
 

@@ -42,24 +42,24 @@ public class DelayConsumerConfiguration implements ApplicationContextAware, Smar
     public void afterSingletonsInstantiated() {
         Map<String, Object> beans = this.applicationContext.getBeansWithAnnotation(SummerMQMessageListener.class);
 
-        Set<String> groupNames = new HashSet<>();
+        Set<String> namespaces = new HashSet<>();
         if (Objects.nonNull(beans)) {
             beans.forEach((k, v) -> {
                 Class<?> clazz = AopProxyUtils.ultimateTargetClass(v);
                 SummerMQMessageListener annotation = clazz.getAnnotation(SummerMQMessageListener.class);
-                groupNames.add(this.environment.resolvePlaceholders(annotation.consumerGroup()));
+                namespaces.add(this.environment.resolvePlaceholders(annotation.consumerNamespace()));
             });
-            groupNames.forEach(this::registerContainer);
+            namespaces.forEach(this::registerContainer);
         }
     }
 
-    private void registerContainer(String groupName) {
+    private void registerContainer(String namespace) {
         String beanName = String.format("%s_%s", MessageDelayPullConsumer.class.getName(),
                 counter.incrementAndGet());
         GenericApplicationContext genericApplicationContext = (GenericApplicationContext) applicationContext;
 
         BeanDefinitionBuilder beanBuilder = BeanDefinitionBuilder.rootBeanDefinition(MessageDelayPullConsumer.class);
-        beanBuilder.addPropertyValue("consumerGroup", groupName);
+        beanBuilder.addPropertyValue("consumerNamespace", namespace);
 
         genericApplicationContext.registerBeanDefinition(beanName, beanBuilder.getBeanDefinition());
         genericApplicationContext.getBean(beanName, MessageDelayPullConsumer.class);

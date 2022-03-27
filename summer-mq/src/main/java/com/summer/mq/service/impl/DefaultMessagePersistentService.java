@@ -27,8 +27,8 @@ public class DefaultMessagePersistentService implements MessagePersistentService
     private String pageSql = "select id, optimistic, status, create_time, last_update_time, business_no, namespace, business_type, times, content, remark, next_execute_time, time, ip, create_span_id, last_update_span_id, timeout from business_msg WHERE ( status = :status and next_execute_time <= :next_execute_time ) order by id desc limit :limitStart , :limitSize";
     private String countSql = "select count(*) from business_msg WHERE (status = :status and next_execute_time <= :next_execute_time )";
 
-    private String insertSql = "insert into business_msg ( id, optimistic, status, create_time, last_update_time, business_no, namespace, business_type, times, content, next_execute_time, create_span_id, timeout ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-    private String updateSql = "update business_msg SET status = ?, create_time = ?, last_update_time = ?, business_no = ?, namespace = ?, business_type = ?, times = ?, content = ?, next_execute_time = ?, time = ?, ip = ?, create_span_id = ?, last_update_span_id = ?, timeout = ?, optimistic = optimistic + 1 where id = ? and optimistic = ?";
+    private String insertSql = "insert into business_msg ( id, optimistic, status, create_time, last_update_time, business_no, namespace, business_type, times, content, remark, next_execute_time, create_span_id, timeout ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+    private String updateSql = "update business_msg SET status = ?, create_time = ?, last_update_time = ?, business_no = ?, namespace = ?, business_type = ?, times = ?, content = ?, remark = ?, next_execute_time = ?, time = ?, ip = ?, create_span_id = ?, last_update_span_id = ?, timeout = ?, optimistic = optimistic + 1 where id = ? and optimistic = ?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -57,6 +57,10 @@ public class DefaultMessagePersistentService implements MessagePersistentService
 
     @Override
     public int save(MessageBody message) {
+        if (StringUtils.hasText(message.getRemark())) {
+            message.setRemark(message.getRemark().substring(0, Math.min(message.getRemark().length(), 80)));
+        }
+
         final int size = jdbcTemplate.update(insertSql,
                 message.getId(),
                 message.getOptimistic(),
@@ -68,6 +72,7 @@ public class DefaultMessagePersistentService implements MessagePersistentService
                 message.getBusinessType(),
                 message.getTimes(),
                 message.getContent(),
+                message.getRemark(),
                 message.getNextExecuteTime(),
                 message.getCreateSpanId(),
                 message.getTimeout());
@@ -89,6 +94,7 @@ public class DefaultMessagePersistentService implements MessagePersistentService
                 message.getBusinessType(),
                 message.getTimes(),
                 message.getContent(),
+                message.getRemark(),
                 message.getNextExecuteTime(),
                 message.getTime(),
                 message.getIp(),

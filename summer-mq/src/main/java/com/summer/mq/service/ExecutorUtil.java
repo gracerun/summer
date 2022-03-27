@@ -32,12 +32,12 @@ public class ExecutorUtil {
                 handler);
     }
 
-    public static String fmtThreadNamePrefix(String group) {
-        return group + QueueConstant.DELIMITER + QueueConstant.DELAY + "-";
+    public static String fmtThreadNamePrefix(String namespace) {
+        return namespace + QueueConstant.DELIMITER + QueueConstant.DELAY + "-";
     }
 
-    public static String fmtThreadNamePrefix(String group, int delayLevel) {
-        return group + QueueConstant.DELIMITER + QueueConstant.DELAY + DelayRule.DEFAULT_RULE.fmtLevelName(delayLevel) + "-";
+    public static String fmtThreadNamePrefix(String namespace, int delayLevel) {
+        return namespace + QueueConstant.DELIMITER + QueueConstant.DELAY + DelayRule.DEFAULT_RULE.fmtLevelName(delayLevel) + "-";
     }
 
 }

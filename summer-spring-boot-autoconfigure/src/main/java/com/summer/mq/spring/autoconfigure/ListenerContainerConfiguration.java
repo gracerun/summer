@@ -60,7 +60,7 @@ public class ListenerContainerConfiguration implements ApplicationContextAware, 
 
         BeanDefinitionBuilder beanBuilder = BeanDefinitionBuilder.rootBeanDefinition(RedisMessagePullConsumer.class);
         beanBuilder.addConstructorArgValue(this.environment.resolvePlaceholders(annotation.topic()));
-        beanBuilder.addPropertyValue("consumerGroup", this.environment.resolvePlaceholders(annotation.consumerGroup()));
+        beanBuilder.addPropertyValue("consumerNamespace", this.environment.resolvePlaceholders(annotation.consumerNamespace()));
         beanBuilder.addPropertyValue("batchRpopSize", annotation.batchRpopSize());
         beanBuilder.addPropertyValue("corePoolSize", annotation.corePoolSize());
         beanBuilder.addPropertyValue("maximumPoolSize", annotation.maximumPoolSize());

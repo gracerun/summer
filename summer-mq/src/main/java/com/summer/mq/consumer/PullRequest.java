@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @Setter
 public class PullRequest {
 
-    private String consumerGroup;
+    private String consumerNamespace;
 
     private String messageQueueName;
 
@@ -19,15 +19,15 @@ public class PullRequest {
 
     private int batchSize = 10;
 
-    public PullRequest(String consumerGroup, String messageQueueName) {
-        this.consumerGroup = consumerGroup;
+    public PullRequest(String consumerNamespace, String messageQueueName) {
+        this.consumerNamespace = consumerNamespace;
         this.messageQueueName = messageQueueName;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("consumerGroup", consumerGroup)
+                .append("consumerNamespace", consumerNamespace)
                 .append("messageQueueName", messageQueueName)
                 .append("batchPull", batchPull)
                 .append("batchSize", batchSize)

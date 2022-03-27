@@ -12,7 +12,7 @@ public interface QueueConstant {
     /**
      * 默认消息组
      */
-    String DEFAULT_GROUP_NAME = "summer.mq.queue";
+    String DEFAULT_NAMASPACE = "summer.mq.queue";
 
     /**
      * 分隔符

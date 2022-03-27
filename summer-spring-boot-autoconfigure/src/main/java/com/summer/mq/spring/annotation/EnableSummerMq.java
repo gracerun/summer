@@ -19,7 +19,7 @@ public @interface EnableSummerMq {
     /**
      * Group name of producer.
      */
-    String producerNamespace() default QueueConstant.DEFAULT_GROUP_NAME;
+    String producerNamespace() default QueueConstant.DEFAULT_NAMASPACE;
 
     /**
      * Set ExecutorService params -- corePoolSize

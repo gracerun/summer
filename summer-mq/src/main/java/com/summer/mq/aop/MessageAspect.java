@@ -81,7 +81,7 @@ public class MessageAspect {
             messageBody.setTimeout(30);
         }
         if (!StringUtils.hasText(messageBody.getNamespace())) {
-            messageBody.setNamespace(redisMessageProducer.getProducerGroup());
+            messageBody.setNamespace(redisMessageProducer.getProducerNamespace());
         }
         messageBody.setCreateSpanId(TracingHolder.getSanToString());
         return messageBody;

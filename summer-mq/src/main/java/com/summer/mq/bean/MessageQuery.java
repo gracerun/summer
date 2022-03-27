@@ -25,7 +25,7 @@ public class MessageQuery {
 
     @Getter
     @Setter
-    private Set<String> groupNames;
+    private Set<String> namespaces;
 
     @Getter
     @Setter

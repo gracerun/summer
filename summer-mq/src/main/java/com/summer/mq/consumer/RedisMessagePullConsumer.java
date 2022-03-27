@@ -93,7 +93,7 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
 
     @Getter
     @Setter
-    private String consumerGroup;
+    private String consumerNamespace;
 
     @Getter
     @Setter
@@ -138,7 +138,7 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
     public synchronized void start() throws MQClientException {
         switch (this.serviceState) {
             case CREATE_JUST:
-                queueName = QueueNameService.fmtTopicQueueName(consumerGroup, topic);
+                queueName = QueueNameService.fmtTopicQueueName(consumerNamespace, topic);
 
                 if (StringUtils.hasText(summerMQMessageListener.delayExpression())
                         && !QueueConstant.DELAY_EXPRESSION.equals(summerMQMessageListener.delayExpression())) {
@@ -166,11 +166,11 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
                 boolean registerOK = mqClientInstance.registerConsumer(queueName, this);
                 if (!registerOK) {
                     this.serviceState = ServiceState.CREATE_JUST;
-                    throw new MQClientException("The consumer group[" + queueName + "] has been created before, specify another name please.", null);
+                    throw new MQClientException("The consumer queue [" + queueName + "] has been created before, specify another name please.", null);
                 }
 
                 mqClientInstance.start();
-                executePullRequestImmediately(new PullRequest(consumerGroup, queueName).setBatchSize(batchRpopSize));
+                executePullRequestImmediately(new PullRequest(consumerNamespace, queueName).setBatchSize(batchRpopSize));
                 log.info("the consumer [{}] start OK.", queueName);
                 this.serviceState = ServiceState.RUNNING;
                 break;
