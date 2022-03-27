@@ -40,10 +40,11 @@ public class MessageConsumer implements Runnable {
     @Override
     public void run() {
         ConsumeStatus consumeStatus = ConsumeStatus.RECONSUME_LATER;
+        final Date oldNextExecuteTime = message.getNextExecuteTime();
         long startTime = System.currentTimeMillis();
         long consumeTime;
         try {
-            log.debug("queueName:{}, msgId:{}, consumerDelay:{}ms", pullRequest.getMessageQueueName(), message.getId(), (startTime - message.getNextExecuteTime().getTime()));
+            log.debug("queueName:{}, msgId:{}, consumerDelay:{}ms", pullRequest.getMessageQueueName(), message.getId(), (startTime - oldNextExecuteTime.getTime()));
             consumeStatus = redisMessagePullConsumer.messageListener.consumeMessage(message);
             consumeTime = System.currentTimeMillis() - startTime;
             log.debug("queueName:{}, msgId:{}, consumeStatus:{}, consumeTime:{}ms", pullRequest.getMessageQueueName(), message.getId(), consumeStatus, consumeTime);
@@ -54,7 +55,7 @@ public class MessageConsumer implements Runnable {
         }
 
         try {
-            int size = updateMessage(message, consumeStatus, (int) consumeTime);
+            int size = updateMessage(message, consumeStatus, (int) consumeTime, oldNextExecuteTime);
             if (size != 1) {
                 log.warn("Message Concurrent update fail msgId:{}, size:{}", message.getId(), size);
                 return;
@@ -72,7 +73,7 @@ public class MessageConsumer implements Runnable {
         }
     }
 
-    private int updateMessage(MessageBody message, ConsumeStatus consumeStatus, Integer time) {
+    private int updateMessage(MessageBody message, ConsumeStatus consumeStatus, Integer time, Date oldNextExecuteTime) {
         if (message.getTimes() != null) {
             message.setTimes(message.getTimes() + 1);
         } else {
@@ -85,8 +86,10 @@ public class MessageConsumer implements Runnable {
             if ((message.getTimes() - 1) >= delayRule.size() && !delayRule.isRepeatRetry()) {
                 message.setStatus(MessageStatusConstant.FAIL);
             } else {
-                DateTime dateTime = new DateTime().plusSeconds(delayRule.getSeconds((message.getTimes() - 1) % delayRule.size()));
-                message.setNextExecuteTime(dateTime.toDate());
+                if (oldNextExecuteTime == message.getNextExecuteTime() && oldNextExecuteTime.getTime() == message.getNextExecuteTime().getTime()) {
+                    DateTime dateTime = new DateTime().plusSeconds(delayRule.getSeconds((message.getTimes() - 1) % delayRule.size()));
+                    message.setNextExecuteTime(dateTime.toDate());
+                }
             }
         }
 
