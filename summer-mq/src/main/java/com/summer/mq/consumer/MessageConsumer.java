@@ -50,6 +50,7 @@ public class MessageConsumer implements Runnable {
             log.debug("queueName:{}, msgId:{}, consumeStatus:{}, consumeTime:{}ms", pullRequest.getMessageQueueName(), message.getId(), consumeStatus, consumeTime);
         } catch (Exception e) {
             consumeTime = System.currentTimeMillis() - startTime;
+            message.setRemark(e.getMessage());
             log.error("queueName:{}, msgId:{}, error:{}", pullRequest.getMessageQueueName(), message.getId(), e.getMessage());
             log.error(e.getMessage(), e);
         }
