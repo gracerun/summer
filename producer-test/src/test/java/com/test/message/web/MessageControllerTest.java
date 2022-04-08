@@ -26,8 +26,8 @@ public class MessageControllerTest {
                 messageBody.setBusinessNo(System.currentTimeMillis() + "");
                 messageBody.setBusinessType("msg_notify");
                 messageBody.setContent(i + "");
-//                HttpBuilder.post("http://localhost:8008/message/push").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
-                HttpBuilder.post("http://192.168.1.71:8008/message/push").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
+                HttpBuilder.post("http://localhost:8008/message/push").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
+//                HttpBuilder.post("http://192.168.1.71:8008/message/push").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
 //                TimeUnit.SECONDS.sleep(1);
             } catch (Exception e) {
             }

@@ -63,6 +63,7 @@
     </appender>
 
     <logger name="com.summer.mq" additivity="false" level="DEBUG">
+        <appender-ref ref="infoAppender"/>
         <appender-ref ref="taskAppender"/>
         <appender-ref ref="scheduledAppender"/>
     </logger>
