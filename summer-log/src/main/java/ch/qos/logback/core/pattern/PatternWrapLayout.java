@@ -27,91 +27,109 @@ public class PatternWrapLayout extends PatternLayoutBase<ILoggingEvent> {
     static final int LOG_PRE_BUILDER_SIZE = 128;
     static final String SPACE_STR = " ";
 
-    public static final Map<String, String> defaultConverterMap = new HashMap<String, String>();
+    public static final Map<String, String> DEFAULT_CONVERTER_MAP = new HashMap<>();
+    public static final Map<String, String> CONVERTER_CLASS_TO_KEY_MAP = new HashMap<>();
+
     public static final String HEADER_PREFIX = "#logback.classic pattern: ";
 
     static {
-        defaultConverterMap.putAll(Parser.DEFAULT_COMPOSITE_CONVERTER_MAP);
+        DEFAULT_CONVERTER_MAP.putAll(Parser.DEFAULT_COMPOSITE_CONVERTER_MAP);
 
-        defaultConverterMap.put("d", DateConverter.class.getName());
-        defaultConverterMap.put("date", DateConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("d", DateConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("date", DateConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(DateConverter.class.getName(), "date");
 
-        defaultConverterMap.put("r", RelativeTimeConverter.class.getName());
-        defaultConverterMap.put("relative", RelativeTimeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("r", RelativeTimeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("relative", RelativeTimeConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(RelativeTimeConverter.class.getName(), "relative");
 
-        defaultConverterMap.put("level", LevelConverter.class.getName());
-        defaultConverterMap.put("le", LevelConverter.class.getName());
-        defaultConverterMap.put("p", LevelConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("level", LevelConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("le", LevelConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("p", LevelConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(LevelConverter.class.getName(), "level");
 
-        defaultConverterMap.put("t", ThreadConverter.class.getName());
-        defaultConverterMap.put("thread", ThreadConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("t", ThreadConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("thread", ThreadConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(ThreadConverter.class.getName(), "thread");
 
-        defaultConverterMap.put("lo", LoggerConverter.class.getName());
-        defaultConverterMap.put("logger", LoggerConverter.class.getName());
-        defaultConverterMap.put("c", LoggerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("lo", LoggerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("logger", LoggerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("c", LoggerConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(LoggerConverter.class.getName(), "logger");
 
-        defaultConverterMap.put("m", MessageConverter.class.getName());
-        defaultConverterMap.put("msg", MessageConverter.class.getName());
-        defaultConverterMap.put("message", MessageConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("m", MessageConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("msg", MessageConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("message", MessageConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(MessageConverter.class.getName(), "message");
 
-        defaultConverterMap.put("C", ClassOfCallerConverter.class.getName());
-        defaultConverterMap.put("class", ClassOfCallerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("C", ClassOfCallerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("class", ClassOfCallerConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(ClassOfCallerConverter.class.getName(), "class");
 
-        defaultConverterMap.put("M", MethodOfCallerConverter.class.getName());
-        defaultConverterMap.put("method", MethodOfCallerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("M", MethodOfCallerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("method", MethodOfCallerConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(MethodOfCallerConverter.class.getName(), "method");
 
-        defaultConverterMap.put("L", LineOfCallerConverter.class.getName());
-        defaultConverterMap.put("line", LineOfCallerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("L", LineOfCallerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("line", LineOfCallerConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(LineOfCallerConverter.class.getName(), "line");
 
-        defaultConverterMap.put("F", FileOfCallerConverter.class.getName());
-        defaultConverterMap.put("file", FileOfCallerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("F", FileOfCallerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("file", FileOfCallerConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(FileOfCallerConverter.class.getName(), "file");
 
-        defaultConverterMap.put("X", MDCConverter.class.getName());
-        defaultConverterMap.put("mdc", MDCConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("X", MDCConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("mdc", MDCConverter.class.getName());
 
-        defaultConverterMap.put("ex", ThrowableProxyConverter.class.getName());
-        defaultConverterMap.put("exception", ThrowableProxyConverter.class.getName());
-        defaultConverterMap.put("rEx", RootCauseFirstThrowableProxyConverter.class.getName());
-        defaultConverterMap.put("rootException", RootCauseFirstThrowableProxyConverter.class.getName());
-        defaultConverterMap.put("throwable", ThrowableProxyConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("ex", ThrowableProxyConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("exception", ThrowableProxyConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("rEx", RootCauseFirstThrowableProxyConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("rootException", RootCauseFirstThrowableProxyConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("throwable", ThrowableProxyConverter.class.getName());
 
-        defaultConverterMap.put("xEx", ExtendedThrowableProxyConverter.class.getName());
-        defaultConverterMap.put("xException", ExtendedThrowableProxyConverter.class.getName());
-        defaultConverterMap.put("xThrowable", ExtendedThrowableProxyConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("xEx", ExtendedThrowableProxyConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("xException", ExtendedThrowableProxyConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("xThrowable", ExtendedThrowableProxyConverter.class.getName());
 
-        defaultConverterMap.put("nopex", NopThrowableInformationConverter.class.getName());
-        defaultConverterMap.put("nopexception", NopThrowableInformationConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("nopex", NopThrowableInformationConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("nopexception", NopThrowableInformationConverter.class.getName());
 
-        defaultConverterMap.put("cn", ContextNameConverter.class.getName());
-        defaultConverterMap.put("contextName", ContextNameConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("cn", ContextNameConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("contextName", ContextNameConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(ContextNameConverter.class.getName(), "contextName");
 
-        defaultConverterMap.put("caller", CallerDataConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("caller", CallerDataConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(CallerDataConverter.class.getName(), "caller");
 
-        defaultConverterMap.put("marker", MarkerConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("marker", MarkerConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(MarkerConverter.class.getName(), "marker");
 
-        defaultConverterMap.put("property", PropertyConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("property", PropertyConverter.class.getName());
 
-        defaultConverterMap.put("n", LineSeparatorConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("n", LineSeparatorConverter.class.getName());
 
-        defaultConverterMap.put("black", BlackCompositeConverter.class.getName());
-        defaultConverterMap.put("red", RedCompositeConverter.class.getName());
-        defaultConverterMap.put("green", GreenCompositeConverter.class.getName());
-        defaultConverterMap.put("yellow", YellowCompositeConverter.class.getName());
-        defaultConverterMap.put("blue", BlueCompositeConverter.class.getName());
-        defaultConverterMap.put("magenta", MagentaCompositeConverter.class.getName());
-        defaultConverterMap.put("cyan", CyanCompositeConverter.class.getName());
-        defaultConverterMap.put("white", WhiteCompositeConverter.class.getName());
-        defaultConverterMap.put("gray", GrayCompositeConverter.class.getName());
-        defaultConverterMap.put("boldRed", BoldRedCompositeConverter.class.getName());
-        defaultConverterMap.put("boldGreen", BoldGreenCompositeConverter.class.getName());
-        defaultConverterMap.put("boldYellow", BoldYellowCompositeConverter.class.getName());
-        defaultConverterMap.put("boldBlue", BoldBlueCompositeConverter.class.getName());
-        defaultConverterMap.put("boldMagenta", BoldMagentaCompositeConverter.class.getName());
-        defaultConverterMap.put("boldCyan", BoldCyanCompositeConverter.class.getName());
-        defaultConverterMap.put("boldWhite", BoldWhiteCompositeConverter.class.getName());
-        defaultConverterMap.put("highlight", HighlightingCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("black", BlackCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("red", RedCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("green", GreenCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("yellow", YellowCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("blue", BlueCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("magenta", MagentaCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("cyan", CyanCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("white", WhiteCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("gray", GrayCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("boldRed", BoldRedCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("boldGreen", BoldGreenCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("boldYellow", BoldYellowCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("boldBlue", BoldBlueCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("boldMagenta", BoldMagentaCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("boldCyan", BoldCyanCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("boldWhite", BoldWhiteCompositeConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("highlight", HighlightingCompositeConverter.class.getName());
 
-        defaultConverterMap.put("lsn", LocalSequenceNumberConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("lsn", LocalSequenceNumberConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(LocalSequenceNumberConverter.class.getName(), "lsn");
+
+        DEFAULT_CONVERTER_MAP.put("prefix", PrefixCompositeConverter.class.getName());
 
     }
 
@@ -121,7 +139,7 @@ public class PatternWrapLayout extends PatternLayoutBase<ILoggingEvent> {
 
     @Override
     public Map<String, String> getDefaultConverterMap() {
-        return defaultConverterMap;
+        return DEFAULT_CONVERTER_MAP;
     }
 
     @Override
@@ -155,11 +173,11 @@ public class PatternWrapLayout extends PatternLayoutBase<ILoggingEvent> {
 
     //处理日志换行问题
     private String formatWrap(StringBuilder strBuilder, StringBuilder logPre) {
-        int index = -1;
+        int index;
         if (strBuilder.length() != 0 && (index = strBuilder.indexOf(CoreConstants.LINE_SEPARATOR)) != -1 && index != strBuilder.length() - 1) {
             StringBuilder newStrBuilder = new StringBuilder(strBuilder.length() + BIG_STRING_BUILDER_SIZE);
             newStrBuilder.append(strBuilder.substring(0, index + 1));
-            int lastIndex = -1;
+            int lastIndex;
             while ((lastIndex = strBuilder.indexOf(CoreConstants.LINE_SEPARATOR, index + 1)) != -1) {
                 newStrBuilder.append(logPre);
                 newStrBuilder.append(strBuilder.substring(index + 1, lastIndex + 1));

@@ -1,4 +1,4 @@
-package ch.qos.logback.classic.encoder;
+package com.summer.log.encoder;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.pattern.PatternLayoutEncoderBase;
@@ -17,9 +17,9 @@ public class PatternWrapLayoutEncoder extends PatternLayoutEncoderBase<ILoggingE
     @Override
     public void start() {
         PatternWrapLayout patternLayout = new PatternWrapLayout();
-        patternLayout.setContext(context);
-        patternLayout.setPattern(getPattern());
-        patternLayout.setOutputPatternAsHeader(outputPatternAsHeader);
+        patternLayout.setContext(this.context);
+        patternLayout.setPattern(this.getPattern());
+        patternLayout.setOutputPatternAsHeader(this.outputPatternAsHeader);
         patternLayout.start();
         this.layout = patternLayout;
         super.start();

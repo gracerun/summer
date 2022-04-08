@@ -1,7 +1,7 @@
 package com.summer.mq.consumer;
 
 import com.summer.log.core.IpUtil;
-import com.summer.log.core.TracingHolder;
+import com.summer.log.core.TracerHolder;
 import com.summer.mq.bean.DelayRule;
 import com.summer.mq.bean.MessageBody;
 import com.summer.mq.constant.ConsumeStatus;
@@ -96,7 +96,7 @@ public class MessageConsumer implements Runnable {
 
         message.setIp(IpUtil.getIp());
         message.setTime(time);
-        message.setLastUpdateSpanId(TracingHolder.getSanToString());
+        message.setLastUpdateSpanId(TracerHolder.getSanToString());
         message.setLastUpdateTime(new Date());
 
         if (Objects.nonNull(redisMessagePullConsumer.getMessagePersistentService()) && Boolean.TRUE.equals(message.getPersistent())) {

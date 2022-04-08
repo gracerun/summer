@@ -1,11 +1,8 @@
 package com.summer.util;
 
-import brave.Tracing;
 import brave.baggage.BaggageFields;
-import brave.propagation.CurrentTraceContext;
-import brave.propagation.TraceContext;
 import ch.qos.logback.classic.Level;
-import com.summer.log.core.TracingHolder;
+import com.summer.log.core.TracerHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.*;
@@ -27,6 +24,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import org.springframework.cloud.sleuth.CurrentTraceContext;
+import org.springframework.cloud.sleuth.TraceContext;
+import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -176,14 +176,14 @@ public class HttpUtil {
     }
 
     public static void setTracerHeader(RequestBuilder requestBuilder) {
-        Tracing tracing = TracingHolder.getTracing();
-        if (tracing != null) {
-            CurrentTraceContext currentTraceContext = tracing.currentTraceContext();
-            TraceContext traceContext = currentTraceContext.get();
+        final Tracer tracer = TracerHolder.getTracer();
+        if (tracer != null) {
+            final CurrentTraceContext currentTraceContext = tracer.currentTraceContext();
+            TraceContext traceContext = currentTraceContext.context();
             if (traceContext != null) {
-                requestBuilder.addHeader(BaggageFields.TRACE_ID.name(), traceContext.traceIdString());
-                requestBuilder.addHeader(BaggageFields.SPAN_ID.name(), traceContext.spanIdString());
-                requestBuilder.addHeader(BaggageFields.PARENT_ID.name(), traceContext.parentIdString());
+                requestBuilder.addHeader(BaggageFields.TRACE_ID.name(), traceContext.traceId());
+                requestBuilder.addHeader(BaggageFields.SPAN_ID.name(), traceContext.spanId());
+                requestBuilder.addHeader(BaggageFields.PARENT_ID.name(), traceContext.parentId());
             }
         }
     }

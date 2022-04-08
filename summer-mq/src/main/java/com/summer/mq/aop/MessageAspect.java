@@ -3,7 +3,7 @@
 package com.summer.mq.aop;
 
 import cn.hutool.core.util.IdUtil;
-import com.summer.log.core.TracingHolder;
+import com.summer.log.core.TracerHolder;
 import com.summer.mq.bean.MessageBody;
 import com.summer.mq.constant.MessageStatusConstant;
 import com.summer.mq.event.MessageEvent;
@@ -83,7 +83,7 @@ public class MessageAspect {
         if (!StringUtils.hasText(messageBody.getNamespace())) {
             messageBody.setNamespace(redisMessageProducer.getProducerNamespace());
         }
-        messageBody.setCreateSpanId(TracingHolder.getSanToString());
+        messageBody.setCreateSpanId(TracerHolder.getSanToString());
         return messageBody;
     }
 

@@ -11,7 +11,7 @@ public @interface SummerMQMessageListener {
 
     String topic();
 
-    String consumerNamespace() default QueueConstant.DEFAULT_NAMASPACE;
+    String consumerNamespace() default "${spring.profiles.active:" + QueueConstant.DEFAULT_NAMASPACE + "}";
 
     String delayExpression() default QueueConstant.DELAY_EXPRESSION;
 

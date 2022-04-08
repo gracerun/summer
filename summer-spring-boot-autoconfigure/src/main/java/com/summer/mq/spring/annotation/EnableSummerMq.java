@@ -19,7 +19,7 @@ public @interface EnableSummerMq {
     /**
      * Group name of producer.
      */
-    String producerNamespace() default QueueConstant.DEFAULT_NAMASPACE;
+    String producerNamespace() default "${spring.profiles.active:" + QueueConstant.DEFAULT_NAMASPACE + "}";
 
     /**
      * Set ExecutorService params -- corePoolSize
