@@ -31,11 +31,6 @@ public class MsgNotifyConsumer implements MessageListener {
             log.error(e.getMessage(), e);
         }
 
-        if (msg.getTimes() <= 7) {
-            return ConsumeStatus.RECONSUME_LATER;
-        } else {
-            return ConsumeStatus.CONSUME_SUCCESS;
-        }
-
+        return ConsumeStatus.CONSUME_SUCCESS;
     }
 }

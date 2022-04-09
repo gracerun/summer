@@ -36,10 +36,10 @@ public class MessageControllerTest {
 
     @Test
     public void pushMessage2() throws IOException, InterruptedException {
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 100; i++) {
             final MessageBody messageBody = new MessageBody();
             messageBody.setBusinessNo(System.currentTimeMillis() + "");
-            messageBody.setBusinessType("pay_notify");
+            messageBody.setBusinessType("msg_notify");
             messageBody.setContent(i + "");
             HttpBuilder.post("http://localhost:8008/message/push").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
 //            TimeUnit.SECONDS.sleep(1);
