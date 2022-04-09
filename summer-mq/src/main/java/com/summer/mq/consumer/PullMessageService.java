@@ -1,6 +1,8 @@
 
 package com.summer.mq.consumer;
 
+import com.summer.log.constant.LogCategoryConstant;
+import com.summer.log.core.TraceRunnableWrapper;
 import com.summer.mq.factory.MQClientInstance;
 import com.summer.mq.util.ThreadUtils;
 import lombok.Getter;
@@ -94,6 +96,6 @@ public class PullMessageService implements Runnable, DisposableBean {
     }
 
     public void start() {
-        pullExecutor.execute(this);
+        pullExecutor.execute(new TraceRunnableWrapper(this, null, LogCategoryConstant.DEFAULT));
     }
 }
