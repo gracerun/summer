@@ -1,6 +1,6 @@
 package com.summer.mq.consumer;
 
-import com.summer.log.core.IpUtil;
+import com.summer.log.util.IpUtil;
 import com.summer.log.core.TracerHolder;
 import com.summer.mq.bean.DelayRule;
 import com.summer.mq.bean.MessageBody;

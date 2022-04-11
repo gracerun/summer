@@ -2,8 +2,10 @@ package com.summer.log.core;
 
 import brave.baggage.BaggageFields;
 import brave.propagation.TraceContext;
+import com.summer.log.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
@@ -35,6 +37,7 @@ public class AppContextLogInitializer implements ApplicationContextInitializer {
             }
         }
 
+        System.setProperty(LoggingSystem.SYSTEM_PROPERTY, LogbackCategoryLoggingSystem.class.getName());
         initSpan();
     }
 
