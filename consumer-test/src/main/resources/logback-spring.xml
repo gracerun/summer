@@ -19,10 +19,10 @@
             <fileNamePattern>${LOG_HISTORY_HOME}/info%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>${MAX_HISTORY}</maxHistory>
         </rollingPolicy>
-        <encoder class="com.summer.log.encoder.PatternWrapLayoutEncoder">
+        <encoder>
             <pattern>${BIZ_LOG}</pattern>
         </encoder>
-        <filter class="com.summer.log.filter.LogCategoryFilter">
+        <filter>
             <value>DEFAULT</value>
         </filter>
     </appender>
@@ -34,10 +34,10 @@
             <fileNamePattern>${LOG_HISTORY_HOME}/task%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>${MAX_HISTORY}</maxHistory>
         </rollingPolicy>
-        <encoder class="com.summer.log.encoder.PatternWrapLayoutEncoder">
+        <encoder>
             <pattern>${BIZ_LOG}</pattern>
         </encoder>
-        <filter class="com.summer.log.filter.LogCategoryFilter">
+        <filter>
             <value>TASK</value>
         </filter>
     </appender>
@@ -49,16 +49,16 @@
             <fileNamePattern>${LOG_HISTORY_HOME}/scheduled%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>${MAX_HISTORY}</maxHistory>
         </rollingPolicy>
-        <encoder class="com.summer.log.encoder.PatternWrapLayoutEncoder">
+        <encoder>
             <pattern>${BIZ_LOG}</pattern>
         </encoder>
-        <filter class="com.summer.log.filter.LogCategoryFilter">
+        <filter>
             <value>SCHEDULED</value>
         </filter>
     </appender>
 
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="com.summer.log.encoder.PatternWrapLayoutEncoder">
+        <encoder>
             <pattern>${BIZ_LOG}</pattern>
         </encoder>
     </appender>

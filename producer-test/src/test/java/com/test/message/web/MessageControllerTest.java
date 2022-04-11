@@ -70,7 +70,6 @@ public class MessageControllerTest {
     static class EExecute implements Runnable {
         CountDownLatch countDownLatch;
 
-
         public EExecute(CountDownLatch countDownLatch) {
             this.countDownLatch = countDownLatch;
         }

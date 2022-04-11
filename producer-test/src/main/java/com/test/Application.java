@@ -20,9 +20,11 @@ public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+
         new Thread(new TraceRunnableWrapper(() -> {
             final RuntimeException e = new RuntimeException("异常测试");
             log.error(e.getMessage(), e);
         })).start();
+
     }
 }
