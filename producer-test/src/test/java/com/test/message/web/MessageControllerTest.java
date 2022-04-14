@@ -19,6 +19,16 @@ public class MessageControllerTest {
     protected static final RequestConfig config = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(10000).setConnectionRequestTimeout(2000).build();
 
     @Test
+    public void testLog() throws IOException {
+        final MessageBody messageBody = new MessageBody();
+        messageBody.setBusinessNo(System.currentTimeMillis() + "");
+        messageBody.setBusinessType("msg_notify");
+        messageBody.setContent("测试消息");
+//        HttpBuilder.post("http://localhost:8008/message/log").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
+        HttpBuilder.post("http://localhost:8009/message/log").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
+    }
+
+    @Test
     public void pushMessage() {
         for (int i = 0; i < 1; i++) {
             try {
@@ -27,6 +37,7 @@ public class MessageControllerTest {
                 messageBody.setBusinessType("msg_notify");
                 messageBody.setContent(i + "测试消息");
                 HttpBuilder.post("http://localhost:8008/message/push").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
+//                HttpBuilder.post("http://192.168.1.178:8008/message/push").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
 //                HttpBuilder.post("http://192.168.1.71:8008/message/push").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
 //                TimeUnit.SECONDS.sleep(1);
             } catch (Exception e) {

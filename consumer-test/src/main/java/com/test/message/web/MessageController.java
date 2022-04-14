@@ -1,8 +1,6 @@
 package com.test.message.web;
 
 import com.summer.mq.bean.MessageBody;
-import com.summer.mq.producer.SummerMQTemplate;
-import com.test.message.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,26 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/message")
-public class MessageController implements MessageInterface {
-
-    @Autowired(required = false)
-    private SummerMQTemplate summerMQTemplate;
+public class MessageController {
 
     @Autowired
-    private BaseService baseService;
+    private MessageInterface messageInterface;
 
-    @Override
     @PostMapping("/push")
     public ResponseEntity push(@RequestBody MessageBody messageBody) {
-        summerMQTemplate.sendAndSave(messageBody);
-        return ResponseEntity.ok("发送成功");
+        return messageInterface.push(messageBody);
     }
 
-    @Override
     @PostMapping("/log")
     public ResponseEntity log(@RequestBody MessageBody messageBody) {
-        baseService.print();
-        return ResponseEntity.ok("发送成功");
+        return messageInterface.log(messageBody);
     }
 
 }
