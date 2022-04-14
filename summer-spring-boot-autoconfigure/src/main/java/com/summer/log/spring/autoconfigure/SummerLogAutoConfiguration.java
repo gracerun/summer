@@ -1,5 +1,6 @@
 package com.summer.log.spring.autoconfigure;
 
+import com.summer.log.aop.LoggingAspect;
 import com.summer.log.aop.ScheduledLogAspect;
 import com.summer.log.core.TracerHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,12 @@ public class SummerLogAutoConfiguration {
     public ScheduledLogAspect scheduledLogAspect() {
         log.info("Init ScheduledLogAspect");
         return new ScheduledLogAspect();
+    }
+
+    @Bean
+    public LoggingAspect loggingAspect() {
+        log.info("Init LoggingAspect");
+        return new LoggingAspect();
     }
 
 }

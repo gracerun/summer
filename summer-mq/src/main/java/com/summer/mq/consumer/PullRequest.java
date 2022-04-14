@@ -1,6 +1,7 @@
 
 package com.summer.mq.consumer;
 
+import com.summer.log.util.NotNullStringStyle;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -26,11 +27,6 @@ public class PullRequest {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("consumerNamespace", consumerNamespace)
-                .append("messageQueueName", messageQueueName)
-                .append("batchPull", batchPull)
-                .append("batchSize", batchSize)
-                .toString();
+        return ToStringBuilder.reflectionToString(this, NotNullStringStyle.getSytle());
     }
 }

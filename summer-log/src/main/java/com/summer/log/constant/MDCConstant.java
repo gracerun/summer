@@ -12,7 +12,7 @@ public interface MDCConstant {
     /**
      * 方法名
      */
-    String METHOD_NAME = "METHOD_NAME-";
+    String METHOD_NAME = "METHOD_NAME_";
 
     /**
      * 当前方法名

@@ -35,7 +35,7 @@ public class TraceRunnableWrapper implements Runnable {
         if (StringUtils.hasText(logCategory)) {
             this.logCategory = logCategory;
         } else {
-            this.logCategory = LogCategoryConstant.TASK;
+            this.logCategory = LogCategoryConstant.ASYNC;
         }
         if (Objects.nonNull(TracerHolder.getTracer())) {
             this.delegate = new TraceRunnable(TracerHolder.getTracer(), TracerHolder.getSpanNamer(), delegate, name);

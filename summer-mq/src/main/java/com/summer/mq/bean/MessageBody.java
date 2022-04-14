@@ -1,10 +1,11 @@
 package com.summer.mq.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.summer.log.util.NotNullStringStyle;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Date;
 
@@ -17,7 +18,6 @@ import java.util.Date;
  */
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode(callSuper = false)
 public class MessageBody {
 
@@ -114,4 +114,8 @@ public class MessageBody {
      */
     private Integer timeout;
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, NotNullStringStyle.getSytle());
+    }
 }

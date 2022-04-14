@@ -21,6 +21,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <spring-boot.version>2.6.3</spring-boot.version>
         <spring-cloud.version>2021.0.1</spring-cloud.version>
+        <spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>
         <fastjson.version>1.2.70</fastjson.version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
         <joda.version>2.9.9</joda.version>
@@ -43,6 +44,14 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

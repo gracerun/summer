@@ -15,9 +15,9 @@ public interface LogCategoryConstant {
     String DEFAULT = "DEFAULT";
 
     /**
-     * 任务
+     * 异步
      */
-    String TASK = "TASK";
+    String ASYNC = "ASYNC";
 
     /**
      * 定时
