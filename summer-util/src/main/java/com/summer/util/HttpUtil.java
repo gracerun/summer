@@ -123,34 +123,34 @@ public class HttpUtil {
     }
 
     public static <T> T execute(RequestBuilder requestBuilder, final ResponseHandler<? extends T> responseHandler, Level headerLogLevel) throws IOException {
-        THREAD_LOCAL.set(headerLogLevel);
-        HttpUtil.setTracerHeader(requestBuilder);
-        HttpEntity entity = requestBuilder.getEntity();
-
-        RequestConfig config = requestBuilder.getConfig();
-        if (config != null) {
-            HttpHost proxy = config.getProxy();
-            if (proxy != null) {
-                log.info(">> proxy host: {}", proxy);
-            }
-        }
-        HttpUriRequest request = requestBuilder.build();
-
-        if (entity != null) {
-            if (entity.getContentType() != null && !request.containsHeader(
-                    HttpHeaders.CONTENT_TYPE)) {
-                request.addHeader(entity.getContentType());
-            }
-            if (entity.getContentEncoding() != null && !request.containsHeader(
-                    HttpHeaders.CONTENT_ENCODING)) {
-                request.addHeader(entity.getContentEncoding());
-            }
-        }
-
-        log.info(">> {}", request.getRequestLine());
-        printHeader(">>", request.getAllHeaders());
-        log.info(">> ");
         try {
+            THREAD_LOCAL.set(headerLogLevel);
+            HttpUtil.setTracerHeader(requestBuilder);
+            HttpEntity entity = requestBuilder.getEntity();
+
+            RequestConfig config = requestBuilder.getConfig();
+            if (config != null) {
+                HttpHost proxy = config.getProxy();
+                if (proxy != null) {
+                    log.info(">> proxy host: {}", proxy);
+                }
+            }
+            HttpUriRequest request = requestBuilder.build();
+
+            if (entity != null) {
+                if (entity.getContentType() != null && !request.containsHeader(
+                        HttpHeaders.CONTENT_TYPE)) {
+                    request.addHeader(entity.getContentType());
+                }
+                if (entity.getContentEncoding() != null && !request.containsHeader(
+                        HttpHeaders.CONTENT_ENCODING)) {
+                    request.addHeader(entity.getContentEncoding());
+                }
+            }
+
+            log.info(">> {}", request.getRequestLine());
+            printHeader(">>", request.getAllHeaders());
+            log.info(">> ");
             return httpClient.execute(request, responseHandler);
         } finally {
             THREAD_LOCAL.remove();

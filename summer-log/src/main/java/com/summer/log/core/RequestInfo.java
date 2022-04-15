@@ -5,13 +5,13 @@ import lombok.Getter;
 @Getter
 public class RequestInfo {
 
-    String remoteHost;
-    String requestType;
+    String ip;
+    String scheme;
 
-    public RequestInfo(String remoteHost, String requestType) {
+    public RequestInfo(String ip, String scheme) {
         super();
-        this.remoteHost = remoteHost;
-        this.requestType = requestType;
+        this.ip = ip;
+        this.scheme = scheme;
     }
 
 }

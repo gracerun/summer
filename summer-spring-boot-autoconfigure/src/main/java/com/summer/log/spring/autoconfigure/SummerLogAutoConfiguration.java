@@ -1,7 +1,7 @@
 package com.summer.log.spring.autoconfigure;
 
+import com.summer.log.aop.LogSchedulingAspect;
 import com.summer.log.aop.LoggingAspect;
-import com.summer.log.aop.ScheduledLogAspect;
 import com.summer.log.core.TracerHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +33,9 @@ public class SummerLogAutoConfiguration {
     }
 
     @Bean
-    public ScheduledLogAspect scheduledLogAspect() {
-        log.info("Init ScheduledLogAspect");
-        return new ScheduledLogAspect();
+    public LogSchedulingAspect logSchedulingAspect() {
+        log.info("Init LogSchedulingAspect");
+        return new LogSchedulingAspect();
     }
 
     @Bean
