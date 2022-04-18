@@ -9,6 +9,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.MDC;
 
+import java.util.Objects;
+
 /**
  * 设置定时日志类别
  *
@@ -19,23 +21,21 @@ import org.slf4j.MDC;
 @Aspect
 public class LogSchedulingAspect {
 
-    private static final Integer INDEX_INIT_VALUE = 0;
-
-    private static final ThreadLocal<Integer> METHOD_LEVEL = ThreadLocal.withInitial(() -> INDEX_INIT_VALUE);
+    private static final ThreadLocal<String> categoryNameHolder = new ThreadLocal<>();
 
     @Around("execution (@org.springframework.scheduling.annotation.Scheduled  * *.*(..))")
     public Object aroundAdvice(ProceedingJoinPoint pjp) throws Throwable {
-        final Integer methodLevel = METHOD_LEVEL.get();
+        final String categoryName = categoryNameHolder.get();
         try {
-            if (INDEX_INIT_VALUE.equals(methodLevel)) {
-                METHOD_LEVEL.set(methodLevel + 1);
+            if (Objects.isNull(categoryName)) {
+                categoryNameHolder.set(LogCategoryConstant.SCHEDULED);
                 MDC.put(LogCategoryFilter.LOG_CATEGORY_NAME, LogCategoryConstant.SCHEDULED);
             }
             return pjp.proceed();
         } finally {
-            if (INDEX_INIT_VALUE.equals(methodLevel)) {
+            if (Objects.isNull(categoryName)) {
                 MDC.remove(LogCategoryFilter.LOG_CATEGORY_NAME);
-                METHOD_LEVEL.set(methodLevel);
+                categoryNameHolder.remove();
             }
         }
     }

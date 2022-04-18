@@ -37,7 +37,7 @@ import java.util.Objects;
 @Slf4j
 public class LoggingAspect {
 
-    private static final ThreadLocal<MethodLoggingInfo> loggingInfoHolder = new ThreadLocal();
+    private static final ThreadLocal<MethodLoggingInfo> methodLoggingInfoHolder = new ThreadLocal();
 
     @Around("@within(com.summer.log.annotation.Logging) || @annotation(com.summer.log.annotation.Logging)")
     public Object aroundAdvice(ProceedingJoinPoint pjp) throws Throwable {
@@ -47,6 +47,7 @@ public class LoggingAspect {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         MethodLoggingInfo loggingInfo = createMethodLoggingIfNecessary(signature, pjp);
         try {
+            printStartLog(loggingInfo, pjp);
             Object retVal = pjp.proceed();
             printEndLog(loggingInfo, retVal);
             return retVal;
@@ -58,6 +59,16 @@ public class LoggingAspect {
         }
     }
 
+    private void printStartLog(MethodLoggingInfo loggingInfo, ProceedingJoinPoint pjp) {
+        if (Objects.isNull(loggingInfo.oldLoggingInfo)) {
+            RequestInfo requestInfo = getRequestInfo();
+            if (Objects.nonNull(requestInfo)) {
+                loggingInfo.targetLog.info("requestIp:{}, scheme:{}", requestInfo.getIp(), requestInfo.getScheme());
+            }
+        }
+        loggingInfo.getTargetLog().info("begin - {}", Arrays.toString(pjp.getArgs()));
+    }
+
     private void printEndLog(MethodLoggingInfo loggingInfo, Object retVal) {
         if (Void.TYPE != loggingInfo.getReturnType()) {
             loggingInfo.targetLog.info("end {}ms {}", loggingInfo.getTotalTimeMillis(), retVal);
@@ -67,16 +78,27 @@ public class LoggingAspect {
     }
 
     private void printThrowable(MethodLoggingInfo loggingInfo, Throwable e) {
+        if (printOn(loggingInfo, e)) {
+            if (Objects.nonNull(loggingInfo.oldLoggingInfo)) {
+                loggingInfo.oldLoggingInfo.throwable = e;
+            }
+            if (loggingInfo.throwable != e) {
+                loggingInfo.targetLog.error(e.getMessage(), e);
+            }
+        }
+    }
+
+    private boolean printOn(MethodLoggingInfo loggingInfo, Throwable e) {
         if (Objects.nonNull(loggingInfo.logging) && !ObjectUtils.isEmpty(loggingInfo.logging.printFor())) {
             final Class<? extends Throwable>[] classes = loggingInfo.logging.printFor();
             for (int i = 0; i < classes.length; i++) {
                 if (classes[i].isInstance(e)) {
-                    loggingInfo.targetLog.error(e.getMessage());
-                    break;
+                    return true;
                 }
             }
+            return false;
         } else {
-            loggingInfo.targetLog.error(e.getMessage());
+            return true;
         }
     }
 
@@ -89,13 +111,27 @@ public class LoggingAspect {
         }
         MethodLoggingInfo loggingInfo = new MethodLoggingInfo(logging, targetLog, signature);
         loggingInfo.bindToThread();
-        loggingInfo.getTargetLog().info("begin - {}", Arrays.toString(pjp.getArgs()));
         return loggingInfo;
     }
 
     protected void cleanupMethodLoggingInfo(@Nullable MethodLoggingInfo methodLoggingInfo) {
         if (methodLoggingInfo != null) {
             methodLoggingInfo.restoreThreadLocalStatus();
+        }
+    }
+
+    /**
+     * 获取当前请求IP和请求接口类型
+     *
+     * @return
+     */
+    private RequestInfo getRequestInfo() {
+        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
+        if (sra != null && sra.getRequest() != null) {
+            return new RequestInfo(NetworkUtil.getIpAddress(sra.getRequest()), sra.getRequest().getScheme());
+        } else {
+            return null;
         }
     }
 
@@ -109,6 +145,8 @@ public class LoggingAspect {
         private final Logger targetLog;
 
         private final StopWatch stopWatch;
+
+        private Throwable throwable;
 
         @Nullable
         private MethodLoggingInfo oldLoggingInfo;
@@ -146,40 +184,18 @@ public class LoggingAspect {
 
         private void bindToThread() {
             stopWatch.start();
-            this.oldLoggingInfo = loggingInfoHolder.get();
+            this.oldLoggingInfo = methodLoggingInfoHolder.get();
             MDC.put(MDCConstant.CURRENT_METHOD_NAME, getMethodName());
-            if (Objects.isNull(oldLoggingInfo)) {
-                RequestInfo requestInfo = getRequestInfo();
-                if (Objects.nonNull(requestInfo)) {
-                    targetLog.info("requestIp:{}, scheme:{}", requestInfo.getIp(), requestInfo.getScheme());
-                }
-            }
-            loggingInfoHolder.set(this);
-
+            methodLoggingInfoHolder.set(this);
         }
 
         private void restoreThreadLocalStatus() {
-            loggingInfoHolder.set(this.oldLoggingInfo);
+            methodLoggingInfoHolder.set(this.oldLoggingInfo);
             if (Objects.nonNull(oldLoggingInfo)) {
                 MDC.put(MDCConstant.CURRENT_METHOD_NAME, oldLoggingInfo.getMethodName());
             }
             if (stopWatch.isRunning()) {
                 stopWatch.stop();
-            }
-        }
-
-        /**
-         * 获取当前请求IP和请求接口类型
-         *
-         * @return
-         */
-        private RequestInfo getRequestInfo() {
-            RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-            ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-            if (sra != null && sra.getRequest() != null) {
-                return new RequestInfo(NetworkUtil.getIpAddress(sra.getRequest()), sra.getRequest().getScheme());
-            } else {
-                return null;
             }
         }
 
