@@ -10,11 +10,6 @@ package com.summer.log.constant;
 public interface MDCConstant {
 
     /**
-     * 方法名
-     */
-    String METHOD_NAME = "METHOD_NAME_";
-
-    /**
      * 当前方法名
      */
     String CURRENT_METHOD_NAME = "CURRENT_METHOD_NAME";

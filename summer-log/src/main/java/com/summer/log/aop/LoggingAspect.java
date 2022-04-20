@@ -39,7 +39,7 @@ import java.util.Objects;
 @Slf4j
 public class LoggingAspect {
 
-    private static final ThreadLocal<MethodLoggingInfo> methodLoggingInfoHolder = new ThreadLocal();
+    private static final ThreadLocal<LoggingInfo> loggingInfoHolder = new ThreadLocal();
 
     @Around("@within(com.summer.log.annotation.Logging) || @annotation(com.summer.log.annotation.Logging)")
     public Object aroundAdvice(ProceedingJoinPoint pjp) throws Throwable {
@@ -47,7 +47,7 @@ public class LoggingAspect {
             return pjp.proceed();
         }
 
-        MethodLoggingInfo loggingInfo = createMethodLoggingIfNecessary(pjp);
+        LoggingInfo loggingInfo = createLoggingIfNecessary(pjp);
         try {
             printStartLog(loggingInfo, pjp);
             Object retVal = pjp.proceed();
@@ -57,11 +57,11 @@ public class LoggingAspect {
             printThrowable(loggingInfo, e);
             throw e;
         } finally {
-            cleanupMethodLoggingInfo(loggingInfo);
+            cleanupLoggingInfo(loggingInfo);
         }
     }
 
-    private void printStartLog(MethodLoggingInfo loggingInfo, ProceedingJoinPoint pjp) {
+    private void printStartLog(LoggingInfo loggingInfo, ProceedingJoinPoint pjp) {
         if (Objects.isNull(loggingInfo.oldLoggingInfo)) {
             RequestInfo requestInfo = getRequestInfo();
             if (Objects.nonNull(requestInfo)) {
@@ -71,7 +71,7 @@ public class LoggingAspect {
         log(loggingInfo, "begin - {}", Arrays.toString(pjp.getArgs()));
     }
 
-    private void printEndLog(MethodLoggingInfo loggingInfo, Object retVal) {
+    private void printEndLog(LoggingInfo loggingInfo, Object retVal) {
         if (Void.TYPE != loggingInfo.getReturnType()) {
             log(loggingInfo, "end {}ms {}", loggingInfo.getTotalTimeMillis(), retVal);
         } else {
@@ -79,7 +79,7 @@ public class LoggingAspect {
         }
     }
 
-    private void printThrowable(MethodLoggingInfo loggingInfo, Throwable e) {
+    private void printThrowable(LoggingInfo loggingInfo, Throwable e) {
         if (printCondition(loggingInfo, e)) {
             if (Objects.nonNull(loggingInfo.oldLoggingInfo)) {
                 loggingInfo.oldLoggingInfo.throwable = e;
@@ -90,11 +90,11 @@ public class LoggingAspect {
         }
     }
 
-    private boolean printCondition(MethodLoggingInfo loggingInfo, Throwable e) {
+    private boolean printCondition(LoggingInfo loggingInfo, Throwable e) {
         if (Objects.nonNull(loggingInfo.logging) && !ObjectUtils.isEmpty(loggingInfo.logging.throwableLog())) {
             final ThrowableLog[] throwableLogs = loggingInfo.logging.throwableLog();
             for (int i = 0; i < throwableLogs.length; i++) {
-                if (throwableLogs[i].printThrowable().isInstance(e)) {
+                if (throwableLogs[i].throwable().isInstance(e)) {
                     return true;
                 }
             }
@@ -104,7 +104,7 @@ public class LoggingAspect {
         }
     }
 
-    private void log(MethodLoggingInfo loggingInfo, String format, Object... arguments) {
+    private void log(LoggingInfo loggingInfo, String format, Object... arguments) {
         switch (loggingInfo.logging.level()) {
             case INFO:
                 loggingInfo.targetLog.info(format, arguments);
@@ -124,7 +124,7 @@ public class LoggingAspect {
         }
     }
 
-    protected MethodLoggingInfo createMethodLoggingIfNecessary(ProceedingJoinPoint pjp) {
+    protected LoggingInfo createLoggingIfNecessary(ProceedingJoinPoint pjp) {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         final Class<?> declaringClass = signature.getMethod().getDeclaringClass();
 
@@ -140,14 +140,14 @@ public class LoggingAspect {
             targetLog = LoggerFactory.getLogger(declaringClass);
         }
 
-        MethodLoggingInfo loggingInfo = new MethodLoggingInfo(logging, targetLog, signature);
+        LoggingInfo loggingInfo = new LoggingInfo(logging, targetLog, signature);
         loggingInfo.bindToThread();
         return loggingInfo;
     }
 
-    protected void cleanupMethodLoggingInfo(@Nullable MethodLoggingInfo methodLoggingInfo) {
-        if (methodLoggingInfo != null) {
-            methodLoggingInfo.restoreThreadLocalStatus();
+    protected void cleanupLoggingInfo(@Nullable LoggingInfo loggingInfo) {
+        if (loggingInfo != null) {
+            loggingInfo.restoreThreadLocalStatus();
         }
     }
 
@@ -166,7 +166,11 @@ public class LoggingAspect {
         }
     }
 
-    protected static final class MethodLoggingInfo {
+    public static LoggingInfo currentLoggingInfo() {
+        return loggingInfoHolder.get();
+    }
+
+    public static final class LoggingInfo {
 
         @Nullable
         private final Logging logging;
@@ -180,9 +184,9 @@ public class LoggingAspect {
         private Throwable throwable;
 
         @Nullable
-        private MethodLoggingInfo oldLoggingInfo;
+        private LoggingInfo oldLoggingInfo;
 
-        public MethodLoggingInfo(@Nullable Logging logging, Logger targetLog, MethodSignature signature) {
+        public LoggingInfo(@Nullable Logging logging, Logger targetLog, MethodSignature signature) {
             this.logging = logging;
             this.targetLog = targetLog;
             this.signature = signature;
@@ -192,6 +196,20 @@ public class LoggingAspect {
         @Nullable
         public Logging getLogging() {
             return this.logging;
+        }
+
+        public int getThrowableLogPrintMaxRow(Throwable e) {
+            if (Objects.nonNull(logging) && !ObjectUtils.isEmpty(logging.throwableLog())) {
+                final ThrowableLog[] throwableLogs = logging.throwableLog();
+                for (int i = 0; i < throwableLogs.length; i++) {
+                    if (throwableLogs[i].throwable().isInstance(e)) {
+                        return throwableLogs[i].maxRow();
+                    }
+                }
+                return -1;
+            } else {
+                return -1;
+            }
         }
 
         public Logger getTargetLog() {
@@ -215,13 +233,13 @@ public class LoggingAspect {
 
         private void bindToThread() {
             stopWatch.start();
-            this.oldLoggingInfo = methodLoggingInfoHolder.get();
+            this.oldLoggingInfo = loggingInfoHolder.get();
             MDC.put(MDCConstant.CURRENT_METHOD_NAME, getMethodName());
-            methodLoggingInfoHolder.set(this);
+            loggingInfoHolder.set(this);
         }
 
         private void restoreThreadLocalStatus() {
-            methodLoggingInfoHolder.set(this.oldLoggingInfo);
+            loggingInfoHolder.set(this.oldLoggingInfo);
             if (Objects.nonNull(oldLoggingInfo)) {
                 MDC.put(MDCConstant.CURRENT_METHOD_NAME, oldLoggingInfo.getMethodName());
             }

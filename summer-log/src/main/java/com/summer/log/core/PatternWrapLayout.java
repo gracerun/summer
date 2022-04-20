@@ -13,6 +13,9 @@ import ch.qos.logback.core.spi.ScanException;
 import ch.qos.logback.core.status.ErrorStatus;
 import ch.qos.logback.core.status.StatusManager;
 import com.summer.log.constant.MDCConstant;
+import com.summer.log.pattern.DynamicMessageConverter;
+import com.summer.log.pattern.DynamicThrowableProxyConverter;
+import com.summer.log.pattern.EnsureDynamicExceptionHandling;
 import org.slf4j.MDC;
 import org.springframework.util.StringUtils;
 
@@ -31,6 +34,21 @@ public class PatternWrapLayout extends PatternLayout {
     public static final String SPACE_STR = " ";
 
     protected Converter<ILoggingEvent> head;
+
+    static {
+        DEFAULT_CONVERTER_MAP.put("m", DynamicMessageConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("msg", DynamicMessageConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("message", DynamicMessageConverter.class.getName());
+        CONVERTER_CLASS_TO_KEY_MAP.put(DynamicMessageConverter.class.getName(), "message");
+
+        DEFAULT_CONVERTER_MAP.put("ex", DynamicThrowableProxyConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("exception", DynamicThrowableProxyConverter.class.getName());
+        DEFAULT_CONVERTER_MAP.put("throwable", DynamicThrowableProxyConverter.class.getName());
+    }
+
+    public PatternWrapLayout() {
+        this.postCompileProcessor = new EnsureDynamicExceptionHandling();
+    }
 
     @Override
     public void start() {

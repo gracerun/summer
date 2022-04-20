@@ -14,7 +14,7 @@ public @interface ThrowableLog {
      *
      * @return
      */
-    Class<? extends Throwable> printThrowable();
+    Class<? extends Throwable> throwable();
 
     /**
      * 异常日志最大行数
@@ -23,6 +23,6 @@ public @interface ThrowableLog {
      *
      * @return
      */
-    int printMaxRow() default -1;
+    int maxRow() default -1;
 
 }
