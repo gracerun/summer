@@ -1,6 +1,7 @@
 package com.summer.log.aop;
 
 import com.summer.log.annotation.Logging;
+import com.summer.log.annotation.ThrowableLog;
 import com.summer.log.constant.MDCConstant;
 import com.summer.log.core.RequestInfo;
 import com.summer.log.util.NetworkUtil;
@@ -18,6 +19,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StopWatch;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -44,8 +46,8 @@ public class LoggingAspect {
         if (!(pjp.getSignature() instanceof MethodSignature)) {
             return pjp.proceed();
         }
-        MethodSignature signature = (MethodSignature) pjp.getSignature();
-        MethodLoggingInfo loggingInfo = createMethodLoggingIfNecessary(signature, pjp);
+
+        MethodLoggingInfo loggingInfo = createMethodLoggingIfNecessary(pjp);
         try {
             printStartLog(loggingInfo, pjp);
             Object retVal = pjp.proceed();
@@ -63,22 +65,22 @@ public class LoggingAspect {
         if (Objects.isNull(loggingInfo.oldLoggingInfo)) {
             RequestInfo requestInfo = getRequestInfo();
             if (Objects.nonNull(requestInfo)) {
-                loggingInfo.targetLog.info("requestIp:{}, scheme:{}", requestInfo.getIp(), requestInfo.getScheme());
+                log(loggingInfo, "requestIp:{}, scheme:{}", requestInfo.getIp(), requestInfo.getScheme());
             }
         }
-        loggingInfo.getTargetLog().info("begin - {}", Arrays.toString(pjp.getArgs()));
+        log(loggingInfo, "begin - {}", Arrays.toString(pjp.getArgs()));
     }
 
     private void printEndLog(MethodLoggingInfo loggingInfo, Object retVal) {
         if (Void.TYPE != loggingInfo.getReturnType()) {
-            loggingInfo.targetLog.info("end {}ms {}", loggingInfo.getTotalTimeMillis(), retVal);
+            log(loggingInfo, "end {}ms {}", loggingInfo.getTotalTimeMillis(), retVal);
         } else {
-            loggingInfo.targetLog.info("end {}ms", loggingInfo.getTotalTimeMillis());
+            log(loggingInfo, "end {}ms", loggingInfo.getTotalTimeMillis());
         }
     }
 
     private void printThrowable(MethodLoggingInfo loggingInfo, Throwable e) {
-        if (printOn(loggingInfo, e)) {
+        if (printCondition(loggingInfo, e)) {
             if (Objects.nonNull(loggingInfo.oldLoggingInfo)) {
                 loggingInfo.oldLoggingInfo.throwable = e;
             }
@@ -88,11 +90,11 @@ public class LoggingAspect {
         }
     }
 
-    private boolean printOn(MethodLoggingInfo loggingInfo, Throwable e) {
-        if (Objects.nonNull(loggingInfo.logging) && !ObjectUtils.isEmpty(loggingInfo.logging.printFor())) {
-            final Class<? extends Throwable>[] classes = loggingInfo.logging.printFor();
-            for (int i = 0; i < classes.length; i++) {
-                if (classes[i].isInstance(e)) {
+    private boolean printCondition(MethodLoggingInfo loggingInfo, Throwable e) {
+        if (Objects.nonNull(loggingInfo.logging) && !ObjectUtils.isEmpty(loggingInfo.logging.throwableLog())) {
+            final ThrowableLog[] throwableLogs = loggingInfo.logging.throwableLog();
+            for (int i = 0; i < throwableLogs.length; i++) {
+                if (throwableLogs[i].printThrowable().isInstance(e)) {
                     return true;
                 }
             }
@@ -102,13 +104,42 @@ public class LoggingAspect {
         }
     }
 
-    protected MethodLoggingInfo createMethodLoggingIfNecessary(MethodSignature signature, ProceedingJoinPoint pjp) {
+    private void log(MethodLoggingInfo loggingInfo, String format, Object... arguments) {
+        switch (loggingInfo.logging.level()) {
+            case INFO:
+                loggingInfo.targetLog.info(format, arguments);
+                break;
+            case WARN:
+                loggingInfo.targetLog.warn(format, arguments);
+                break;
+            case ERROR:
+                loggingInfo.targetLog.error(format, arguments);
+                break;
+            case DEBUG:
+                loggingInfo.targetLog.debug(format, arguments);
+                break;
+            case TRACE:
+                loggingInfo.targetLog.trace(format, arguments);
+                break;
+        }
+    }
+
+    protected MethodLoggingInfo createMethodLoggingIfNecessary(ProceedingJoinPoint pjp) {
+        MethodSignature signature = (MethodSignature) pjp.getSignature();
         final Class<?> declaringClass = signature.getMethod().getDeclaringClass();
-        Logger targetLog = LoggerFactory.getLogger(declaringClass);
+
         Logging logging = signature.getMethod().getAnnotation(Logging.class);
         if (Objects.isNull(logging)) {
             logging = AnnotationUtils.findAnnotation(declaringClass, Logging.class);
         }
+
+        Logger targetLog;
+        if (StringUtils.hasText(logging.value())) {
+            targetLog = LoggerFactory.getLogger(logging.value());
+        } else {
+            targetLog = LoggerFactory.getLogger(declaringClass);
+        }
+
         MethodLoggingInfo loggingInfo = new MethodLoggingInfo(logging, targetLog, signature);
         loggingInfo.bindToThread();
         return loggingInfo;
