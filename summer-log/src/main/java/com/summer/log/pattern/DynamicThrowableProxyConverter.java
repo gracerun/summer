@@ -29,6 +29,7 @@ public class DynamicThrowableProxyConverter extends ThrowableProxyConverter {
                 }
             }
         }
+        super.subjoinSTEPArray(buf, indent, tp);
     }
 
     protected void subjoinSTEPArray(StringBuilder buf, int indent, IThrowableProxy tp, int lengthOption) {
