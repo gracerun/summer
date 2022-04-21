@@ -23,13 +23,14 @@ public class MessageController {
     private MessageInterface messageInterface;
 
     @PostMapping("/push")
-    public ResponseEntity push(@RequestBody MessageBody messageBody) {
+    public ResponseEntity push(@RequestBody MessageBody messageBody) throws Exception {
         return messageInterface.push(messageBody);
     }
 
     @PostMapping("/log")
     public ResponseEntity log(@RequestBody MessageBody messageBody) {
-        return messageInterface.log(messageBody);
+        final ResponseEntity log = messageInterface.log(messageBody);
+        return new ResponseEntity(log.getBody(), log.getStatusCode());
     }
 
 }

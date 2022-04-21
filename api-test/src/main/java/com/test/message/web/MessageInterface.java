@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @date 4/13/22
  */
 @Logging
-@FeignClient(name = "producer-test", path = "/message")
+@FeignClient(name = "producer-test", path = "/message", configuration = FooConfiguration.class)
 public interface MessageInterface {
 
     @PostMapping(value = "/push", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity push(@RequestBody MessageBody messageBody);
+    ResponseEntity push(@RequestBody MessageBody messageBody) throws Exception;
 
     @PostMapping(value = "/log", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity log(@RequestBody MessageBody messageBody);
