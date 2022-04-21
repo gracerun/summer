@@ -5,7 +5,6 @@ import com.summer.log.annotation.ThrowableLog;
 import com.summer.log.constant.MDCConstant;
 import com.summer.log.core.RequestInfo;
 import com.summer.log.util.NetworkUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -36,7 +35,6 @@ import java.util.Objects;
  */
 @Aspect
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@Slf4j
 public class LoggingAspect {
 
     private static final ThreadLocal<LoggingInfo> loggingInfoHolder = new ThreadLocal();
