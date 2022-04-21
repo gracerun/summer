@@ -23,6 +23,7 @@ public class DynamicThrowableProxyConverter extends ThrowableProxyConverter {
                     return;
                 } else if (throwableLogPrintMaxRow > 0) {
                     subjoinSTEPArray(buf, indent, tp, throwableLogPrintMaxRow);
+                    return;
                 } else {
                     super.subjoinSTEPArray(buf, indent, tp);
                     return;
