@@ -34,7 +34,7 @@ import java.util.Objects;
  * @date 4/13/22
  */
 @Aspect
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.HIGHEST_PRECEDENCE + 100)
 public class LoggingAspect {
 
     private static final ThreadLocal<LoggingInfo> loggingInfoHolder = new ThreadLocal();
