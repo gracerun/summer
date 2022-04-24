@@ -1,8 +1,11 @@
 package com.summer.log.spring.autoconfigure;
 
 import com.summer.log.aop.LogSchedulingAspect;
-import com.summer.log.aop.LoggingAspect;
 import com.summer.log.core.TracerHolder;
+import com.summer.log.interceptor.AnnotationLoggingAttributeSource;
+import com.summer.log.interceptor.LoggingAttributeSource;
+import com.summer.log.interceptor.LoggingAttributeSourceAdvisor;
+import com.summer.log.interceptor.LoggingInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,9 +42,24 @@ public class SummerLogAutoConfiguration {
     }
 
     @Bean
-    public LoggingAspect loggingAspect() {
-        log.info("Init LoggingAspect");
-        return new LoggingAspect();
+    public LoggingAttributeSourceAdvisor loggingAdvisor(
+            LoggingAttributeSource loggingAttributeSource, LoggingInterceptor loggingInterceptor) {
+        LoggingAttributeSourceAdvisor advisor = new LoggingAttributeSourceAdvisor();
+        advisor.setLoggingAttributeSource(loggingAttributeSource);
+        advisor.setLoggingInterceptor(loggingInterceptor);
+        return advisor;
+    }
+
+    @Bean
+    public LoggingAttributeSource loggingAttributeSource() {
+        return new AnnotationLoggingAttributeSource();
+    }
+
+    @Bean
+    public LoggingInterceptor loggingInterceptor(LoggingAttributeSource loggingAttributeSource) {
+        LoggingInterceptor interceptor = new LoggingInterceptor();
+        interceptor.setLoggingAttributeSource(loggingAttributeSource);
+        return interceptor;
     }
 
 }

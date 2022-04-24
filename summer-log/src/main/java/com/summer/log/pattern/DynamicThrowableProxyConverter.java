@@ -7,7 +7,7 @@ import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.classic.spi.ThrowableProxy;
 import ch.qos.logback.classic.spi.ThrowableProxyUtil;
 import ch.qos.logback.core.CoreConstants;
-import com.summer.log.aop.LoggingAspect;
+import com.summer.log.interceptor.LoggingInterceptor;
 
 import java.util.Objects;
 
@@ -15,7 +15,7 @@ public class DynamicThrowableProxyConverter extends ThrowableProxyConverter {
 
     @Override
     protected void subjoinSTEPArray(StringBuilder buf, int indent, IThrowableProxy tp) {
-        final LoggingAspect.LoggingInfo loggingInfo = LoggingAspect.currentLoggingInfo();
+        final LoggingInterceptor.LoggingInfo loggingInfo = LoggingInterceptor.currentLoggingInfo();
         if (Objects.nonNull(loggingInfo)) {
             if (tp instanceof ThrowableProxy) {
                 final int throwableLogPrintMaxRow = loggingInfo.getThrowableLogPrintMaxRow(((ThrowableProxy) tp).getThrowable());

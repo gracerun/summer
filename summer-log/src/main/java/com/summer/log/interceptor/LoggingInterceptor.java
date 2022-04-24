@@ -1,30 +1,25 @@
 package com.summer.log.interceptor;
 
-import com.summer.log.annotation.Logging;
-import com.summer.log.annotation.ThrowableLog;
 import com.summer.log.constant.MDCConstant;
 import com.summer.log.core.RequestInfo;
 import com.summer.log.util.NetworkUtil;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StopWatch;
-import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -39,6 +34,9 @@ import java.util.Objects;
 public class LoggingInterceptor implements MethodInterceptor {
 
     private static final ThreadLocal<LoggingInfo> loggingInfoHolder = new ThreadLocal();
+
+    @Nullable
+    private LoggingAttributeSource loggingAttributeSource;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -80,16 +78,16 @@ public class LoggingInterceptor implements MethodInterceptor {
                 loggingInfo.oldLoggingInfo.throwable = e;
             }
             if (loggingInfo.throwable != e) {
-                loggingInfo.targetLog.error(e.getMessage(), e);
+                loggingInfo.getTargetLog().error(e.getMessage(), e);
             }
         }
     }
 
     private boolean printCondition(LoggingInfo loggingInfo, Throwable e) {
-        if (Objects.nonNull(loggingInfo.logging) && !ObjectUtils.isEmpty(loggingInfo.logging.throwableLog())) {
-            final ThrowableLog[] throwableLogs = loggingInfo.logging.throwableLog();
-            for (int i = 0; i < throwableLogs.length; i++) {
-                if (throwableLogs[i].throwable().isInstance(e)) {
+        if (Objects.nonNull(loggingInfo.loggingAttribute) && !ObjectUtils.isEmpty(loggingInfo.loggingAttribute.getThrowableLogAttributes())) {
+            final List<ThrowableLogAttribute> throwableLogAttributes = loggingInfo.loggingAttribute.getThrowableLogAttributes();
+            for (ThrowableLogAttribute attr : throwableLogAttributes) {
+                if (attr.throwable.isInstance(e)) {
                     return true;
                 }
             }
@@ -100,21 +98,21 @@ public class LoggingInterceptor implements MethodInterceptor {
     }
 
     private void log(LoggingInfo loggingInfo, String format, Object... arguments) {
-        switch (loggingInfo.logging.level()) {
+        switch (loggingInfo.loggingAttribute.getLevel()) {
             case INFO:
-                loggingInfo.targetLog.info(format, arguments);
+                loggingInfo.getTargetLog().info(format, arguments);
                 break;
             case WARN:
-                loggingInfo.targetLog.warn(format, arguments);
+                loggingInfo.getTargetLog().warn(format, arguments);
                 break;
             case ERROR:
-                loggingInfo.targetLog.error(format, arguments);
+                loggingInfo.getTargetLog().error(format, arguments);
                 break;
             case DEBUG:
-                loggingInfo.targetLog.debug(format, arguments);
+                loggingInfo.getTargetLog().debug(format, arguments);
                 break;
             case TRACE:
-                loggingInfo.targetLog.trace(format, arguments);
+                loggingInfo.getTargetLog().trace(format, arguments);
                 break;
         }
     }
@@ -122,19 +120,10 @@ public class LoggingInterceptor implements MethodInterceptor {
     protected LoggingInfo createLoggingIfNecessary(MethodInvocation invocation) {
         Class<?> targetClass = (invocation.getThis() != null ? AopUtils.getTargetClass(invocation.getThis()) : null);
 
-        Logging logging = invocation.getMethod().getAnnotation(Logging.class);
-        if (Objects.isNull(logging)) {
-            logging = AnnotationUtils.findAnnotation(targetClass, Logging.class);
-        }
+        LoggingAttributeSource las = getLoggingAttributeSource();
+        final LoggingAttribute loggingAttribute = (las != null ? las.getLoggingAttribute(invocation.getMethod(), targetClass) : null);
 
-        Logger targetLog;
-        if (StringUtils.hasText(logging.value())) {
-            targetLog = LoggerFactory.getLogger(logging.value());
-        } else {
-            targetLog = LoggerFactory.getLogger(targetClass);
-        }
-
-        LoggingInfo loggingInfo = new LoggingInfo(logging, targetLog, null);
+        LoggingInfo loggingInfo = new LoggingInfo(loggingAttribute, invocation);
         loggingInfo.bindToThread();
         return loggingInfo;
     }
@@ -160,18 +149,24 @@ public class LoggingInterceptor implements MethodInterceptor {
         }
     }
 
+    public void setLoggingAttributeSource(@Nullable LoggingAttributeSource loggingAttributeSource) {
+        this.loggingAttributeSource = loggingAttributeSource;
+    }
+
+    @Nullable
+    public LoggingAttributeSource getLoggingAttributeSource() {
+        return this.loggingAttributeSource;
+    }
+
     public static LoggingInfo currentLoggingInfo() {
         return loggingInfoHolder.get();
     }
 
     public static final class LoggingInfo {
 
-        @Nullable
-        private final Logging logging;
+        private final LoggingAttribute loggingAttribute;
 
-        private final MethodSignature signature;
-
-        private final Logger targetLog;
+        private final MethodInvocation invocation;
 
         private final StopWatch stopWatch;
 
@@ -180,42 +175,30 @@ public class LoggingInterceptor implements MethodInterceptor {
         @Nullable
         private LoggingInfo oldLoggingInfo;
 
-        public LoggingInfo(@Nullable Logging logging, Logger targetLog, MethodSignature signature) {
-            this.logging = logging;
-            this.targetLog = targetLog;
-            this.signature = signature;
+        public LoggingInfo(LoggingAttribute loggingAttribute, MethodInvocation invocation) {
+            this.loggingAttribute = loggingAttribute;
+            this.invocation = invocation;
             this.stopWatch = new StopWatch();
         }
 
-        @Nullable
-        public Logging getLogging() {
-            return this.logging;
-        }
-
-        public int getThrowableLogPrintMaxRow(Throwable e) {
-            if (Objects.nonNull(logging) && !ObjectUtils.isEmpty(logging.throwableLog())) {
-                final ThrowableLog[] throwableLogs = logging.throwableLog();
-                for (int i = 0; i < throwableLogs.length; i++) {
-                    if (throwableLogs[i].throwable().isInstance(e)) {
-                        return throwableLogs[i].maxRow();
-                    }
-                }
-                return -1;
-            } else {
-                return -1;
-            }
+        public LoggingAttribute getLoggingAttribute() {
+            return loggingAttribute;
         }
 
         public Logger getTargetLog() {
-            return targetLog;
+            return loggingAttribute.getTargetLog();
+        }
+
+        public int getThrowableLogPrintMaxRow(Throwable e) {
+            return loggingAttribute.getThrowableLogPrintMaxRow(e);
         }
 
         public String getMethodName() {
-            return signature.getName();
+            return invocation.getMethod().getName();
         }
 
         public Class<?> getReturnType() {
-            return signature.getReturnType();
+            return invocation.getMethod().getReturnType();
         }
 
         public long getTotalTimeMillis() {
