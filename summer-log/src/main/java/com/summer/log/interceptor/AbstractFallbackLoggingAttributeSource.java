@@ -69,11 +69,17 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
             if (logAttr != null) {
                 return logAttr;
             }
-            // Last fallback is the class of the original method.
+            // Fallback is the class of the original method.
             logAttr = findLoggingAttribute(method.getDeclaringClass());
             if (logAttr != null && ClassUtils.isUserLevelMethod(method)) {
                 return logAttr;
             }
+        }
+
+        // Last try is the logging attribute on the target class.
+        logAttr = findLoggingAttribute(targetClass);
+        if (logAttr != null && ClassUtils.isUserLevelMethod(method)) {
+            return logAttr;
         }
 
         return null;
