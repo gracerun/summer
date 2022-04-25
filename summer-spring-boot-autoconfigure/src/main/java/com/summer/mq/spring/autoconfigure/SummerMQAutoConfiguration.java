@@ -1,6 +1,6 @@
 package com.summer.mq.spring.autoconfigure;
 
-import com.summer.log.spring.autoconfigure.SummerLogAutoConfiguration;
+import com.summer.log.spring.autoconfigure.SummerLogSchedulingAutoConfiguration;
 import com.summer.mq.aop.MessageAspect;
 import com.summer.mq.config.MqConfiguration;
 import com.summer.mq.event.MessageEventListener;
@@ -25,9 +25,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import java.util.Map;
 
 @Slf4j
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({MqConfiguration.class, MessagePersistentConfiguration.class, ListenerContainerConfiguration.class, DelayConsumerConfiguration.class})
-@AutoConfigureAfter({RedisAutoConfiguration.class, SummerLogAutoConfiguration.class})
+@AutoConfigureAfter({RedisAutoConfiguration.class, SummerLogSchedulingAutoConfiguration.class})
 public class SummerMQAutoConfiguration implements ImportAware {
 
     @Autowired

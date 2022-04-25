@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.summer.log.spring.autoconfigure.SummerLogAutoConfiguration
+com.summer.log.spring.autoconfigure.SummerLogSchedulingAutoConfiguration,\
+com.summer.log.spring.autoconfigure.SummerLoggingAutoConfiguration

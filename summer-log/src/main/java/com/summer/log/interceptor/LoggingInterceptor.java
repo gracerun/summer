@@ -5,12 +5,9 @@ import com.summer.log.core.RequestInfo;
 import com.summer.log.util.NetworkUtil;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
 import org.springframework.aop.support.AopUtils;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StopWatch;
@@ -28,8 +25,6 @@ import java.util.Objects;
  * @version 1.0.0
  * @date 4/13/22
  */
-@Aspect
-@Order(Ordered.HIGHEST_PRECEDENCE + 100)
 public class LoggingInterceptor implements MethodInterceptor {
 
     private static final ThreadLocal<LoggingInfo> loggingInfoHolder = new ThreadLocal();
