@@ -18,6 +18,14 @@ public class LoggingAttribute {
      */
     private String name;
 
+    /**
+     * 方法完整名称
+     */
+    private String methodIdentification;
+
+    /**
+     * 日志接口
+     */
     private Logger targetLog;
 
     /**

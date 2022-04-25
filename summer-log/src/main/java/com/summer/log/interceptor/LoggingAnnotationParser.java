@@ -1,11 +1,10 @@
 package com.summer.log.interceptor;
 
 import com.summer.log.annotation.Logging;
-import com.summer.log.serializer.LogSerializer;
+import com.summer.log.annotation.ThrowableLog;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
@@ -22,18 +21,17 @@ public class LoggingAnnotationParser {
 
     @Nullable
     public LoggingAttribute parseLoggingAnnotation(AnnotatedElement element, Class<?> clazz) {
-        AnnotationAttributes attributes = AnnotatedElementUtils.findMergedAnnotationAttributes(
-                element, Logging.class, false, false);
-        if (attributes != null) {
-            return parseLoggingAnnotation(attributes, clazz);
+        final Logging logging = AnnotatedElementUtils.findMergedAnnotation(element, Logging.class);
+        if (logging != null) {
+            return parseLoggingAnnotation(logging, clazz);
         } else {
             return null;
         }
     }
 
-    protected LoggingAttribute parseLoggingAnnotation(AnnotationAttributes attributes, Class<?> clazz) {
+    protected LoggingAttribute parseLoggingAnnotation(Logging logging, Class<?> clazz) {
         LoggingAttribute loggingAttribute = new LoggingAttribute();
-        loggingAttribute.setName(attributes.getString("name"));
+        loggingAttribute.setName(logging.name());
 
         if (StringUtils.hasText(loggingAttribute.getName())) {
             loggingAttribute.setTargetLog(LoggerFactory.getLogger(loggingAttribute.getName()));
@@ -41,24 +39,23 @@ public class LoggingAnnotationParser {
             loggingAttribute.setTargetLog(LoggerFactory.getLogger(clazz));
         }
 
-        loggingAttribute.setLevel(attributes.getEnum("level"));
-        loggingAttribute.setMaxLength(attributes.getNumber("maxLength").intValue());
+        loggingAttribute.setLevel(logging.level());
+        loggingAttribute.setMaxLength(logging.maxLength());
 
-        final Class<?> serializeArgsUsing = attributes.getClass("serializeArgsUsing");
-        final Class<?> serializeReturnUsing = attributes.getClass("serializeReturnUsing");
+        loggingAttribute.setSerializeArgsUsing(BeanUtils.instantiateClass(logging.serializeArgsUsing()));
+        loggingAttribute.setSerializeReturnUsing(BeanUtils.instantiateClass(logging.serializeReturnUsing()));
 
-        loggingAttribute.setSerializeArgsUsing((LogSerializer) BeanUtils.instantiateClass(serializeArgsUsing));
-        loggingAttribute.setSerializeReturnUsing((LogSerializer) BeanUtils.instantiateClass(serializeReturnUsing));
-
-        final AnnotationAttributes[] throwableLogs = attributes.getAnnotationArray("throwableLog");
-        final List<ThrowableLogAttribute> throwableLogAttributes = new ArrayList<>(throwableLogs.length);
-        for (int i = 0; i < throwableLogs.length; i++) {
-            final ThrowableLogAttribute throwableLogAttribute = new ThrowableLogAttribute();
-            throwableLogAttribute.setThrowable(throwableLogs[i].getClass("throwable"));
-            throwableLogAttribute.setMaxRow(throwableLogs[i].getNumber("maxRow").intValue());
-            throwableLogAttributes.add(throwableLogAttribute);
+        final ThrowableLog[] throwableLogs = logging.throwableLog();
+        if (throwableLogs.length > 0) {
+            final List<ThrowableLogAttribute> throwableLogAttributes = new ArrayList<>(throwableLogs.length);
+            for (int i = 0; i < throwableLogs.length; i++) {
+                final ThrowableLogAttribute throwableLogAttribute = new ThrowableLogAttribute();
+                throwableLogAttribute.setThrowable(throwableLogs[i].throwable());
+                throwableLogAttribute.setMaxRow(throwableLogs[i].maxRow());
+                throwableLogAttributes.add(throwableLogAttribute);
+            }
+            loggingAttribute.setThrowableLogAttributes(throwableLogAttributes);
         }
-        loggingAttribute.setThrowableLogAttributes(throwableLogAttributes);
         return loggingAttribute;
     }
 

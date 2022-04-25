@@ -25,6 +25,7 @@ public class EnsureDynamicExceptionHandling implements PostCompileProcessor<ILog
             if (loggerContext.isPackagingDataEnabled()) {
                 exConverter = new ExtendedThrowableProxyConverter();
             } else {
+                // 设置默认的异常转换器
                 exConverter = new DynamicThrowableProxyConverter();
             }
             tail.setNext(exConverter);

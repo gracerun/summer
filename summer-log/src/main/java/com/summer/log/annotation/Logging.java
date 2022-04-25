@@ -1,6 +1,7 @@
 
 package com.summer.log.annotation;
 
+import com.summer.log.serializer.LogSerializer;
 import com.summer.log.serializer.ToStringSerializer;
 import org.slf4j.event.Level;
 import org.springframework.core.annotation.AliasFor;
@@ -41,14 +42,14 @@ public @interface Logging {
      *
      * @return
      */
-    Class<?> serializeArgsUsing() default ToStringSerializer.class;
+    Class<? extends LogSerializer> serializeArgsUsing() default ToStringSerializer.class;
 
     /**
      * 序列化返回值
      *
      * @return
      */
-    Class<?> serializeReturnUsing() default ToStringSerializer.class;
+    Class<? extends LogSerializer> serializeReturnUsing() default ToStringSerializer.class;
 
     /**
      * 日志级别

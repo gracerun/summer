@@ -18,7 +18,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -61,12 +60,14 @@ public class LoggingInterceptor implements MethodInterceptor {
                 log(loggingInfo, "requestIp:{}, scheme:{}", requestInfo.getIp(), requestInfo.getScheme());
             }
         }
-        log(loggingInfo, "begin - {}", Arrays.toString(invocation.getArguments()));
+        log(loggingInfo, "begin - {}", loggingInfo.getLoggingAttribute().getSerializeArgsUsing().write(invocation.getArguments()));
     }
 
     private void printEndLog(LoggingInfo loggingInfo, Object retVal) {
         if (Void.TYPE != loggingInfo.getReturnType()) {
-            log(loggingInfo, "end {}ms {}", loggingInfo.getTotalTimeMillis(), retVal);
+            log(loggingInfo, "end {}ms {}",
+                    loggingInfo.getTotalTimeMillis(),
+                    loggingInfo.getLoggingAttribute().getSerializeReturnUsing().write(retVal));
         } else {
             log(loggingInfo, "end {}ms", loggingInfo.getTotalTimeMillis());
         }
@@ -87,7 +88,7 @@ public class LoggingInterceptor implements MethodInterceptor {
         if (Objects.nonNull(loggingInfo.loggingAttribute) && !ObjectUtils.isEmpty(loggingInfo.loggingAttribute.getThrowableLogAttributes())) {
             final List<ThrowableLogAttribute> throwableLogAttributes = loggingInfo.loggingAttribute.getThrowableLogAttributes();
             for (ThrowableLogAttribute attr : throwableLogAttributes) {
-                if (attr.throwable.isInstance(e)) {
+                if (attr.throwable.isInstance(e) && attr.maxRow != 0) {
                     return true;
                 }
             }

@@ -4,8 +4,6 @@ import java.util.Arrays;
 
 public class ToStringSerializer implements LogSerializer {
 
-    public static final ToStringSerializer instance = new ToStringSerializer();
-
     @Override
     public String write(Object[] args) {
         return Arrays.toString(args);

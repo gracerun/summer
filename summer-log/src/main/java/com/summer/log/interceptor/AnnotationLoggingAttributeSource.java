@@ -2,14 +2,12 @@ package com.summer.log.interceptor;
 
 import org.springframework.lang.Nullable;
 
-import java.io.Serializable;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Set;
 
-public class AnnotationLoggingAttributeSource extends AbstractFallbackLoggingAttributeSource
-        implements Serializable {
+public class AnnotationLoggingAttributeSource extends AbstractFallbackLoggingAttributeSource {
 
     private final boolean publicMethodsOnly;
 

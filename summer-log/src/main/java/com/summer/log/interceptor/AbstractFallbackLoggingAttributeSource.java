@@ -1,28 +1,18 @@
 package com.summer.log.interceptor;
 
 import org.springframework.aop.support.AopUtils;
-import org.springframework.context.EmbeddedValueResolverAware;
 import org.springframework.core.MethodClassKey;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.StringValueResolver;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class AbstractFallbackLoggingAttributeSource implements LoggingAttributeSource, EmbeddedValueResolverAware {
-
-    @Nullable
-    private transient StringValueResolver embeddedValueResolver;
+public abstract class AbstractFallbackLoggingAttributeSource implements LoggingAttributeSource {
 
     private final Map<Object, LoggingAttribute> attributeCache = new ConcurrentHashMap<>(1024);
-
-    @Override
-    public void setEmbeddedValueResolver(StringValueResolver resolver) {
-        this.embeddedValueResolver = resolver;
-    }
 
     @Override
     @Nullable
@@ -38,6 +28,8 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
         } else {
             LoggingAttribute logAttr = computeLoggingAttribute(method, targetClass);
             if (logAttr != null) {
+                String methodIdentification = ClassUtils.getQualifiedMethodName(method, targetClass);
+                logAttr.setMethodIdentification(methodIdentification);
                 this.attributeCache.put(cacheKey, logAttr);
             }
             return logAttr;
@@ -60,27 +52,27 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
         Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
 
         // First try is the method in the target class.
-        LoggingAttribute txAttr = findLoggingAttribute(specificMethod);
-        if (txAttr != null) {
-            return txAttr;
+        LoggingAttribute logAttr = findLoggingAttribute(specificMethod);
+        if (logAttr != null) {
+            return logAttr;
         }
 
         // Second try is the logging attribute on the target class.
-        txAttr = findLoggingAttribute(specificMethod.getDeclaringClass());
-        if (txAttr != null && ClassUtils.isUserLevelMethod(method)) {
-            return txAttr;
+        logAttr = findLoggingAttribute(specificMethod.getDeclaringClass());
+        if (logAttr != null && ClassUtils.isUserLevelMethod(method)) {
+            return logAttr;
         }
 
         if (specificMethod != method) {
             // Fallback is to look at the original method.
-            txAttr = findLoggingAttribute(method);
-            if (txAttr != null) {
-                return txAttr;
+            logAttr = findLoggingAttribute(method);
+            if (logAttr != null) {
+                return logAttr;
             }
             // Last fallback is the class of the original method.
-            txAttr = findLoggingAttribute(method.getDeclaringClass());
-            if (txAttr != null && ClassUtils.isUserLevelMethod(method)) {
-                return txAttr;
+            logAttr = findLoggingAttribute(method.getDeclaringClass());
+            if (logAttr != null && ClassUtils.isUserLevelMethod(method)) {
+                return logAttr;
             }
         }
 
