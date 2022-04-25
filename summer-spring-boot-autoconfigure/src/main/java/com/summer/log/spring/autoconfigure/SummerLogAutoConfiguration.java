@@ -14,6 +14,7 @@ import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.cloud.sleuth.autoconfig.brave.BraveAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 
 @Slf4j
 @Configuration
@@ -47,6 +48,7 @@ public class SummerLogAutoConfiguration {
         LoggingAttributeSourceAdvisor advisor = new LoggingAttributeSourceAdvisor();
         advisor.setLoggingAttributeSource(loggingAttributeSource);
         advisor.setLoggingInterceptor(loggingInterceptor);
+        advisor.setOrder(Ordered.HIGHEST_PRECEDENCE + 100);
         return advisor;
     }
 
