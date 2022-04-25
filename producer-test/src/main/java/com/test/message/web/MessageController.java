@@ -1,7 +1,5 @@
 package com.test.message.web;
 
-import com.summer.log.annotation.Logging;
-import com.summer.log.annotation.ThrowableLog;
 import com.summer.mq.bean.MessageBody;
 import com.summer.mq.producer.SummerMQTemplate;
 import com.test.message.service.BaseService;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 1/17/22
  */
 @Slf4j
-@Logging(throwableLog = {@ThrowableLog(throwable = Throwable.class, maxRow = 5)})
 @RestController
 @RequestMapping("/message")
 public class MessageController implements MessageInterface {
@@ -33,6 +30,7 @@ public class MessageController implements MessageInterface {
 
     @Override
     @PostMapping("/push")
+    @Transactional
     public ResponseEntity push(@RequestBody MessageBody messageBody) {
         summerMQTemplate.sendAndSave(messageBody);
         return ResponseEntity.ok("发送成功");
@@ -40,7 +38,6 @@ public class MessageController implements MessageInterface {
 
     @Override
     @PostMapping("/log")
-    @Transactional
     public ResponseEntity log(@RequestBody MessageBody messageBody) {
         try {
             baseService.print();

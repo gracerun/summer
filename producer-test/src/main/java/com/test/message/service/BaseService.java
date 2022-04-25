@@ -15,9 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0.0
  * @date 4/13/22
  */
-@Logging(
-        maxLength = 10,
-        throwableLog = {@ThrowableLog(throwable = Throwable.class, maxRow = 5)})
+@Logging(throwableLog = {@ThrowableLog(throwable = Throwable.class, maxRow = 5)})
 public abstract class BaseService {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
