@@ -1,9 +1,9 @@
 
 package com.summer.log.annotation;
 
+import com.summer.log.constant.Level;
 import com.summer.log.serializer.LogSerializer;
 import com.summer.log.serializer.ToStringSerializer;
-import org.slf4j.event.Level;
 import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;

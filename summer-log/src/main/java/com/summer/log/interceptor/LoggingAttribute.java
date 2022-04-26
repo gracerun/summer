@@ -1,10 +1,10 @@
 package com.summer.log.interceptor;
 
+import com.summer.log.constant.Level;
 import com.summer.log.serializer.LogSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
-import org.slf4j.event.Level;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;

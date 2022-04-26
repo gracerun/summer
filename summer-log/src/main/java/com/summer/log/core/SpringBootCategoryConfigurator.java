@@ -12,6 +12,7 @@ import ch.qos.logback.core.joran.spi.RuleStore;
 import ch.qos.logback.core.net.ssl.SSLNestedComponentRegistryRules;
 import com.summer.log.encoder.PatternWrapLayoutEncoder;
 import com.summer.log.filter.LogCategoryFilter;
+import com.summer.log.encoder.PatternWrapLayout;
 import org.springframework.boot.logging.LoggingInitializationContext;
 import org.springframework.core.env.Environment;
 

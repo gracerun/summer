@@ -1,5 +1,5 @@
 
-package com.summer.log.core;
+package com.summer.log.encoder;
 
 import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.pattern.LoggerConverter;
