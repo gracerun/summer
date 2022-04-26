@@ -1,5 +1,6 @@
 package com.summer.log.interceptor;
 
+import com.summer.log.constant.Level;
 import com.summer.log.constant.MDCConstant;
 import com.summer.log.core.RequestInfo;
 import com.summer.log.util.NetworkUtil;
@@ -69,7 +70,7 @@ public class LoggingInterceptor implements MethodInterceptor {
     }
 
     private void printThrowable(LoggingInfo loggingInfo, Throwable e) {
-        if (printCondition(loggingInfo, e)) {
+        if (loggingInfo.getLoggingAttribute().getLevel() != Level.OFF && printCondition(loggingInfo, e)) {
             if (Objects.nonNull(loggingInfo.oldLoggingInfo)) {
                 loggingInfo.oldLoggingInfo.throwable = e;
             }

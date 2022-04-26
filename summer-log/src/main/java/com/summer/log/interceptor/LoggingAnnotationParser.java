@@ -2,7 +2,6 @@ package com.summer.log.interceptor;
 
 import com.summer.log.annotation.Logging;
 import com.summer.log.annotation.ThrowableLog;
-import com.summer.log.constant.Level;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -34,9 +33,6 @@ public class LoggingAnnotationParser {
         LoggingAttribute loggingAttribute = new LoggingAttribute();
         loggingAttribute.setName(logging.name());
         loggingAttribute.setLevel(logging.level());
-        if (Level.OFF == logging.level()) {
-            return null;
-        }
 
         if (StringUtils.hasText(loggingAttribute.getName())) {
             loggingAttribute.setTargetLog(LoggerFactory.getLogger(loggingAttribute.getName()));
