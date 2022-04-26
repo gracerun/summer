@@ -52,32 +52,32 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
         Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
 
         // First try is the method in the target class.
-        LoggingAttribute logAttr = findLoggingAttribute(specificMethod);
+        LoggingAttribute logAttr = findLoggingAttribute(specificMethod, method.getDeclaringClass());
         if (logAttr != null) {
             return logAttr;
         }
 
         // Second try is the logging attribute on the target class.
-        logAttr = findLoggingAttribute(specificMethod.getDeclaringClass());
+        logAttr = findLoggingAttribute(specificMethod.getDeclaringClass(), method.getDeclaringClass());
         if (logAttr != null && ClassUtils.isUserLevelMethod(method)) {
             return logAttr;
         }
 
         if (specificMethod != method) {
             // Fallback is to look at the original method.
-            logAttr = findLoggingAttribute(method);
+            logAttr = findLoggingAttribute(method, method.getDeclaringClass());
             if (logAttr != null) {
                 return logAttr;
             }
             // Fallback is the class of the original method.
-            logAttr = findLoggingAttribute(method.getDeclaringClass());
+            logAttr = findLoggingAttribute(method.getDeclaringClass(), method.getDeclaringClass());
             if (logAttr != null && ClassUtils.isUserLevelMethod(method)) {
                 return logAttr;
             }
         }
 
         // Last try is the logging attribute on the target class.
-        logAttr = findLoggingAttribute(targetClass);
+        logAttr = findLoggingAttribute(targetClass, method.getDeclaringClass());
         if (logAttr != null && ClassUtils.isUserLevelMethod(method)) {
             return logAttr;
         }
@@ -86,10 +86,10 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
     }
 
     @Nullable
-    protected abstract LoggingAttribute findLoggingAttribute(Class<?> clazz);
+    protected abstract LoggingAttribute findLoggingAttribute(Class<?> clazz, Class<?> userClazz);
 
     @Nullable
-    protected abstract LoggingAttribute findLoggingAttribute(Method method);
+    protected abstract LoggingAttribute findLoggingAttribute(Method method, Class<?> userClazz);
 
     protected boolean allowPublicMethodsOnly() {
         return false;

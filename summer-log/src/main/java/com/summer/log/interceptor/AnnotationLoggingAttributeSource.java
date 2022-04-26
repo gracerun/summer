@@ -34,20 +34,20 @@ public class AnnotationLoggingAttributeSource extends AbstractFallbackLoggingAtt
 
     @Override
     @Nullable
-    protected LoggingAttribute findLoggingAttribute(Class<?> clazz) {
-        return determineLoggingAttribute(clazz, clazz);
+    protected LoggingAttribute findLoggingAttribute(Class<?> clazz, Class<?> userClazz) {
+        return determineLoggingAttribute(clazz, userClazz);
     }
 
     @Override
     @Nullable
-    protected LoggingAttribute findLoggingAttribute(Method method) {
-        return determineLoggingAttribute(method, method.getDeclaringClass());
+    protected LoggingAttribute findLoggingAttribute(Method method, Class<?> userClazz) {
+        return determineLoggingAttribute(method, userClazz);
     }
 
     @Nullable
-    protected LoggingAttribute determineLoggingAttribute(AnnotatedElement element, Class<?> clazz) {
+    protected LoggingAttribute determineLoggingAttribute(AnnotatedElement element, Class<?> userClazz) {
         for (LoggingAnnotationParser parser : this.annotationParsers) {
-            LoggingAttribute attr = parser.parseLoggingAnnotation(element, clazz);
+            LoggingAttribute attr = parser.parseLoggingAnnotation(element, userClazz);
             if (attr != null) {
                 return attr;
             }
