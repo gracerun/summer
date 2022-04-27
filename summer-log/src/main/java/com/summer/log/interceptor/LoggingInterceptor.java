@@ -2,8 +2,6 @@ package com.summer.log.interceptor;
 
 import com.summer.log.constant.Level;
 import com.summer.log.constant.MDCConstant;
-import com.summer.log.core.RequestInfo;
-import com.summer.log.util.NetworkUtil;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
@@ -12,9 +10,6 @@ import org.springframework.aop.support.AopUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StopWatch;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,12 +45,6 @@ public class LoggingInterceptor implements MethodInterceptor {
     }
 
     private void printStartLog(LoggingInfo loggingInfo, MethodInvocation invocation) {
-        if (Objects.isNull(loggingInfo.oldLoggingInfo)) {
-            RequestInfo requestInfo = getRequestInfo();
-            if (Objects.nonNull(requestInfo)) {
-                log(loggingInfo, "requestIp:{}, scheme:{}", requestInfo.getIp(), requestInfo.getScheme());
-            }
-        }
         log(loggingInfo, "begin - {}", loggingInfo.getLoggingAttribute().getSerializeArgsUsing().write(invocation.getArguments()));
     }
 
@@ -131,21 +120,6 @@ public class LoggingInterceptor implements MethodInterceptor {
         }
     }
 
-    /**
-     * 获取当前请求IP和请求接口类型
-     *
-     * @return
-     */
-    private RequestInfo getRequestInfo() {
-        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-        if (sra != null && sra.getRequest() != null) {
-            return new RequestInfo(NetworkUtil.getIpAddress(sra.getRequest()), sra.getRequest().getScheme());
-        } else {
-            return null;
-        }
-    }
-
     public void setLoggingAttributeSource(@Nullable LoggingAttributeSource loggingAttributeSource) {
         this.loggingAttributeSource = loggingAttributeSource;
     }
@@ -216,6 +190,8 @@ public class LoggingInterceptor implements MethodInterceptor {
             loggingInfoHolder.set(this.oldLoggingInfo);
             if (Objects.nonNull(oldLoggingInfo)) {
                 MDC.put(MDCConstant.CURRENT_METHOD_NAME, oldLoggingInfo.getMethodName());
+            } else {
+                MDC.remove(MDCConstant.CURRENT_METHOD_NAME);
             }
             if (stopWatch.isRunning()) {
                 stopWatch.stop();
