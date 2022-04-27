@@ -2,7 +2,6 @@ package com.summer.log.filter;
 
 import com.summer.log.util.NetworkUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -24,15 +23,12 @@ public class HttpTraceFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        long start = System.currentTimeMillis();
         final String ipAddress = NetworkUtil.getIpAddress(request);
         final String method = request.getMethod();
         final String requestURI = request.getRequestURI();
         final String protocol = request.getProtocol();
         log.info("{} {} {} {} ", ipAddress, method, requestURI, protocol);
         filterChain.doFilter(request, response);
-        long end = System.currentTimeMillis();
-        log.info("{} {} {} {} {} {}", ipAddress, method, requestURI, protocol, response.getStatus(), (end - start));
     }
 
 }
