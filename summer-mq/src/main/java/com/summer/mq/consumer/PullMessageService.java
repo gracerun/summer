@@ -1,8 +1,6 @@
 
 package com.summer.mq.consumer;
 
-import com.summer.log.constant.LogCategoryConstant;
-import com.summer.log.core.TraceRunnableWrapper;
 import com.summer.mq.factory.MQClientInstance;
 import com.summer.mq.util.ThreadUtils;
 import lombok.Getter;
@@ -36,14 +34,13 @@ public class PullMessageService implements Runnable, DisposableBean {
         } else {
             log.warn("PullMessageServiceScheduledThread has shutdown");
         }
-
     }
 
     public void executePullRequestImmediately(final PullRequest pullRequest) {
         try {
             this.pullRequestQueue.put(pullRequest);
         } catch (InterruptedException e) {
-            log.error("executePullRequestImmediately pullRequestQueue.put", e);
+            log.error("executePullRequestImmediately pullRequestQueue.put InterruptedException", e);
         }
     }
 
@@ -70,19 +67,20 @@ public class PullMessageService implements Runnable, DisposableBean {
 
     @Override
     public void run() {
-        log.info(this.getServiceName() + " service started");
+        log.info("{} service started", this.getServiceName());
 
         while (!this.isStopped()) {
             try {
                 PullRequest pullRequest = this.pullRequestQueue.take();
                 this.pullMessage(pullRequest);
             } catch (InterruptedException ignored) {
+                log.error("Pull Message Service Run Method InterruptedException", ignored);
             } catch (Exception e) {
                 log.error("Pull Message Service Run Method exception", e);
             }
         }
 
-        log.info(this.getServiceName() + " service end");
+        log.info("{} service end", this.getServiceName());
     }
 
     @Override
@@ -96,6 +94,6 @@ public class PullMessageService implements Runnable, DisposableBean {
     }
 
     public void start() {
-        pullExecutor.execute(new TraceRunnableWrapper(this, null, LogCategoryConstant.DEFAULT));
+        pullExecutor.execute(this);
     }
 }

@@ -111,7 +111,7 @@ public class RedisMessageProducer implements InitializingBean, DisposableBean {
 
     public void asyncSend(List<MessageBody> list) {
         if (!CollectionUtils.isEmpty(list)) {
-            producerThread.submit(new TraceRunnableWrapper(() -> RedisMessageProducer.this.syncSend("", list)));
+            producerThread.submit(new TraceRunnableWrapper(() -> RedisMessageProducer.this.syncSend("", list), true));
         }
     }
 
@@ -121,7 +121,7 @@ public class RedisMessageProducer implements InitializingBean, DisposableBean {
 
     public void asyncSend(String beforeQueueName, MessageBody messageBody) {
         if (Objects.nonNull(messageBody)) {
-            producerThread.submit(new TraceRunnableWrapper(() -> RedisMessageProducer.this.syncSend(beforeQueueName, messageBody)));
+            producerThread.submit(new TraceRunnableWrapper(() -> RedisMessageProducer.this.syncSend(beforeQueueName, messageBody), true));
         }
     }
 
