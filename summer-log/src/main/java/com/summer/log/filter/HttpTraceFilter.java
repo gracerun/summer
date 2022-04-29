@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 请求日志
+ * 请求地址与响应码日志
  *
  * @author Tom
  * @version 1.0.0
@@ -23,12 +23,12 @@ public class HttpTraceFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        final String ipAddress = NetworkUtil.getIpAddress(request);
-        final String method = request.getMethod();
-        final String requestURI = request.getRequestURI();
-        final String protocol = request.getProtocol();
-        log.info("{} {} {} {} ", ipAddress, method, requestURI, protocol);
+        long start = System.currentTimeMillis();
         filterChain.doFilter(request, response);
+        long end = System.currentTimeMillis();
+        log.info("{} {} {} {} {} {}", NetworkUtil.getIpAddress(request),
+                request.getMethod(), request.getRequestURI(), request.getProtocol(),
+                response.getStatus(), (end - start));
     }
 
 }
