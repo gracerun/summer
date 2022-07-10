@@ -50,7 +50,6 @@ public class HttpUtil {
 
     private static final String HTTP = "http";
     private static final String HTTPS = "https";
-    private static final String UTF_8 = "UTF-8";
     private static SSLConnectionSocketFactory sslsf = null;
     private static PoolingHttpClientConnectionManager cm = null;
     private static SSLContextBuilder builder = null;
