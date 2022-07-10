@@ -19,7 +19,7 @@ public class BBBServiceImpl {
         } catch (InterruptedException e) {
 
         }
-        log.info("-------BBB{}", System.currentTimeMillis());
+        log.info("-------printBBB:{}", System.currentTimeMillis());
         throw new RuntimeException("printBBB失败");
     }
 }

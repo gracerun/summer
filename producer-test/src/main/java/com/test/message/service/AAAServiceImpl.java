@@ -21,9 +21,9 @@ public class AAAServiceImpl extends BaseService {
         } catch (InterruptedException e) {
 
         }
-        log.info("-------AAA{}", System.currentTimeMillis());
+        log.info("-------printAAA:{}", System.currentTimeMillis());
         bbbService.printBBB();
-        log.info("-------AAA{}", System.currentTimeMillis());
+        log.info("-------printAAA:{}", System.currentTimeMillis());
         return "SUCCESS";
     }
 }

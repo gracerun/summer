@@ -38,8 +38,8 @@ public class MessageControllerTest {
         messageBody.setBusinessNo(System.currentTimeMillis() + "");
         messageBody.setBusinessType("msg_notify");
         messageBody.setContent("测试消息");
-//        HttpBuilder.post("http://localhost:8008/message/log").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
-        HttpBuilder.post("http://localhost:8009/message/log").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
+        HttpBuilder.post("http://localhost:8008/message/log").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
+//        HttpBuilder.post("http://localhost:8009/message/log").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
     }
 
     @Test

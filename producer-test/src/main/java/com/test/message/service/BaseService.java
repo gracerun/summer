@@ -28,13 +28,13 @@ public abstract class BaseService {
         } catch (InterruptedException e) {
 
         }
-        log.info("-------AAA----------------------------{}", System.currentTimeMillis());
+        log.info("-------print----------------------------{}", System.currentTimeMillis());
         try {
             printAAA();
         } catch (Throwable e) {
             throw new RuntimeException("printAAA报错了", e);
         }
-        log.info("-------AAA----------------------------{}", System.currentTimeMillis());
+        log.info("-------print----------------------------{}", System.currentTimeMillis());
     }
 
     public abstract String printAAA();
