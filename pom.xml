@@ -15,6 +15,7 @@
         <module>summer-spring-boot-autoconfigure</module>
         <module>summer-spring-boot-starter</module>
         <module>summer-util</module>
+        <module>summer-knife4j-fix</module>
     </modules>
     <packaging>pom</packaging>
     <name>${project.artifactId} ${project.version}</name>
