@@ -30,11 +30,11 @@ public class ServiceTask extends AbstractApplicationTask {
 
         List<ServiceInfo> serviceInfos = (List<ServiceInfo>) context.getAttribute("serviceInfos");
 
-        BaseHandler<ServiceInfo> baseHandler;
-        for (ServiceInfo serviceInfo : serviceInfos) {
-            baseHandler = new ServiceHandler(SERVICE_FTL, serviceInfo);
-            baseHandler.execute(context);
-        }
+//        BaseHandler<ServiceInfo> baseHandler;
+//        for (ServiceInfo serviceInfo : serviceInfos) {
+//            baseHandler = new ServiceHandler(SERVICE_FTL, serviceInfo);
+//            baseHandler.execute(context);
+//        }
 
         log.info("结束生成service...");
         return false;

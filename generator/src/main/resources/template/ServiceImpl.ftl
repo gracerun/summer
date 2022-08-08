@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import ${entityPackage}.${entityName};
 import ${daoType};
-import ${serviceType};
 
 /**
  * ${entityDesc}service服务类
@@ -17,7 +16,7 @@ import ${serviceType};
  * @since 1.8
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class ${entityName}Service extends BaseServiceImpl<${entityName}Mapper, ${entityName}> {
 
     @Resource

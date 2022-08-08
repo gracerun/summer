@@ -29,7 +29,7 @@ public class ServiceImplHandler extends BaseHandler<ServiceImplInfo> {
         this.param.put("packageStr", info.getPackageStr());
         this.param.put("serviceType", info.getServiceType());
         String voType = info.getVoType();
-        String utilProject = voType.substring(0,info.getPackageStr().lastIndexOf(".service.impl"));
+        String utilProject = voType.substring(0,info.getPackageStr().lastIndexOf(".service"));
         utilProject = utilProject.substring(utilProject.lastIndexOf(".")+1);
 
         this.param.put("voType", voType);

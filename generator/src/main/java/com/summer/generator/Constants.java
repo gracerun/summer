@@ -31,7 +31,7 @@ public class Constants {
     public static String UI_SUFFIX = "";
 
 
-    public static String SERVICE_IMPL_SUFFIX = "ServiceImpl";
+    public static String SERVICE_IMPL_SUFFIX = "Service";
 
     public static String SERVICE_TEST_SUFFIX = "ServiceTest";
 
