@@ -20,18 +20,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 基础实体
- *
- * @author xiaojie.zhang
- * @version V1.0.0
- * @since 2018/7/31
+ * @Author: Tom
+ * @CreateTime: ${YEAR}-${MONTH}-${DAY}  ${HOUR}:${MINUTE}
+ * @Description: 描述
+ * @Version: 1.0
  */
 @Accessors(chain = true)
 @Data
 @ApiModel
-@ColumnWidth(35)
-@HeadRowHeight(20)
-@ContentRowHeight(16)
 public class BaseEntity implements Serializable {
 
     /**

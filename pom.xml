@@ -17,7 +17,6 @@
         <module>summer-util</module>
         <module>summer-knife4j-fix</module>
         <module>generator-base</module>
-        <module>generator</module>
     </modules>
     <packaging>pom</packaging>
     <name>${project.artifactId} ${project.version}</name>

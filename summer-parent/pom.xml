@@ -26,10 +26,8 @@
 
         <knife4j.version>3.0.3</knife4j.version>
 
-        <mybatis-spring.version>2.2.2</mybatis-spring.version>
-        <mybatis.plus.version>3.4.3</mybatis.plus.version>
-        <mybatis.plus.generator.version>3.3.2</mybatis.plus.generator.version>
-        <mybatis-plus-join.version>1.1.8</mybatis-plus-join.version>
+        <mybatis.plus.version>3.5.2</mybatis.plus.version>
+        <mybatis.plus.generator.version>3.5.2</mybatis.plus.generator.version>
 
         <easyexcel.version>3.1.1</easyexcel.version>
         <fastjson.version>1.2.83</fastjson.version>
@@ -73,21 +71,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis-spring.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis.plus.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.github.yulichang</groupId>
-                <artifactId>mybatis-plus-join</artifactId>
-                <version>${mybatis-plus-join.version}</version>
             </dependency>
 
             <dependency>
