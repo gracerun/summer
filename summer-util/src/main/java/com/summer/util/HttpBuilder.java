@@ -15,6 +15,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -50,6 +51,10 @@ public class HttpBuilder {
 
     public static Builder get(String url) {
         return new Builder(HttpGet.METHOD_NAME, url);
+    }
+
+    public static Builder put(String url) {
+        return new Builder(HttpPut.METHOD_NAME, url);
     }
 
     public static class Builder {

@@ -35,6 +35,11 @@
             <version>${summer.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.summer</groupId>
+            <artifactId>summer-util</artifactId>
+            <version>${summer.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
         </dependency>
