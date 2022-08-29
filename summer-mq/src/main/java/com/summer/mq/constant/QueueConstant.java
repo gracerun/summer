@@ -29,6 +29,8 @@ public interface QueueConstant {
      */
     String DELAY_INDEX = "delay_index";
 
+    String _INDEX = "_index";
+
     /**
      * 数据加载锁
      */

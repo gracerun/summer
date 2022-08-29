@@ -17,11 +17,13 @@ public class QueueNameService {
     }
 
     public static String fmtDelayQueueName(String namespace, int delayLevel) {
-        return namespace + QueueConstant.DELIMITER + QueueConstant.DELAY + DelayRule.fmtLevelName(delayLevel);
+        return "{" + namespace + QueueConstant.DELIMITER + QueueConstant.DELAY + "}"
+                + DelayRule.fmtLevelName(delayLevel);
     }
 
     public static String fmtDelayIndexQueueName(String namespace, int delayLevel) {
-        return namespace + QueueConstant.DELIMITER + QueueConstant.DELAY_INDEX + DelayRule.fmtLevelName(delayLevel);
+        return "{" + namespace + QueueConstant.DELIMITER + QueueConstant.DELAY + "}"
+                + QueueConstant._INDEX + DelayRule.fmtLevelName(delayLevel);
     }
 
 }
