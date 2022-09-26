@@ -19,6 +19,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -130,7 +131,7 @@ public class HttpBuilder {
 
             if (!CollectionUtils.isEmpty(param)) {
                 param.forEach((key, value) -> {
-                    multipartBuilder.addTextBody(key, value);
+                    multipartBuilder.addTextBody(key, value, ContentType.create("text/plain", Consts.UTF_8));
                 });
             }
             if (!CollectionUtils.isEmpty(fileParam)) {
@@ -138,6 +139,7 @@ public class HttpBuilder {
                     multipartBuilder.addBinaryBody(key, new File(value));
                 });
             }
+            multipartBuilder.setMode(HttpMultipartMode.RFC6532);
             this.entity = multipartBuilder.build();
             return this;
         }
