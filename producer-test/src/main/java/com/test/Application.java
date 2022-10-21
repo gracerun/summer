@@ -17,8 +17,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication
 @EnableScheduling
-@EnableDiscoveryClient
-@EnableFeignClients
+//@EnableDiscoveryClient
+//@EnableFeignClients
 @EnableSummerMq(producerCorePoolSize = 10, producerMaximumPoolSize = 10)
 @Slf4j
 public class Application implements ApplicationRunner {

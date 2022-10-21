@@ -43,16 +43,30 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void pushMessage() {
+    public void send() {
         for (int i = 0; i < 1; i++) {
             try {
                 final MessageBody messageBody = new MessageBody();
                 messageBody.setBusinessNo(System.currentTimeMillis() + "");
                 messageBody.setBusinessType("msg_notify");
                 messageBody.setContent(i + "测试消息");
-                HttpBuilder.post("http://localhost:8008/message/push").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
-//                HttpBuilder.post("http://192.168.1.178:8008/message/push").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
-//                HttpBuilder.post("http://192.168.1.71:8008/message/push").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
+                HttpBuilder.post("http://localhost:8008/message/send").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
+//                TimeUnit.SECONDS.sleep(1);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+    }
+
+    @Test
+    public void sendAndSave() {
+        for (int i = 0; i < 1; i++) {
+            try {
+                final MessageBody messageBody = new MessageBody();
+                messageBody.setBusinessNo(System.currentTimeMillis() + "");
+                messageBody.setBusinessType("msg_notify");
+                messageBody.setContent(i + "测试消息");
+                HttpBuilder.post("http://localhost:8008/message/sendAndSave").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
 //                TimeUnit.SECONDS.sleep(1);
             } catch (Exception e) {
                 log.error(e.getMessage());

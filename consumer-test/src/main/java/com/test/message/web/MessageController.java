@@ -22,9 +22,9 @@ public class MessageController {
     @Autowired
     private MessageInterface messageInterface;
 
-    @PostMapping("/push")
-    public ResponseEntity push(@RequestBody MessageBody messageBody) throws Exception {
-        return messageInterface.push(messageBody);
+    @PostMapping("/sendAndSave")
+    public ResponseEntity sendAndSave(@RequestBody MessageBody messageBody) throws Exception {
+        return messageInterface.sendAndSave(messageBody);
     }
 
     @PostMapping("/log")
