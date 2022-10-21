@@ -1,8 +1,8 @@
 # 简介
-summer将通用功能组件进行封装，提供轻量级消息队列、日志增强、分布式锁、http等常用工具。使开发人员最大限度避免“复制粘贴“代码的问题。
+summer将通用功能组件进行封装，提供轻量级消息组件、日志增强、分布式锁、http等常用工具。使开发人员最大限度避免“复制粘贴“代码的问题。
 
 # summer-mq
-`summer-mq`是一个轻量级消息队列，通过集成`redis`组件实现普通消息、事务消息、定时/延迟消息。不需要额外部署消息中间件即可享受异步通信的快感。
+`summer-mq`是一个轻量级消息组件，通过集成`redis`组件实现普通消息、事务消息、定时/延迟消息。不需要额外部署消息中间件即可享受异步通信的快感。
 
 ##使用说明
 
@@ -28,19 +28,21 @@ Maven
 
 实现`MessageListener`接口，配置`@SummerMQMessageListener`注解，设置`topic`标识，设置消费者线程池大小。
 
-`consumerNamespace`：消费者名称空间，默认值为：`${spring.profiles.active:summer.mq.queue}`，*消费者与生产者名称空间相同的情况下才能消费对应的消息*
+`consumerNamespace`：消费者名称空间，默认值为：`${spring.profiles.active:summer.mq.queue}`，
+*消费者与生产者名称空间相同的情况下才能消费对应的消息*
 
 `topic`：用于消息分类
 
-`delayExpression`：消费失败时重试次数和重试时间间隔，默认重试19次，默认时间间隔`1s 3s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h`
+`delayExpression`：消费失败时重试次数和重试时间间隔，默认重试19次，
+默认时间间隔`1s 3s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h`
 
 `repeatRetry`：当消费失败并且达到最大重试次数之后是否需要重复尝试消费，默认`false`
 
 `batchRpopSize`：单次拉取消息的最大数量，默认10
 
-`corePoolSize`：消费者核心线程数大小，默认10
+`corePoolSize`：消费者核心线程数大小，默认4
 
-`maximumPoolSize`：消费者线程数最大值，默认10
+`maximumPoolSize`：消费者线程数最大值，默认4
 
 `keepAliveTime`：消费者线程空闲超时时间，单位秒，默认60
 
@@ -55,7 +57,7 @@ Maven
 ```java
 @Slf4j
 @Component
-@SummerMQMessageListener(topic = "msg_notify", corePoolSize = 10, maximumPoolSize = 10, batchRpopSize = 30)
+@SummerMQMessageListener(topic = "msg_notify")
 public class MsgNotifyConsumer implements MessageListener {
 
     @Override
@@ -77,7 +79,7 @@ public class MsgNotifyConsumer implements MessageListener {
 ```java
 @SpringBootApplication
 @EnableScheduling
-@EnableSummerMq(producerCorePoolSize = 10, producerMaximumPoolSize = 10)
+@EnableSummerMq
 @Slf4j
 public class Application implements ApplicationRunner {
 
@@ -93,8 +95,9 @@ public class Application implements ApplicationRunner {
 ```
 ##发送普通消息
 
-`summerMQTemplate.sendAndSave`表示发送消息并将消息持久化到数据库，如果在事务内执行则事务提交成功之后才发送该消息，如果在事务外执行则立即发送。
-`summerMQTemplate.send`表示发送消息不会将消息持久化到数据库，如果在事务内执行则事务提交成功之后才发送该消息，如果在事务外执行则立即发送。
+`summerMQTemplate.sendAndSave`表示发送消息并将消息持久化到数据库
+`summerMQTemplate.send`表示发送消息不会将消息持久化到数据库
+如果在事务内执行则事务提交成功之后才发送该消息，如果在事务外执行则立即发送。
 
 ```java
 @Autowired
@@ -248,6 +251,7 @@ RequestConfig config = RequestConfig.custom()
   .setConnectTimeout(10000)
   .setConnectionRequestTimeout(2000)
   .build();
+  
 HttpBuilder.get("url")
   .setConfig(config)
   .setLevel(Level.INFO)
@@ -262,6 +266,7 @@ RequestConfig config = RequestConfig.custom()
   .setConnectTimeout(10000)
   .setConnectionRequestTimeout(2000)
   .build();
+  
 HttpBuilder.post("url")
   .setJsonParam("{}")
   .setConfig(config)
