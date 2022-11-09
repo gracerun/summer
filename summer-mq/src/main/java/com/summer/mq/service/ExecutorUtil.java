@@ -37,7 +37,7 @@ public class ExecutorUtil {
     }
 
     public static String fmtThreadNamePrefix(String namespace, int delayLevel) {
-        return namespace + QueueConstant.DELIMITER + QueueConstant.DELAY + DelayRule.DEFAULT_RULE.fmtLevelName(delayLevel) + "-";
+        return namespace + QueueConstant.DELIMITER + QueueConstant.DELAY + DelayRule.fmtLevelName(delayLevel) + "-";
     }
 
 }

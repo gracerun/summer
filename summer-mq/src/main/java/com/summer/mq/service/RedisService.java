@@ -53,8 +53,7 @@ public class RedisService {
     }
 
     /**
-     * redis单实例或主备模式分布式锁
-     * 对于 Redis 集群则无法使用
+     * redis分布式锁
      *
      * @param key     加锁键
      * @param value   加锁唯一标识,推荐使用UUID

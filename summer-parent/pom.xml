@@ -36,6 +36,8 @@
         <hutool.version>5.8.3</hutool.version>
         <commons-io.version>2.11.0</commons-io.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
+
+        <easy-captcha.version>1.6.2</easy-captcha.version>
     </properties>
 
     <dependencyManagement>
@@ -128,6 +130,12 @@
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
                 <version>${commons-beanutils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.whvcse</groupId>
+                <artifactId>easy-captcha</artifactId>
+                <version>${easy-captcha.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
