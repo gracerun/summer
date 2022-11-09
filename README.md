@@ -18,7 +18,7 @@ Maven
 
 ```xml
 <dependency>
-    <groupId>com.summer</groupId>
+    <groupId>com.gracerun</groupId>
     <artifactId>summer-spring-boot-starter</artifactId>
     <version>1.0.0</version>
 </dependency>

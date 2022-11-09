@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.summer</groupId>
+    <groupId>com.gracerun</groupId>
     <artifactId>summer</artifactId>
     <version>1.0.0</version>
 
@@ -15,11 +15,8 @@
         <module>summer-spring-boot-autoconfigure</module>
         <module>summer-spring-boot-starter</module>
         <module>summer-util</module>
-        <module>summer-knife4j-fix</module>
-        <module>generator-base</module>
     </modules>
     <packaging>pom</packaging>
-    <name>${project.artifactId} ${project.version}</name>
 
     <build>
         <plugins>
@@ -90,4 +87,6 @@
             </plugin>
         </plugins>
     </build>
+
+
 </project>
