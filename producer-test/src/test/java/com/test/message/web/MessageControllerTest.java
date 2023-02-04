@@ -1,8 +1,8 @@
 package com.test.message.web;
 
 import ch.qos.logback.classic.Level;
-import com.summer.mq.bean.MessageBody;
-import com.summer.util.HttpBuilder;
+import com.gracerun.summermq.bean.MessageBody;
+import com.gracerun.util.HttpBuilder;
 import io.lettuce.core.RedisAsyncCommandsImpl;
 import io.lettuce.core.RedisFuture;
 import io.lettuce.core.cluster.api.async.RedisClusterAsyncCommands;

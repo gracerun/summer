@@ -1,9 +1,9 @@
 package com.test.message.web;
 
-import com.summer.log.annotation.Logging;
-import com.summer.log.annotation.ThrowableLog;
-import com.summer.log.serializer.ToJsonSerializer;
-import com.summer.mq.bean.MessageBody;
+import com.gracerun.log.annotation.Logging;
+import com.gracerun.log.annotation.ThrowableLog;
+import com.gracerun.log.serializer.ToJsonSerializer;
+import com.gracerun.summermq.bean.MessageBody;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.test.message.service;
 
-import com.summer.log.annotation.Logging;
-import com.summer.log.annotation.ThrowableLog;
+import com.gracerun.log.annotation.Logging;
+import com.gracerun.log.annotation.ThrowableLog;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package com.test.message.web;
 
-import com.summer.log.annotation.Logging;
-import com.summer.mq.bean.MessageBody;
+import com.gracerun.log.annotation.Logging;
+import com.gracerun.summermq.bean.MessageBody;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;

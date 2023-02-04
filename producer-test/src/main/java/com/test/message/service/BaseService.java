@@ -1,8 +1,8 @@
 package com.test.message.service;
 
-import com.summer.log.annotation.Logging;
-import com.summer.log.annotation.ThrowableLog;
-import com.summer.log.constant.Level;
+import com.gracerun.log.annotation.Logging;
+import com.gracerun.log.annotation.ThrowableLog;
+import com.gracerun.log.constant.Level;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

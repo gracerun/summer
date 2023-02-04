@@ -1,7 +1,7 @@
 package com.test.message.web;
 
-import com.summer.mq.bean.MessageBody;
-import com.summer.mq.producer.SummerMQTemplate;
+import com.gracerun.summermq.bean.MessageBody;
+import com.gracerun.summermq.producer.SummerMQTemplate;
 import com.test.message.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
