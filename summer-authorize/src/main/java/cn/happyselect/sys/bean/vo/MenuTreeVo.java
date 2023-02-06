@@ -1,0 +1,36 @@
+package cn.happyselect.sys.bean.vo;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 菜单树
+ *
+ * @author adc
+ * @version 1.0.0
+ * @date 2020-08-11
+ */
+@Getter
+@Setter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
+public class MenuTreeVo {
+
+    private String menuCode;
+
+    private String menuName;
+
+    private String url;
+
+    private String parentCode;
+
+    private String nodeType;
+
+    private List<MenuTreeVo> child = new ArrayList<MenuTreeVo>();
+
+}
