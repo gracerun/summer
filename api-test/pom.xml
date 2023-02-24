@@ -7,13 +7,12 @@
     <parent>
         <groupId>com.gracerun</groupId>
         <artifactId>summer-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <relativePath>../summer-parent/pom.xml</relativePath>
     </parent>
 
     <groupId>com.test</groupId>
     <artifactId>api-test</artifactId>
-    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>${project.artifactId} ${project.version}</name>
 
@@ -25,15 +24,15 @@
         <dependency>
             <groupId>com.gracerun</groupId>
             <artifactId>summer-mq</artifactId>
-            <version>1.0.0</version>
+            <version>${summer.version}</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.gracerun</groupId>
-            <artifactId>summer-knife4j-fix</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.gracerun</groupId>-->
+<!--            <artifactId>summer-knife4j-fix</artifactId>-->
+<!--            <version>${summer.version}</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>

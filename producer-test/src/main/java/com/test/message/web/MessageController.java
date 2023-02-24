@@ -2,7 +2,7 @@ package com.test.message.web;
 
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.producer.SummerMQTemplate;
-import com.test.message.service.BaseService;
+import com.test.message.service.AppleServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class MessageController implements MessageInterface {
     private SummerMQTemplate summerMQTemplate;
 
     @Autowired
-    private BaseService baseService;
+    private AppleServiceImpl appleService;
 
     @Override
     @PostMapping("/sendAndSave")
@@ -56,7 +56,7 @@ public class MessageController implements MessageInterface {
     @PostMapping("/log")
     public ResponseEntity log(@RequestBody MessageBody messageBody) {
         try {
-            baseService.print();
+            appleService.printName();
         } catch (Exception e) {
             log.error("控制层报错了{}-{}", e.getMessage(), e);
         }

@@ -9,7 +9,8 @@
 
     <property name="LOG_HOME" value="${LOG_HOME_DIR}"/>
     <property name="LOG_HISTORY_HOME" value="${LOG_HOME}/history"/>
-    <property name="BIZ_LOG" value="%d{HH:mm:ss.SSS} [${LOCALHOST_IP},%X{spanId},%X{traceId}] %-5level %-32.32logger{32} %X{CURRENT_METHOD_NAME} %msg%n"/>
+    <property name="BIZ_LOG"
+              value="%d{HH:mm:ss.SSS} [${LOCALHOST_IP},%X{spanId},%X{traceId}] %-5level %-32.32logger{32} %X{CURRENT_METHOD_NAME} %msg%n"/>
 
     <springProfile name="test">
         <!--业务日志-->
@@ -22,9 +23,9 @@
             <encoder>
                 <pattern>${BIZ_LOG}</pattern>
             </encoder>
-<!--            <filter>-->
-<!--                <value>DEFAULT</value>-->
-<!--            </filter>-->
+            <!--            <filter>-->
+            <!--                <value>DEFAULT</value>-->
+            <!--            </filter>-->
         </appender>
 
         <!--任务执行日志-->
@@ -63,14 +64,14 @@
             </encoder>
         </appender>
 
-        <logger name="com.summer.mq" additivity="false" level="DEBUG">
+        <logger name="com.summer.mq" additivity="false" level="INFO">
             <appender-ref ref="infoAppender"/>
             <appender-ref ref="taskAppender"/>
             <appender-ref ref="scheduledAppender"/>
         </logger>
 
         <root level="INFO">
-            <!--        <appender-ref ref="consoleAppender"/>-->
+            <appender-ref ref="consoleAppender"/>
             <appender-ref ref="infoAppender"/>
             <appender-ref ref="taskAppender"/>
             <appender-ref ref="scheduledAppender"/>
