@@ -52,7 +52,8 @@ public @interface Logging {
     Class<? extends LogSerializer> serializeReturnUsing() default ToStringSerializer.class;
 
     /**
-     * 日志级别
+     * 定义方法入参与返回值的日志级别
+     * Level.OFF: 关闭方法入参与返回值的日志
      *
      * @return
      */

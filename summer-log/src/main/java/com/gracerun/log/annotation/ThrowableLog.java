@@ -10,16 +10,16 @@ package com.gracerun.log.annotation;
 public @interface ThrowableLog {
 
     /**
-     * 记录异常类
+     * 限定异常类及其所有子类
      *
      * @return
      */
     Class<? extends Throwable> throwable();
 
     /**
-     * 异常日志最大行数
+     * 打印异常堆栈的行数不超过maxRow
      * -1:不限制行数
-     * 0:不记录异常
+     * 0:不打印异常堆栈信息
      *
      * @return
      */

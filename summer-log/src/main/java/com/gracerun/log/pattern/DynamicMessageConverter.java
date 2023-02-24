@@ -16,6 +16,9 @@ public class DynamicMessageConverter extends MessageConverter {
         if (Objects.nonNull(loggingInfo)) {
             final String formattedMessage = event.getFormattedMessage();
             final int maxLength = loggingInfo.getLoggingAttribute().getMaxLength();
+            if (maxLength == 0) {
+                return "";
+            }
             if (StringUtils.hasText(formattedMessage)
                     && 0 < maxLength
                     && maxLength < formattedMessage.length()) {
