@@ -6,7 +6,7 @@
               value="%d{HH:mm:ss.SSS} [${INSTANCE_ID},%X{spanId},%X{traceId}] %-5level %-36.36logger{36} %msg%n"/>
 
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="com.summer.log.encoder.PatternWrapLayoutEncoder">
+        <encoder class="com.gracerun.log.encoder.PatternWrapLayoutEncoder">
             <pattern>${BIZ_LOG}</pattern>
         </encoder>
     </appender>

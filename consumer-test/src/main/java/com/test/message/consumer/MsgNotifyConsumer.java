@@ -1,9 +1,9 @@
 package com.test.message.consumer;
 
-import com.summer.mq.annotation.SummerMQMessageListener;
-import com.summer.mq.bean.MessageBody;
-import com.summer.mq.constant.ConsumeStatus;
-import com.summer.mq.consumer.MessageListener;
+import com.gracerun.summermq.annotation.SummerMQMessageListener;
+import com.gracerun.summermq.bean.MessageBody;
+import com.gracerun.summermq.constant.ConsumeStatus;
+import com.gracerun.summermq.consumer.MessageListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.stereotype.Component;

@@ -22,9 +22,9 @@
             <encoder>
                 <pattern>${BIZ_LOG}</pattern>
             </encoder>
-            <filter>
-                <value>DEFAULT</value>
-            </filter>
+<!--            <filter>-->
+<!--                <value>DEFAULT</value>-->
+<!--            </filter>-->
         </appender>
 
         <!--任务执行日志-->

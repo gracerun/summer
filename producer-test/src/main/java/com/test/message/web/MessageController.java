@@ -1,9 +1,10 @@
 package com.test.message.web;
 
-import com.summer.mq.bean.MessageBody;
-import com.summer.mq.producer.SummerMQTemplate;
+import com.gracerun.summermq.bean.MessageBody;
+import com.gracerun.summermq.producer.SummerMQTemplate;
 import com.test.message.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +30,25 @@ public class MessageController implements MessageInterface {
     private BaseService baseService;
 
     @Override
-    @PostMapping("/push")
+    @PostMapping("/sendAndSave")
     @Transactional
-    public ResponseEntity push(@RequestBody MessageBody messageBody) {
+    public ResponseEntity sendAndSave(@RequestBody MessageBody messageBody) {
         summerMQTemplate.sendAndSave(messageBody);
+        return ResponseEntity.ok("发送成功");
+    }
+
+    @PostMapping("/delaySend")
+    @Transactional
+    public ResponseEntity delaySend(@RequestBody MessageBody messageBody) {
+        messageBody.setNextExecuteTime(new DateTime().plusMinutes(1).toDate());
+        summerMQTemplate.sendAndSave(messageBody);
+        return ResponseEntity.ok("发送成功");
+    }
+
+    @Override
+    @PostMapping("/send")
+    public ResponseEntity send(@RequestBody MessageBody messageBody) {
+        summerMQTemplate.send(messageBody);
         return ResponseEntity.ok("发送成功");
     }
 

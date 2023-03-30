@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.summer</groupId>
+        <groupId>com.gracerun</groupId>
         <artifactId>summer-parent</artifactId>
         <version>1.0.0</version>
         <relativePath>../summer-parent/pom.xml</relativePath>
@@ -23,13 +23,13 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.summer</groupId>
+            <groupId>com.gracerun</groupId>
             <artifactId>summer-mq</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.summer</groupId>
+            <groupId>com.gracerun</groupId>
             <artifactId>summer-knife4j-fix</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>

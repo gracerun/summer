@@ -1,1 +1,1 @@
-org.springframework.context.ApplicationContextInitializer=com.summer.log.core.AppContextLogInitializer
+org.springframework.context.ApplicationContextInitializer=com.gracerun.log.core.AppContextLogInitializer
