@@ -55,11 +55,7 @@ public class MessageController implements MessageInterface {
     @Override
     @PostMapping("/log")
     public ResponseEntity log(@RequestBody MessageBody messageBody) {
-        try {
-            appleService.printName();
-        } catch (Exception e) {
-            log.error("控制层报错了{}-{}", e.getMessage(), e);
-        }
+        appleService.printName();
         return ResponseEntity.ok("发送成功");
     }
 

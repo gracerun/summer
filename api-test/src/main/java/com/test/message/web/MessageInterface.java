@@ -2,6 +2,7 @@ package com.test.message.web;
 
 import com.gracerun.log.annotation.Logging;
 import com.gracerun.log.annotation.ThrowableLog;
+import com.gracerun.log.constant.Level;
 import com.gracerun.log.serializer.ToJsonSerializer;
 import com.gracerun.summermq.bean.MessageBody;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,7 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @version 1.0.0
  * @date 4/13/22
  */
-@Logging(throwableLog = {@ThrowableLog(throwable = Throwable.class, maxRow = 5)},
+@Logging(
+        name = "testLog",
+        maxLength = 1024,
+        level = Level.DEBUG,
+        throwableLog = {@ThrowableLog(throwable = Throwable.class, maxRow = 5)},
         serializeArgsUsing = ToJsonSerializer.class,
         serializeReturnUsing = ToJsonSerializer.class)
 @FeignClient(name = "producer-test", path = "/message", configuration = FooConfiguration.class)
