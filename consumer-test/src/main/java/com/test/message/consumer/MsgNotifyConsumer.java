@@ -12,10 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 消息推送
- *
- * @author adc
+ * @author Tom
  * @version 1.0.0
- * @date 6/9/21
+ * @date 2023/4/11
  */
 @Slf4j
 @Component

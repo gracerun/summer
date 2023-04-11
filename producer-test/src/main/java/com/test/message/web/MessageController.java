@@ -1,5 +1,6 @@
 package com.test.message.web;
 
+import com.gracerun.log.annotation.Logging;
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.producer.SummerMQTemplate;
 import com.test.message.service.BaseService;
@@ -32,6 +33,7 @@ public class MessageController implements MessageInterface {
     @Override
     @PostMapping("/sendAndSave")
     @Transactional
+    @Logging(name = "MessageControllerXXXXXXXXXX")
     public ResponseEntity sendAndSave(@RequestBody MessageBody messageBody) {
         summerMQTemplate.sendAndSave(messageBody);
         return ResponseEntity.ok("发送成功");

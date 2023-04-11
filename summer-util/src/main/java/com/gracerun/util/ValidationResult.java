@@ -3,13 +3,10 @@ package com.gracerun.util;
 import java.util.Map;
 
 /**
- * Copyright (C), 2010-2020, emi99 Payment. Co., Ltd.
- * <p>
  * 校验结果
- *
- * @author lowrie
+ * @author Tom
  * @version 1.0.0
- * @date 2020-06-30
+ * @date 2023/4/11
  */
 public class ValidationResult {
 

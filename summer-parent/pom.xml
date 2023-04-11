@@ -6,15 +6,15 @@
 
     <groupId>com.gracerun</groupId>
     <artifactId>summer-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
 
     <name>${project.groupId} ${project.artifactId} ${project.version}</name>
     <description>spring boot starter for summermq</description>
-    <url>https://github.com/yaodan-sn/summer</url>
+    <url>https://github.com/gracerun/summer</url>
 
     <properties>
-        <summer.version>1.0.0</summer.version>
+        <summer.version>1.0.1</summer.version>
         <java.version>1.8</java.version>
         <resource.delimiter>@</resource.delimiter>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
@@ -49,10 +49,12 @@
             <url>https://spdx.org/licenses/BSD-3-Clause.html</url>
         </license>
     </licenses>
+
     <scm>
-        <connection>https://github.com/yaodan-sn/summer.git</connection>
-        <url>https://github.com/yaodan-sn/summer</url>
+        <connection>https://github.com/gracerun/summer.git</connection>
+        <url>https://github.com/gracerun/summer</url>
     </scm>
+
     <developers>
         <developer>
             <name>yaodan</name>

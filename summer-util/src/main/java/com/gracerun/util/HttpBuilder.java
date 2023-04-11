@@ -13,10 +13,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -56,6 +53,26 @@ public class HttpBuilder {
 
     public static Builder put(String url) {
         return new Builder(HttpPut.METHOD_NAME, url);
+    }
+
+    public static Builder delete(String url) {
+        return new Builder(HttpDelete.METHOD_NAME, url);
+    }
+
+    public static Builder head(String url) {
+        return new Builder(HttpHead.METHOD_NAME, url);
+    }
+
+    public static Builder options(String url) {
+        return new Builder(HttpOptions.METHOD_NAME, url);
+    }
+
+    public static Builder patch(String url) {
+        return new Builder(HttpPatch.METHOD_NAME, url);
+    }
+
+    public static Builder trace(String url) {
+        return new Builder(HttpTrace.METHOD_NAME, url);
     }
 
     public static class Builder {

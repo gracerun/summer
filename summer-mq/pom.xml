@@ -7,12 +7,11 @@
     <parent>
         <groupId>com.gracerun</groupId>
         <artifactId>summer-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <relativePath>../summer-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>summer-mq</artifactId>
-    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>${project.artifactId} ${project.version}</name>
 
@@ -33,6 +32,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
