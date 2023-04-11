@@ -71,7 +71,7 @@
         </logger>
 
         <root level="INFO">
-            <!--        <appender-ref ref="consoleAppender"/>-->
+            <appender-ref ref="consoleAppender"/>
             <appender-ref ref="infoAppender"/>
             <appender-ref ref="taskAppender"/>
             <appender-ref ref="scheduledAppender"/>
