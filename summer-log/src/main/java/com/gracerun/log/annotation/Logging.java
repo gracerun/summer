@@ -60,7 +60,7 @@ public @interface Logging {
     Level level() default Level.INFO;
 
     /**
-     * 单行日志最大长度
+     * 单行日志最大长度, 异常堆栈不受此配置限制
      * -1:不限制长度
      *
      * @return
