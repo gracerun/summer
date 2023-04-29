@@ -1,7 +1,6 @@
-package com.gracerun.summermq.spring.annotation;
+package com.gracerun.summermq.annotation;
 
 import com.gracerun.summermq.constant.QueueConstant;
-import com.gracerun.summermq.spring.autoconfigure.SummerMQImportSelector;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 

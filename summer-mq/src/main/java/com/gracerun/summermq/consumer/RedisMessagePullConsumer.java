@@ -140,13 +140,13 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
             case CREATE_JUST:
                 queueName = QueueNameService.fmtTopicQueueName(consumerNamespace, topic);
 
+                log.info("the consumer [{}] start beginning", queueName);
+
                 if (StringUtils.hasText(summerMQMessageListener.delayExpression())
                         && !QueueConstant.DELAY_EXPRESSION.equals(summerMQMessageListener.delayExpression())) {
                     delayRule = new DelayRule(summerMQMessageListener.delayExpression());
                 }
                 delayRule.setRepeatRetry(summerMQMessageListener.repeatRetry());
-
-                log.info("the consumer [{}] start beginning", queueName);
 
                 final Duration timeout = redisProperties.getTimeout();
                 final long seconds = timeout.getSeconds();
@@ -171,8 +171,8 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
 
                 mqClientInstance.start();
                 executePullRequestImmediately(new PullRequest(consumerNamespace, queueName).setBatchSize(batchRpopSize));
-                log.info("the consumer [{}] start OK.", queueName);
                 this.serviceState = ServiceState.RUNNING;
+                log.info("the consumer [{}] start OK.", queueName);
                 break;
             case RUNNING:
             case START_FAILED:

@@ -1,11 +1,11 @@
 package com.gracerun.summermq.spring.autoconfigure;
 
 
+import com.gracerun.summermq.annotation.EnableSummerMQ;
 import com.gracerun.summermq.aop.MessageAspect;
 import com.gracerun.summermq.event.MessageEventListener;
 import com.gracerun.summermq.producer.RedisMessageProducer;
 import com.gracerun.summermq.producer.SummerMQTemplate;
-import com.gracerun.summermq.spring.annotation.EnableSummerMQ;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;

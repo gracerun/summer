@@ -78,6 +78,7 @@ public class RedisMessageProducer implements InitializingBean, DisposableBean {
     public void start(final boolean startFactory) throws MQClientException {
         switch (this.serviceState) {
             case CREATE_JUST:
+                log.info("the producer start beginning");
                 this.serviceState = ServiceState.START_FAILED;
 
                 producerThread = ExecutorUtil.createExecutor("summer-producer-", corePoolSize, maximumPoolSize, keepAliveTime, blockingQueueSize, new ThreadPoolExecutor.CallerRunsPolicy());
@@ -93,6 +94,7 @@ public class RedisMessageProducer implements InitializingBean, DisposableBean {
                     mqClientInstance.start();
                 }
                 this.serviceState = ServiceState.RUNNING;
+                log.info("the producer start OK.");
                 break;
             case RUNNING:
             case START_FAILED:
