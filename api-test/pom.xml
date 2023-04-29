@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>com.gracerun</groupId>
-            <artifactId>summer-mq</artifactId>
+            <artifactId>summer-log</artifactId>
             <version>${summer.version}</version>
             <scope>compile</scope>
         </dependency>

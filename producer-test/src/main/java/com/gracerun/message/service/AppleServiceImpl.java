@@ -1,4 +1,4 @@
-package com.test.message.service;
+package com.gracerun.message.service;
 
 import com.gracerun.log.annotation.Logging;
 import com.gracerun.log.annotation.ThrowableLog;

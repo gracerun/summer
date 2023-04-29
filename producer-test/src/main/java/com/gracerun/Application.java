@@ -1,6 +1,6 @@
-package com.test;
+package com.gracerun;
 
-import com.gracerun.summermq.spring.annotation.EnableSummerMQ;
+import com.gracerun.summermq.annotation.EnableSummerMQ;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

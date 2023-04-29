@@ -1,4 +1,4 @@
-package com.test.message.consumer;
+package com.gracerun.message.consumer;
 
 import com.gracerun.log.annotation.Logging;
 import com.gracerun.summermq.annotation.SummerMQMessageListener;

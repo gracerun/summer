@@ -1,7 +1,7 @@
-package com.test.message.web;
+package com.gracerun.message.web;
 
 import com.gracerun.log.annotation.Logging;
-import com.gracerun.summermq.bean.MessageBody;
+import com.gracerun.message.bean.GraceMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +22,7 @@ public class AnnotationUtilsTest {
         log.info("AnnotatedElementUtils.findClassMergedAnnotation:\n {}", AnnotatedElementUtils.findMergedAnnotation(MessageController.class, Logging.class));
         log.info("AnnotatedElementUtils.getClassMergedAnnotation:\n {}", AnnotatedElementUtils.getMergedAnnotation(MessageController.class, Logging.class));
 
-        Method method = BeanUtils.findDeclaredMethod(MessageController.class, "log", MessageBody.class);
+        Method method = BeanUtils.findDeclaredMethod(MessageController.class, "log", GraceMessage.class);
 
         log.info("AnnotationUtils.findMethodAnnotation:\n {}", AnnotationUtils.findAnnotation(method, Logging.class));
         log.info("AnnotationUtils.getMethodAnnotation:\n {}", AnnotationUtils.getAnnotation(method, Logging.class));

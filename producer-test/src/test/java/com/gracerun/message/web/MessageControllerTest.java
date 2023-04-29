@@ -1,11 +1,8 @@
-package com.test.message.web;
+package com.gracerun.message.web;
 
 import ch.qos.logback.classic.Level;
-import com.gracerun.summermq.bean.MessageBody;
+import com.gracerun.message.bean.GraceMessage;
 import com.gracerun.util.HttpBuilder;
-import io.lettuce.core.RedisAsyncCommandsImpl;
-import io.lettuce.core.RedisFuture;
-import io.lettuce.core.cluster.api.async.RedisClusterAsyncCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
 import org.junit.jupiter.api.Test;
@@ -34,7 +31,7 @@ public class MessageControllerTest {
 
     @Test
     public void testLog() throws IOException {
-        final MessageBody messageBody = new MessageBody();
+        final GraceMessage messageBody = new GraceMessage();
         messageBody.setBusinessNo(System.currentTimeMillis() + "");
         messageBody.setBusinessType("msg_notify");
         messageBody.setContent("测试消息");
@@ -46,7 +43,7 @@ public class MessageControllerTest {
     public void send() {
         for (int i = 0; i < 10; i++) {
             try {
-                final MessageBody messageBody = new MessageBody();
+                final GraceMessage messageBody = new GraceMessage();
                 messageBody.setBusinessNo(System.currentTimeMillis() + "");
                 messageBody.setBusinessType("msg_notify");
                 messageBody.setContent(i + "测试消息");
@@ -61,7 +58,7 @@ public class MessageControllerTest {
     public void sendAndSave() {
         for (int i = 0; i < 10; i++) {
             try {
-                final MessageBody messageBody = new MessageBody();
+                final GraceMessage messageBody = new GraceMessage();
                 messageBody.setBusinessNo(System.currentTimeMillis() + "");
                 messageBody.setBusinessType("msg_notify");
                 messageBody.setContent(i + "测试消息");
@@ -75,7 +72,7 @@ public class MessageControllerTest {
     @Test
     public void delaySend() throws IOException, InterruptedException {
         for (int i = 0; i < 10; i++) {
-            final MessageBody messageBody = new MessageBody();
+            final GraceMessage messageBody = new GraceMessage();
             messageBody.setBusinessNo(System.currentTimeMillis() + "");
             messageBody.setBusinessType("msg_notify");
             messageBody.setContent(i + "");
@@ -119,19 +116,19 @@ public class MessageControllerTest {
 
     }
 
-    @Test
-    public void testLambda() {
-        funciontTest("123123", RedisClusterAsyncCommands::brpop, 10, new byte[]{});
-    }
-
-    public <R, T1, T2> RedisFuture<R> funciontTest(String s, ConnectionFunction2<T1, T2, R> function, T1 t1, T2 t2) {
-        return function.apply(new RedisAsyncCommandsImpl(null, null), t1, t2);
-    }
-
-    @FunctionalInterface
-    interface ConnectionFunction2<T1, T2, R> {
-
-        RedisFuture<R> apply(RedisClusterAsyncCommands<byte[], byte[]> connection, T1 t1, T2 t2);
-    }
+//    @Test
+//    public void testLambda() {
+//        funciontTest("123123", RedisClusterAsyncCommands::brpop, 10, new byte[]{});
+//    }
+//
+//    public <R, T1, T2> RedisFuture<R> funciontTest(String s, ConnectionFunction2<T1, T2, R> function, T1 t1, T2 t2) {
+//        return function.apply(new RedisAsyncCommandsImpl(null, null), t1, t2);
+//    }
+//
+//    @FunctionalInterface
+//    interface ConnectionFunction2<T1, T2, R> {
+//
+//        RedisFuture<R> apply(RedisClusterAsyncCommands<byte[], byte[]> connection, T1 t1, T2 t2);
+//    }
 
 }

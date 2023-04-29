@@ -1,9 +1,11 @@
-package com.test.message.web;
+package com.gracerun.message.web;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.gracerun.log.annotation.Logging;
+import com.gracerun.message.bean.GraceMessage;
+import com.gracerun.message.service.AppleServiceImpl;
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.producer.SummerMQTemplate;
-import com.test.message.service.AppleServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,38 +27,38 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageController implements MessageInterface {
 
     @Autowired
-    private SummerMQTemplate summerMQTemplate;
+    private AppleServiceImpl appleService;
 
     @Autowired
-    private AppleServiceImpl appleService;
+    private SummerMQTemplate summerMQTemplate;
 
     @Override
     @PostMapping("/sendAndSave")
     @Transactional
-    public ResponseEntity sendAndSave(@RequestBody MessageBody messageBody) {
-        summerMQTemplate.sendAndSave(messageBody);
+    public ResponseEntity sendAndSave(@RequestBody GraceMessage message) {
+        summerMQTemplate.sendAndSave(BeanUtil.toBean(message, MessageBody.class));
         return ResponseEntity.ok("发送成功");
     }
 
     @PostMapping("/delaySend")
     @Transactional
-    public ResponseEntity delaySend(@RequestBody MessageBody messageBody) {
-        messageBody.setNextExecuteTime(new DateTime().plusMinutes(1).toDate());
-        summerMQTemplate.sendAndSave(messageBody);
+    public ResponseEntity delaySend(@RequestBody GraceMessage message) {
+        message.setNextExecuteTime(new DateTime().plusMinutes(1).toDate());
+        summerMQTemplate.sendAndSave(BeanUtil.toBean(message, MessageBody.class));
         return ResponseEntity.ok("发送成功");
     }
 
     @Override
     @PostMapping("/send")
-    public ResponseEntity send(@RequestBody MessageBody messageBody) {
-        summerMQTemplate.send(messageBody);
+    public ResponseEntity send(@RequestBody GraceMessage message) {
+        summerMQTemplate.send(BeanUtil.toBean(message, MessageBody.class));
         return ResponseEntity.ok("发送成功");
     }
 
     @Override
     @PostMapping("/log")
     @Logging
-    public ResponseEntity log(@RequestBody MessageBody messageBody) {
+    public ResponseEntity log(@RequestBody GraceMessage message) {
         appleService.printName();
         return ResponseEntity.ok("发送成功");
     }

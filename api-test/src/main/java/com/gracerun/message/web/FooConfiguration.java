@@ -1,4 +1,4 @@
-package com.test.message.web;
+package com.gracerun.message.web;
 
 import feign.Logger;
 import org.springframework.context.annotation.Bean;
