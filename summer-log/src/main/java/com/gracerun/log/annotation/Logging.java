@@ -72,6 +72,6 @@ public @interface Logging {
      *
      * @return
      */
-    ThrowableLog[] throwableLog() default {};
+    ThrowableLog[] throwableLog() default {@ThrowableLog(throwable = Throwable.class, maxRow = 5)};
 
 }

@@ -1,37 +1,31 @@
 package com.gracerun.summermq.spring.autoconfigure;
 
-import com.gracerun.summermq.config.MqConfiguration;
-import com.gracerun.summermq.producer.RedisMessageProducer;
-import com.gracerun.summermq.producer.SummerMQTemplate;
-import com.gracerun.summermq.spring.annotation.EnableSummerMq;
-import com.gracerun.log.spring.autoconfigure.SummerLogSchedulingAutoConfiguration;
+
 import com.gracerun.summermq.aop.MessageAspect;
 import com.gracerun.summermq.event.MessageEventListener;
+import com.gracerun.summermq.producer.RedisMessageProducer;
+import com.gracerun.summermq.producer.SummerMQTemplate;
+import com.gracerun.summermq.spring.annotation.EnableSummerMQ;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportAware;
 import org.springframework.core.annotation.AnnotationAttributes;
-import org.springframework.core.env.StandardEnvironment;
+import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.Map;
 
 @Slf4j
-@Configuration(proxyBeanMethods = false)
-@Import({MqConfiguration.class, MessagePersistentConfiguration.class, ListenerContainerConfiguration.class, DelayConsumerConfiguration.class})
-@AutoConfigureAfter({RedisAutoConfiguration.class, SummerLogSchedulingAutoConfiguration.class})
-public class SummerMQAutoConfiguration implements ImportAware {
+@AutoConfigureAfter({RedisAutoConfiguration.class})
+public class SummerMQConfiguration implements EnvironmentAware, ImportAware {
 
-    @Autowired
-    private StandardEnvironment environment;
+    private Environment environment;
 
     private String producerNamespace;
 
@@ -45,7 +39,7 @@ public class SummerMQAutoConfiguration implements ImportAware {
 
     @Bean
     @ConditionalOnMissingBean(RedisMessageProducer.class)
-    public RedisMessageProducer defaultMQProducer(StringRedisTemplate stringRedisTemplate) {
+    public RedisMessageProducer redisMessageProducer(StringRedisTemplate stringRedisTemplate) {
         final RedisMessageProducer redisMessageProducer = new RedisMessageProducer(producerNamespace, stringRedisTemplate);
         redisMessageProducer.setCorePoolSize(producerCorePoolSize);
         redisMessageProducer.setMaximumPoolSize(producerMaximumPoolSize);
@@ -72,12 +66,17 @@ public class SummerMQAutoConfiguration implements ImportAware {
 
     @Override
     public void setImportMetadata(AnnotationMetadata importMetadata) {
-        Map<String, Object> enableAttrMap = importMetadata.getAnnotationAttributes(EnableSummerMq.class.getName());
+        Map<String, Object> enableAttrMap = importMetadata.getAnnotationAttributes(EnableSummerMQ.class.getName());
         AnnotationAttributes enableAttrs = AnnotationAttributes.fromMap(enableAttrMap);
         this.producerNamespace = this.environment.resolvePlaceholders(enableAttrs.getString("producerNamespace"));
         this.producerCorePoolSize = enableAttrs.getNumber("producerCorePoolSize");
         this.producerMaximumPoolSize = enableAttrs.getNumber("producerMaximumPoolSize");
         this.producerKeepAliveTime = enableAttrs.getNumber("producerKeepAliveTime");
         this.producerBlockingQueueSize = enableAttrs.getNumber("producerBlockingQueueSize");
+    }
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
     }
 }

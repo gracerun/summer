@@ -1,9 +1,9 @@
 package com.gracerun.summermq.service.impl;
 
-import com.gracerun.summermq.service.MessagePersistentService;
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.bean.MessagePage;
 import com.gracerun.summermq.bean.MessageQuery;
+import com.gracerun.summermq.service.MessagePersistentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;

@@ -1,4 +1,5 @@
-package com.gracerun.summermq.config;
+package com.gracerun.summermq.spring.autoconfigure;
+
 
 import com.gracerun.summermq.service.RedisService;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,7 @@ import java.util.List;
  * @version 1.0.0
  * @date 1/10/22
  */
-public class MqConfiguration {
+public class RedisConfiguration {
 
     @Bean
     public RedisService redisService() {

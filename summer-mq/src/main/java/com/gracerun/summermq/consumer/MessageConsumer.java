@@ -1,7 +1,7 @@
 package com.gracerun.summermq.consumer;
 
-import com.gracerun.log.util.IpUtil;
 import com.gracerun.log.core.TracerHolder;
+import com.gracerun.log.util.IpUtil;
 import com.gracerun.summermq.bean.DelayRule;
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.constant.ConsumeStatus;

@@ -1,7 +1,7 @@
 package com.gracerun.log.spring.autoconfigure;
 
-import com.gracerun.log.core.TracerHolder;
 import com.gracerun.log.aop.LogSchedulingAspect;
+import com.gracerun.log.core.TracerHolder;
 import com.gracerun.log.filter.HttpTraceFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

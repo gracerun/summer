@@ -6,7 +6,7 @@
 
     <groupId>com.gracerun</groupId>
     <artifactId>summer</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
     <name>${project.artifactId} ${project.version}</name>
 
@@ -15,7 +15,8 @@
         <module>summer-log</module>
         <module>summer-mq</module>
         <module>summer-spring-boot-autoconfigure</module>
-        <module>summer-spring-boot-starter</module>
+        <module>summermq-spring-boot-starter</module>
+        <module>summerlog-spring-boot-starter</module>
         <module>summer-util</module>
     </modules>
 

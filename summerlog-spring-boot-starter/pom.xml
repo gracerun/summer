@@ -11,22 +11,28 @@
         <relativePath>../summer-parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.test</groupId>
-    <artifactId>api-test</artifactId>
+    <artifactId>summerlog-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId} ${project.version}</name>
 
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <dependencies>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <groupId>com.gracerun</groupId>
+            <artifactId>summer-spring-boot-autoconfigure</artifactId>
+            <version>${summer.version}</version>
         </dependency>
         <dependency>
             <groupId>com.gracerun</groupId>
-            <artifactId>summer-mq</artifactId>
+            <artifactId>summer-log</artifactId>
             <version>${summer.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
-
 </project>

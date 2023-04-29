@@ -1,9 +1,9 @@
 package com.gracerun.log.interceptor;
 
+import cn.hutool.core.lang.Singleton;
 import com.gracerun.log.annotation.Logging;
 import com.gracerun.log.annotation.ThrowableLog;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
@@ -41,9 +41,8 @@ public class LoggingAnnotationParser {
         }
 
         loggingAttribute.setMaxLength(logging.maxLength());
-
-        loggingAttribute.setSerializeArgsUsing(BeanUtils.instantiateClass(logging.serializeArgsUsing()));
-        loggingAttribute.setSerializeReturnUsing(BeanUtils.instantiateClass(logging.serializeReturnUsing()));
+        loggingAttribute.setSerializeArgsUsing(Singleton.get(logging.serializeArgsUsing()));
+        loggingAttribute.setSerializeReturnUsing(Singleton.get(logging.serializeReturnUsing()));
 
         final ThrowableLog[] throwableLogs = logging.throwableLog();
         if (throwableLogs.length > 0) {

@@ -22,9 +22,8 @@ import ch.qos.logback.core.joran.action.ActionUtil.Scope;
 import ch.qos.logback.core.joran.spi.ActionException;
 import ch.qos.logback.core.joran.spi.InterpretationContext;
 import ch.qos.logback.core.util.OptionHelper;
-import org.xml.sax.Attributes;
-
 import org.springframework.core.env.Environment;
+import org.xml.sax.Attributes;
 
 /**
  * Logback {@link Action} to support {@code <springProperty>} tags. Allows logback

@@ -7,11 +7,11 @@
     <parent>
         <groupId>com.gracerun</groupId>
         <artifactId>summer-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
         <relativePath>../summer-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>summer-spring-boot-starter</artifactId>
+    <artifactId>summermq-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId} ${project.version}</name>
 
@@ -27,6 +27,12 @@
             <groupId>com.gracerun</groupId>
             <artifactId>summer-spring-boot-autoconfigure</artifactId>
             <version>${summer.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gracerun</groupId>
+            <artifactId>summer-mq</artifactId>
+            <version>${summer.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

@@ -66,6 +66,12 @@ public class HttpUtil {
         EXCLUDE_HEADER_NAMES.add("Transfer-Encoding");
         EXCLUDE_HEADER_NAMES.add("Via");
         EXCLUDE_HEADER_NAMES.add("Connection");
+        EXCLUDE_HEADER_NAMES.add("Cache-Control");
+        EXCLUDE_HEADER_NAMES.add("Content-Language");
+        EXCLUDE_HEADER_NAMES.add("Content-Language");
+        EXCLUDE_HEADER_NAMES.add("Expires");
+        EXCLUDE_HEADER_NAMES.add("Server");
+        EXCLUDE_HEADER_NAMES.add("Vary");
     }
 
     static {

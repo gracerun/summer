@@ -1,8 +1,8 @@
 package com.gracerun.summermq.spring.autoconfigure;
 
 import com.gracerun.summermq.annotation.SummerMQMessageListener;
-import com.gracerun.summermq.consumer.RedisMessagePullConsumer;
 import com.gracerun.summermq.consumer.MessageListener;
+import com.gracerun.summermq.consumer.RedisMessagePullConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopProxyUtils;

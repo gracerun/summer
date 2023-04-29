@@ -1,7 +1,7 @@
 package com.gracerun.summermq.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.gracerun.log.util.NotNullStringStyle;
+import com.gracerun.summermq.util.NotNullStringStyle;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

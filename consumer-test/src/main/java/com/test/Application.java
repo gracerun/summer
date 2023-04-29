@@ -1,6 +1,6 @@
 package com.test;
 
-import com.gracerun.summermq.spring.annotation.EnableSummerMq;
+import com.gracerun.summermq.spring.annotation.EnableSummerMQ;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 //@EnableDiscoveryClient
 //@EnableFeignClients
-@EnableSummerMq
+@EnableSummerMQ
 public class Application {
 
     public static void main(String[] args) {

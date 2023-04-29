@@ -1,4 +1,4 @@
-package com.gracerun.log.util;
+package com.gracerun.summermq.util;
 
 import org.apache.commons.lang3.builder.ToStringStyle;
 

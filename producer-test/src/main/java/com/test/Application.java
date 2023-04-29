@@ -1,6 +1,6 @@
 package com.test;
 
-import com.gracerun.summermq.spring.annotation.EnableSummerMq;
+import com.gracerun.summermq.spring.annotation.EnableSummerMQ;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 //@EnableDiscoveryClient
 //@EnableFeignClients
-@EnableSummerMq(producerCorePoolSize = 10, producerMaximumPoolSize = 10)
+@EnableSummerMQ(producerCorePoolSize = 10, producerMaximumPoolSize = 10)
 @Slf4j
 public class Application implements ApplicationRunner {
 

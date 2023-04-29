@@ -77,10 +77,11 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
         }
 
         // Last try is the logging attribute on the target class.
-        logAttr = findLoggingAttribute(targetClass, method.getDeclaringClass());
-        if (logAttr != null && ClassUtils.isUserLevelMethod(method)) {
-            return logAttr;
-        }
+        // @Logging注解在子类配置时不查找从父类继承的方法
+        // logAttr = findLoggingAttribute(targetClass, method.getDeclaringClass());
+        // if (logAttr != null && ClassUtils.isUserLevelMethod(method)) {
+        //     return logAttr;
+        // }
 
         return null;
     }
