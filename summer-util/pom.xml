@@ -21,11 +21,6 @@
             <artifactId>spring-cloud-starter-sleuth</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.gracerun</groupId>
-            <artifactId>summer-log</artifactId>
-            <version>${summer.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
@@ -52,6 +47,11 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gracerun</groupId>
+            <artifactId>summer-log</artifactId>
+            <version>${summer.version}</version>
         </dependency>
     </dependencies>
 </project>
