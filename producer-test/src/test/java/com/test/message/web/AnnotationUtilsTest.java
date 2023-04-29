@@ -26,8 +26,12 @@ public class AnnotationUtilsTest {
 
         log.info("AnnotationUtils.findMethodAnnotation:\n {}", AnnotationUtils.findAnnotation(method, Logging.class));
         log.info("AnnotationUtils.getMethodAnnotation:\n {}", AnnotationUtils.getAnnotation(method, Logging.class));
+
         log.info("AnnotatedElementUtils.findMethodMergeAnnotation:\n {}", AnnotatedElementUtils.findMergedAnnotation(method, Logging.class));
         log.info("AnnotatedElementUtils.getMethodMergeAnnotation:\n {}", AnnotatedElementUtils.getMergedAnnotation(method, Logging.class));
+
+        log.info("AnnotatedElementUtils.findMethodMergeAnnotation:\n {}", AnnotatedElementUtils.findMergedAnnotationAttributes(method, Logging.class, false, false));
+        log.info("AnnotatedElementUtils.getMethodMergeAnnotation:\n {}", AnnotatedElementUtils.findMergedAnnotationAttributes(method, Logging.class, false, false));
     }
 
 }

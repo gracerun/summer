@@ -1,5 +1,6 @@
 package com.test.message.web;
 
+import com.gracerun.log.annotation.Logging;
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.producer.SummerMQTemplate;
 import com.test.message.service.AppleServiceImpl;
@@ -54,6 +55,7 @@ public class MessageController implements MessageInterface {
 
     @Override
     @PostMapping("/log")
+    @Logging
     public ResponseEntity log(@RequestBody MessageBody messageBody) {
         appleService.printName();
         return ResponseEntity.ok("发送成功");

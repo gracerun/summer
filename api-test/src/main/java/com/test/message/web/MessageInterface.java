@@ -32,6 +32,12 @@ public interface MessageInterface {
     @PostMapping(value = "/send", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity send(@RequestBody MessageBody messageBody);
 
+    @Logging(
+            maxLength = 11,
+            level = Level.DEBUG,
+            throwableLog = {@ThrowableLog(throwable = Throwable.class, maxRow = 5)},
+            serializeArgsUsing = ToJsonSerializer.class,
+            serializeReturnUsing = ToJsonSerializer.class)
     @PostMapping(value = "/log", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity log(@RequestBody MessageBody messageBody);
 
