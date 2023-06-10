@@ -15,6 +15,9 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.QueryTimeoutException;
+import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
@@ -124,9 +127,11 @@ public class MessageDelayPullConsumer implements InitializingBean, DisposableBea
                 if (Objects.nonNull(size)) {
                     messageSize = (Long) size;
                 }
+            } catch (QueryTimeoutException | RedisConnectionFailureException | RedisSystemException e) {
+                log.error(e.getMessage());
+                return;
             } catch (Exception e) {
-                log.error("queueName:{}, getSize error:{}", queueName, e.getMessage());
-                log.error(e.getMessage(), e);
+                log.error("queueName:{}, getSize error", queueName, e);
                 return;
             }
 
@@ -151,9 +156,10 @@ public class MessageDelayPullConsumer implements InitializingBean, DisposableBea
                     } else {
                         return;
                     }
+                } catch (QueryTimeoutException | RedisConnectionFailureException e) {
+                    log.error(e.getMessage());
                 } catch (Exception e) {
-                    log.error("queueName:{}, batchRpop error:{}", queueName, e.getMessage());
-                    log.error(e.getMessage(), e);
+                    log.error("queueName:{}, batchRpop error", queueName, e);
                 }
             }
         }

@@ -5,6 +5,7 @@ import com.gracerun.message.bean.GraceMessage;
 import com.gracerun.util.HttpBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
+import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -40,14 +41,15 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void send() {
+    public static void send() {
         for (int i = 0; i < 10; i++) {
             try {
-                final GraceMessage messageBody = new GraceMessage();
-                messageBody.setBusinessNo(System.currentTimeMillis() + "");
-                messageBody.setBusinessType("msg_notify");
-                messageBody.setContent(i + "测试消息");
-                HttpBuilder.post("http://localhost:8008/message/send").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
+                final GraceMessage message = new GraceMessage();
+                message.setBusinessNo(System.currentTimeMillis() + "");
+                message.setBusinessType("msg_notify");
+                message.setContent(i + "测试消息");
+                message.setNextExecuteTime(new DateTime().plusSeconds(10).toDate());
+                HttpBuilder.post("http://localhost:8008/message/send").setConfig(config).setLevel(Level.INFO).setJsonParam(message).execute();
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -55,7 +57,7 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void sendAndSave() {
+    public static void sendAndSave() {
         for (int i = 0; i < 10; i++) {
             try {
                 final GraceMessage messageBody = new GraceMessage();
@@ -71,12 +73,14 @@ public class MessageControllerTest {
 
     @Test
     public void delaySend() throws IOException, InterruptedException {
-        for (int i = 0; i < 10; i++) {
-            final GraceMessage messageBody = new GraceMessage();
-            messageBody.setBusinessNo(System.currentTimeMillis() + "");
-            messageBody.setBusinessType("msg_notify");
-            messageBody.setContent(i + "");
-            HttpBuilder.post("http://localhost:8008/message/delaySend").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
+        for (int i = 0; i < 1000; i++) {
+            final GraceMessage message = new GraceMessage();
+            message.setBusinessNo(System.currentTimeMillis() + "");
+            message.setBusinessType("msg_notify");
+            message.setContent(i + "");
+            message.setNextExecuteTime(new DateTime().plusSeconds(10).toDate());
+            HttpBuilder.post("http://localhost:8008/message/delaySend").setConfig(config).setLevel(Level.INFO).setJsonParam(message).execute();
+            TimeUnit.SECONDS.sleep(1);
         }
     }
 
@@ -88,7 +92,7 @@ public class MessageControllerTest {
 
         final CountDownLatch countDownLatch = new CountDownLatch(1000);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1000; i++) {
             threadPoolExecutor.execute(new EExecute(countDownLatch));
         }
         try {
@@ -110,7 +114,7 @@ public class MessageControllerTest {
 
         @Override
         public void run() {
-//            pushMessage();
+            send();
             countDownLatch.countDown();
         }
 

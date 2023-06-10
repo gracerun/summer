@@ -7,7 +7,6 @@ import com.gracerun.message.service.AppleServiceImpl;
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.producer.SummerMQTemplate;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +42,6 @@ public class MessageController implements MessageInterface {
     @PostMapping("/delaySend")
     @Transactional
     public ResponseEntity delaySend(@RequestBody GraceMessage message) {
-        message.setNextExecuteTime(new DateTime().plusMinutes(1).toDate());
         summerMQTemplate.sendAndSave(BeanUtil.toBean(message, MessageBody.class));
         return ResponseEntity.ok("发送成功");
     }

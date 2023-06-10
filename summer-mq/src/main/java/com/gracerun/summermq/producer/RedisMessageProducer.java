@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.data.redis.connection.RedisPipelineException;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.CollectionUtils;
@@ -147,12 +149,13 @@ public class RedisMessageProducer implements InitializingBean, DisposableBean {
                                 , stringRedisTemplate.getStringSerializer().serialize(body));
                         log.debug("send success msgId:{}, {}-->{}", m.getId(), beforeQueueName, queueName);
                     } catch (Exception e) {
-                        log.error("send fail msgId:{}, {}-->{}", m.getId(), beforeQueueName, queueName);
-                        log.error(e.getMessage(), e);
+                        log.error("send fail msgId:{}, {}-->{}", m.getId(), beforeQueueName, queueName, e);
                     }
                 });
                 return null;
             });
+        } catch (RedisPipelineException | RedisConnectionFailureException e) {
+            log.error(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

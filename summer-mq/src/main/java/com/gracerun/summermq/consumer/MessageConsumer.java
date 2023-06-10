@@ -51,8 +51,7 @@ public class MessageConsumer implements Runnable {
         } catch (Exception e) {
             consumeTime = System.currentTimeMillis() - startTime;
             message.setRemark(e.getMessage());
-            log.error("queueName:{}, msgId:{}, error:{}", pullRequest.getMessageQueueName(), message.getId(), e.getMessage());
-            log.error(e.getMessage(), e);
+            log.error("queueName:{}, msgId:{}, error", pullRequest.getMessageQueueName(), message.getId(), e);
         }
 
         try {
@@ -62,8 +61,7 @@ public class MessageConsumer implements Runnable {
                 return;
             }
         } catch (Exception e) {
-            log.error("updateMessage msgId:{}, error:{}", message.getId(), e.getMessage());
-            log.error(e.getMessage(), e);
+            log.error("updateMessage msgId:{}, error", message.getId(), e);
         }
 
         if (ConsumeStatus.RECONSUME_LATER == consumeStatus) {

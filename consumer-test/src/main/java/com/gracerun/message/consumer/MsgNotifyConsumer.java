@@ -1,6 +1,5 @@
 package com.gracerun.message.consumer;
 
-import com.gracerun.log.annotation.Logging;
 import com.gracerun.summermq.annotation.SummerMQMessageListener;
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.constant.ConsumeStatus;
@@ -13,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 消息推送
+ *
  * @author Tom
  * @version 1.0.0
  * @date 2023/4/11
@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 @SummerMQMessageListener(topic = "msg_notify", corePoolSize = 10, maximumPoolSize = 10, batchRpopSize = 30)
 public class MsgNotifyConsumer implements MessageListener {
 
-    @Logging
     @Override
     public ConsumeStatus consumeMessage(MessageBody msg) {
         log.info("msgId:{}", msg.getId());
