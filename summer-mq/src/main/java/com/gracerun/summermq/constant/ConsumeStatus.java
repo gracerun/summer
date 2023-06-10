@@ -9,5 +9,10 @@ public enum ConsumeStatus {
     /**
      * Failure consumption,later try to consume
      */
-    RECONSUME_LATER
+    RECONSUME_LATER,
+
+    /**
+     * Stop consumption,requires manual intervention
+     */
+    CONSUME_STOP
 }
