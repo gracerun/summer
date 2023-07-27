@@ -30,7 +30,7 @@ public class LoggingAnnotationParser {
     }
 
     protected LoggingAttribute parseLoggingAnnotation(Logging logging, Class<?> clazz) {
-        LoggingAttribute loggingAttribute = new LoggingAttribute();
+        RuleBasedLoggingAttribute loggingAttribute = new RuleBasedLoggingAttribute();
         loggingAttribute.setName(logging.name());
         loggingAttribute.setLevel(logging.level());
 
@@ -46,14 +46,16 @@ public class LoggingAnnotationParser {
 
         final ThrowableLog[] throwableLogs = logging.throwableLog();
         if (throwableLogs.length > 0) {
-            final List<ThrowableLogAttribute> throwableLogAttributes = new ArrayList<>(throwableLogs.length);
+            final List<ThrowableLogRuleAttribute> logRuleAttributes = new ArrayList<>(throwableLogs.length);
             for (int i = 0; i < throwableLogs.length; i++) {
-                final ThrowableLogAttribute throwableLogAttribute = new ThrowableLogAttribute();
-                throwableLogAttribute.setThrowable(throwableLogs[i].throwable());
-                throwableLogAttribute.setMaxRow(throwableLogs[i].maxRow());
-                throwableLogAttributes.add(throwableLogAttribute);
+                Class<? extends Throwable>[] throwable = throwableLogs[i].throwable();
+                if (throwable.length > 0) {
+                    for (int j = 0; j < throwable.length; j++) {
+                        logRuleAttributes.add(new ThrowableLogRuleAttribute(throwable[j], throwableLogs[i].maxRow()));
+                    }
+                }
             }
-            loggingAttribute.setThrowableLogAttributes(throwableLogAttributes);
+            loggingAttribute.setLogRuleAttributes(logRuleAttributes);
         }
         return loggingAttribute;
     }

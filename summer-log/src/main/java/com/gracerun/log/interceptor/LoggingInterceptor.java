@@ -1,6 +1,5 @@
 package com.gracerun.log.interceptor;
 
-import com.gracerun.log.constant.Level;
 import com.gracerun.log.constant.MDCConstant;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -8,10 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.MDC;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.lang.Nullable;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StopWatch;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -59,27 +56,12 @@ public class LoggingInterceptor implements MethodInterceptor {
     }
 
     private void printThrowable(LoggingInfo loggingInfo, Throwable e) {
-        if (loggingInfo.getLoggingAttribute().getLevel() != Level.OFF && printCondition(loggingInfo, e)) {
-            if (Objects.nonNull(loggingInfo.oldLoggingInfo)) {
-                loggingInfo.oldLoggingInfo.throwable = e;
-            }
-            if (loggingInfo.throwable != e) {
-                loggingInfo.getTargetLog().error(e.getMessage(), e);
-            }
+        if (Objects.nonNull(loggingInfo.oldLoggingInfo) && Objects.nonNull(loggingInfo.throwable)) {
+            loggingInfo.oldLoggingInfo.throwable = e;
         }
-    }
-
-    private boolean printCondition(LoggingInfo loggingInfo, Throwable e) {
-        if (Objects.nonNull(loggingInfo.loggingAttribute) && !ObjectUtils.isEmpty(loggingInfo.loggingAttribute.getThrowableLogAttributes())) {
-            final List<ThrowableLogAttribute> throwableLogAttributes = loggingInfo.loggingAttribute.getThrowableLogAttributes();
-            for (ThrowableLogAttribute attr : throwableLogAttributes) {
-                if (attr.throwable.isInstance(e) && attr.maxRow != 0) {
-                    return true;
-                }
-            }
-            return false;
-        } else {
-            return true;
+        if (loggingInfo.loggingAttribute.printCondition(e) && loggingInfo.throwable != e) {
+            loggingInfo.oldLoggingInfo.throwable = e;
+            loggingInfo.getTargetLog().error(e.getMessage(), e);
         }
     }
 
@@ -161,7 +143,7 @@ public class LoggingInterceptor implements MethodInterceptor {
         }
 
         public int getThrowableLogPrintMaxRow(Throwable e) {
-            return loggingAttribute.getThrowableLogPrintMaxRow(e);
+            return loggingAttribute.getPrintMaxRow(e);
         }
 
         public String getMethodName() {

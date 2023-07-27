@@ -14,7 +14,7 @@ public @interface ThrowableLog {
      *
      * @return
      */
-    Class<? extends Throwable> throwable();
+    Class<? extends Throwable>[] throwable();
 
     /**
      * 打印异常堆栈的行数不超过maxRow

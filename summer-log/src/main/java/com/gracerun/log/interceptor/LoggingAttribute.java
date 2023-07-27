@@ -5,9 +5,6 @@ import com.gracerun.log.serializer.LogSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
-import org.springframework.util.CollectionUtils;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -49,22 +46,12 @@ public class LoggingAttribute {
      */
     int maxLength;
 
-    /**
-     * 异常日志属性
-     */
-    private List<ThrowableLogAttribute> throwableLogAttributes;
+    public boolean printCondition(Throwable e) {
+        return false;
+    }
 
-    public int getThrowableLogPrintMaxRow(Throwable e) {
-        if (!CollectionUtils.isEmpty(throwableLogAttributes)) {
-            for (ThrowableLogAttribute attr : throwableLogAttributes) {
-                if (attr.throwable.isInstance(e)) {
-                    return attr.maxRow;
-                }
-            }
-            return -1;
-        } else {
-            return -1;
-        }
+    public int getPrintMaxRow(Throwable e) {
+        return -1;
     }
 
 }
