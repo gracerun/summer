@@ -57,10 +57,12 @@ public class LoggingInterceptor implements MethodInterceptor {
 
     private void printThrowable(LoggingInfo loggingInfo, Throwable e) {
         if (Objects.nonNull(loggingInfo.oldLoggingInfo) && Objects.nonNull(loggingInfo.throwable)) {
-            loggingInfo.oldLoggingInfo.throwable = e;
+            loggingInfo.oldLoggingInfo.throwable = loggingInfo.throwable;
         }
         if (loggingInfo.loggingAttribute.printCondition(e) && loggingInfo.throwable != e) {
-            loggingInfo.oldLoggingInfo.throwable = e;
+            if (Objects.nonNull(loggingInfo.oldLoggingInfo)) {
+                loggingInfo.oldLoggingInfo.throwable = e;
+            }
             loggingInfo.getTargetLog().error(e.getMessage(), e);
         }
     }
