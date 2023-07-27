@@ -27,10 +27,4 @@ public class MessageController {
         return messageInterface.sendAndSave(message);
     }
 
-    @PostMapping("/log")
-    public ResponseEntity log(@RequestBody GraceMessage message) {
-        final ResponseEntity log = messageInterface.log(message);
-        return new ResponseEntity(log.getBody(), log.getStatusCode());
-    }
-
 }
