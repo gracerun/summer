@@ -2,6 +2,8 @@ package com.gracerun.message.web;
 
 import com.gracerun.log.annotation.Logging;
 import com.gracerun.message.service.OneServiceImpl;
+import com.gracerun.message.service.ThreeServiceImpl;
+import com.gracerun.message.service.TwoServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,10 +25,22 @@ public class LogController {
     @Resource
     private OneServiceImpl oneService;
 
-    @PostMapping("/printException")
+    @Resource
+    private TwoServiceImpl twoService;
+
+    @Resource
+    private ThreeServiceImpl threeService;
+
+    @PostMapping("/printException1")
     @Logging
-    public ResponseEntity printException() {
+    public ResponseEntity printException1() {
         oneService.printException();
+        return ResponseEntity.ok("成功");
+    }
+
+    @PostMapping("/printException2")
+    public ResponseEntity printException2() {
+        twoService.printException();
         return ResponseEntity.ok("成功");
     }
 

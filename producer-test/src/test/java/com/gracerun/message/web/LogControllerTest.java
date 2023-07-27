@@ -20,11 +20,23 @@ public class LogControllerTest {
 
     /**
      * @throws IOException
-     * @see LogController#printException()
+     * @see LogController#printException1()
      */
     @Test
-    public void printException() throws IOException {
-        HttpBuilder.post("http://localhost:8008/log/printException")
+    public void printException1() throws IOException {
+        HttpBuilder.post("http://localhost:8008/log/printException1")
+                .setConfig(config)
+                .setLevel(Level.INFO)
+                .execute();
+    }
+
+    /**
+     * @throws IOException
+     * @see LogController#printException2()
+     */
+    @Test
+    public void printException2() throws IOException {
+        HttpBuilder.post("http://localhost:8008/log/printException2")
                 .setConfig(config)
                 .setLevel(Level.INFO)
                 .execute();

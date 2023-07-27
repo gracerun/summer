@@ -15,7 +15,7 @@ public class TwoServiceImpl {
     private ThreeServiceImpl threeService;
 
     @Logging(throwableLog = {@ThrowableLog(throwable =
-            {IllegalArgumentException.class, IllegalStateException.class}, maxRow = 1)})
+            {IllegalArgumentException.class, IllegalStateException.class, RuntimeException.class}, maxRow = 1)})
     public void printException() {
         threeService.printException();
     }

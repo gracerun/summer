@@ -1,19 +1,13 @@
 package com.gracerun.message.service;
 
-import com.gracerun.log.annotation.Logging;
-import com.gracerun.log.annotation.ThrowableLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-@Logging(throwableLog = {@ThrowableLog(throwable = RuntimeException.class, maxRow = 0)})
-public class AppleServiceImpl extends FruitService {
+public class AppleServiceImpl extends FruitService implements FruitInterface {
 
     @Override
-    @Logging(maxLength = 3, throwableLog = {
-            @ThrowableLog(throwable = RuntimeException.class, maxRow = 1),
-            @ThrowableLog(throwable = {NullPointerException.class, IllegalArgumentException.class}, maxRow = 5)})
     public void printName() {
         super.printName();
         log.info("appleInner: My name is Apple");

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Logging(throwableLog = {@ThrowableLog(throwable = Throwable.class, maxRow = 5)})
 public class FruitService {
 
+    @Logging(throwableLog = {@ThrowableLog(throwable = Throwable.class, maxRow = 2)})
     public void printName() {
         log.info("fruitInner:{}", System.currentTimeMillis());
     }
