@@ -7,12 +7,13 @@
     <parent>
         <groupId>com.gracerun</groupId>
         <artifactId>summer-parent</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
         <relativePath>../summer-parent/pom.xml</relativePath>
     </parent>
 
     <groupId>com.test</groupId>
     <artifactId>producer-test</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>${project.artifactId} ${project.version}</name>
 
@@ -86,7 +87,7 @@
         <dependency>
             <groupId>com.test</groupId>
             <artifactId>api-test</artifactId>
-            <version>${summer.version}</version>
+            <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

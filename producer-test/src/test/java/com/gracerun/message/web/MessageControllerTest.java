@@ -18,26 +18,10 @@ import java.util.concurrent.TimeUnit;
 public class MessageControllerTest {
     protected static final RequestConfig config = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000).setConnectionRequestTimeout(2000).build();
 
-    public static void main(String[] args) {
-        final RuntimeException e = new RuntimeException();
-        log.error(e.getMessage(), e);
-
-//        e.printStackTrace();
-    }
 
     @Test
     public void exeTest() {
 
-    }
-
-    @Test
-    public void testLog() throws IOException {
-        final GraceMessage messageBody = new GraceMessage();
-        messageBody.setBusinessNo(System.currentTimeMillis() + "");
-        messageBody.setBusinessType("msg_notify");
-        messageBody.setContent("测试消息");
-        HttpBuilder.post("http://localhost:8008/message/log").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
-//        HttpBuilder.post("http://localhost:8009/message/log").setConfig(config).setLevel(Level.INFO).setJsonParam(messageBody).execute();
     }
 
     @Test

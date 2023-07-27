@@ -1,9 +1,7 @@
 package com.gracerun.message.web;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.gracerun.log.annotation.Logging;
 import com.gracerun.message.bean.GraceMessage;
-import com.gracerun.message.service.AppleServiceImpl;
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.producer.SummerMQTemplate;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/message")
 public class MessageController implements MessageInterface {
-
-    @Autowired
-    private AppleServiceImpl appleService;
 
     @Autowired
     private SummerMQTemplate summerMQTemplate;
@@ -50,14 +45,6 @@ public class MessageController implements MessageInterface {
     @PostMapping("/send")
     public ResponseEntity send(@RequestBody GraceMessage message) {
         summerMQTemplate.send(BeanUtil.toBean(message, MessageBody.class));
-        return ResponseEntity.ok("发送成功");
-    }
-
-    @Override
-    @PostMapping("/log")
-    @Logging
-    public ResponseEntity log(@RequestBody GraceMessage message) {
-        appleService.printName();
         return ResponseEntity.ok("发送成功");
     }
 

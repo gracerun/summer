@@ -11,12 +11,14 @@ import org.springframework.stereotype.Component;
 public class AppleServiceImpl extends FruitService {
 
     @Override
-    @Logging(maxLength = 3, throwableLog = {@ThrowableLog(throwable = RuntimeException.class, maxRow = 0)})
+    @Logging(maxLength = 3, throwableLog = {
+            @ThrowableLog(throwable = RuntimeException.class, maxRow = 1),
+            @ThrowableLog(throwable = {NullPointerException.class, IllegalArgumentException.class}, maxRow = 5)})
     public void printName() {
         super.printName();
         log.info("appleInner: My name is Apple");
-        log.error("This class printInnerException maxRow is 0", new RuntimeException("This is RunTimeException"));
-        String name = null;
-        name.toLowerCase();
+        log.error("This class printInnerException maxRow is 1", new RuntimeException("This is RunTimeException"));
+        log.error("This class printInnerException maxRow is 5", new IllegalArgumentException("This is IllegalArgumentException"));
+        log.error("This class printInnerException maxRow is 3", new NullPointerException("This is NullPointerException"));
     }
 }
