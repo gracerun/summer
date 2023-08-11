@@ -9,6 +9,7 @@ import org.springframework.aop.support.AopUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StopWatch;
 
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
@@ -87,18 +88,20 @@ public class LoggingInterceptor implements MethodInterceptor {
         }
     }
 
-    protected LoggingInfo createLoggingIfNecessary(MethodInvocation invocation) {
+    public LoggingInfo createLoggingIfNecessary(MethodInvocation invocation) {
         Class<?> targetClass = (invocation.getThis() != null ? AopUtils.getTargetClass(invocation.getThis()) : null);
+        return createLoggingIfNecessary(invocation.getMethod(), targetClass);
+    }
 
+    public LoggingInfo createLoggingIfNecessary(Method method, Class<?> targetClass) {
         LoggingAttributeSource las = getLoggingAttributeSource();
-        final LoggingAttribute loggingAttribute = (las != null ? las.getLoggingAttribute(invocation.getMethod(), targetClass) : null);
-
-        LoggingInfo loggingInfo = new LoggingInfo(loggingAttribute, invocation);
+        final LoggingAttribute loggingAttribute = (las != null ? las.getLoggingAttribute(method, targetClass) : null);
+        LoggingInfo loggingInfo = new LoggingInfo(loggingAttribute, method);
         loggingInfo.bindToThread();
         return loggingInfo;
     }
 
-    protected void cleanupLoggingInfo(@Nullable LoggingInfo loggingInfo) {
+    public void cleanupLoggingInfo(@Nullable LoggingInfo loggingInfo) {
         if (loggingInfo != null) {
             loggingInfo.restoreThreadLocalStatus();
         }
@@ -117,11 +120,11 @@ public class LoggingInterceptor implements MethodInterceptor {
         return loggingInfoHolder.get();
     }
 
-    public static final class LoggingInfo {
+    public class LoggingInfo {
 
         private final LoggingAttribute loggingAttribute;
 
-        private final MethodInvocation invocation;
+        private final Method method;
 
         private final StopWatch stopWatch;
 
@@ -130,9 +133,9 @@ public class LoggingInterceptor implements MethodInterceptor {
         @Nullable
         private LoggingInfo oldLoggingInfo;
 
-        public LoggingInfo(LoggingAttribute loggingAttribute, MethodInvocation invocation) {
+        public LoggingInfo(LoggingAttribute loggingAttribute, Method method) {
             this.loggingAttribute = loggingAttribute;
-            this.invocation = invocation;
+            this.method = method;
             this.stopWatch = new StopWatch();
         }
 
@@ -149,11 +152,11 @@ public class LoggingInterceptor implements MethodInterceptor {
         }
 
         public String getMethodName() {
-            return invocation.getMethod().getName();
+            return method.getName();
         }
 
         public Class<?> getReturnType() {
-            return invocation.getMethod().getReturnType();
+            return method.getReturnType();
         }
 
         public long getTotalTimeMillis() {

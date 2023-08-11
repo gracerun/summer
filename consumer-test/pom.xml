@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.gracerun</groupId>
         <artifactId>summer-parent</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.6-SNAPSHOT</version>
         <relativePath>../summer-parent/pom.xml</relativePath>
     </parent>
 
@@ -70,17 +70,7 @@
         </dependency>
         <dependency>
             <groupId>com.gracerun</groupId>
-            <artifactId>summerlog-spring-boot-starter</artifactId>
-            <version>${summer.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.gracerun</groupId>
-            <artifactId>summermq-spring-boot-starter</artifactId>
-            <version>${summer.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.gracerun</groupId>
-            <artifactId>summer-util</artifactId>
+            <artifactId>summer-spring-boot-starter</artifactId>
             <version>${summer.version}</version>
         </dependency>
         <dependency>

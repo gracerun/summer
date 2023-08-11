@@ -12,12 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
@@ -35,10 +35,10 @@ import java.util.Objects;
 @Slf4j
 public class MessageAspect {
 
-    @Autowired
+    @Resource
     private ApplicationEventPublisher applicationEventPublisher;
 
-    @Autowired
+    @Resource
     public RedisMessageProducer redisMessageProducer;
 
     @Around("@annotation(com.gracerun.summermq.annotation.PushMessage)")

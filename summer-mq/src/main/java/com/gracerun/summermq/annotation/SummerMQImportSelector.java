@@ -11,29 +11,14 @@ import java.util.Set;
 
 public final class SummerMQImportSelector implements ImportSelector {
 
-    private static final String SUMMERMQ_CONFIGURATION_CLASS_NAME =
-            "com.gracerun.summermq.spring.autoconfigure.SummerMQConfiguration";
-
-    private static final String REDIS_CONFIGURATION_CLASS_NAME =
-            "com.gracerun.summermq.spring.autoconfigure.RedisConfiguration";
-
-    private static final String MESSAGE_PERSISTENTT_CONFIGURATION_CLASS_NAME =
-            "com.gracerun.summermq.spring.autoconfigure.MessagePersistentConfiguration";
-
-    private static final String LISTENER_CONTAINER_CONFIGURATION_CLASS_NAME =
-            "com.gracerun.summermq.spring.autoconfigure.ListenerContainerConfiguration";
-
-    private static final String DELAY_CONSUMER_CONFIGURATION_CLASS_NAME =
-            "com.gracerun.summermq.spring.autoconfigure.DelayConsumerConfiguration";
-
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
         Set<String> imports = new LinkedHashSet<>();
-        imports.add(SUMMERMQ_CONFIGURATION_CLASS_NAME);
-        imports.add(REDIS_CONFIGURATION_CLASS_NAME);
-        imports.add(MESSAGE_PERSISTENTT_CONFIGURATION_CLASS_NAME);
-        imports.add(LISTENER_CONTAINER_CONFIGURATION_CLASS_NAME);
-        imports.add(DELAY_CONSUMER_CONFIGURATION_CLASS_NAME);
+        imports.add(SummerMQConfiguration.class.getName());
+        imports.add(RedisConfiguration.class.getName());
+        imports.add(MessagePersistentConfiguration.class.getName());
+        imports.add(ListenerContainerConfiguration.class.getName());
+        imports.add(DelayConsumerConfiguration.class.getName());
         return StringUtils.toStringArray(imports);
     }
 

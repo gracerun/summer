@@ -10,34 +10,35 @@ import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.util.StringUtils;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
- * 对Runnable接口进行包装,实现多线程环境的日志文件按类型分割。
+ * 对Supplier接口进行包装,实现多线程环境的日志文件按类型分割。
  *
  * @author Tom
  * @version 1.0.0
- * @date 1/21/22
+ * @date 2023/8/10
  */
 @Slf4j
-public class TraceRunnableWrapper implements Runnable {
+public class TraceSupplierWrapper<T> implements Supplier<T> {
 
     private final String logCategory;
 
-    private final Runnable delegate;
+    private final Supplier<T> supplier;
 
-    public TraceRunnableWrapper(Runnable delegate) {
-        this(delegate, false);
+    public TraceSupplierWrapper(Supplier<T> supplier) {
+        this(supplier, false);
     }
 
-    public TraceRunnableWrapper(Runnable delegate, boolean continueSpan) {
-        this(delegate, continueSpan, null);
+    public TraceSupplierWrapper(Supplier<T> supplier, boolean continueSpan) {
+        this(supplier, continueSpan, null);
     }
 
-    public TraceRunnableWrapper(Runnable delegate, boolean continueSpan, String logCategory) {
-        this(delegate, continueSpan, logCategory, null);
+    public TraceSupplierWrapper(Supplier<T> supplier, boolean continueSpan, String logCategory) {
+        this(supplier, continueSpan, logCategory, null);
     }
 
-    public TraceRunnableWrapper(Runnable delegate, boolean continueSpan, String logCategory, String name) {
+    public TraceSupplierWrapper(Supplier<T> supplier, boolean continueSpan, String logCategory, String name) {
         if (StringUtils.hasText(logCategory)) {
             this.logCategory = logCategory;
         } else {
@@ -45,53 +46,53 @@ public class TraceRunnableWrapper implements Runnable {
         }
         if (Objects.nonNull(TracerHolder.getTracer())) {
             if (continueSpan) {
-                this.delegate = new TraceRunnable(TracerHolder.getTracer(), TracerHolder.getSpanNamer(), delegate, name);
+                this.supplier = new TraceSupplier(TracerHolder.getTracer(), TracerHolder.getSpanNamer(), supplier, name);
             } else {
-                this.delegate = new TraceRunnable(TracerHolder.getTracer(), null, TracerHolder.getSpanNamer(), delegate, name);
+                this.supplier = new TraceSupplier(TracerHolder.getTracer(), null, TracerHolder.getSpanNamer(), supplier, name);
             }
         } else {
-            this.delegate = delegate;
+            this.supplier = supplier;
         }
     }
 
     @Override
-    public void run() {
+    public T get() {
         MDC.put(LogCategoryFilter.LOG_CATEGORY_NAME, logCategory);
         try {
-            this.delegate.run();
+            return this.supplier.get();
         } finally {
             MDC.remove(LogCategoryFilter.LOG_CATEGORY_NAME);
         }
     }
 
-    private class TraceRunnable implements Runnable {
+    private class TraceSupplier<T> implements Supplier<T> {
 
         private static final String DEFAULT_SPAN_NAME = "async";
 
         private final Tracer tracer;
 
-        private final Runnable delegate;
+        private final Supplier<T> supplier;
 
         private final Span parent;
 
         private final String spanName;
 
-        public TraceRunnable(Tracer tracer, SpanNamer spanNamer, Runnable delegate, String name) {
-            this(tracer, tracer.currentSpan(), spanNamer, delegate, name);
+        public TraceSupplier(Tracer tracer, SpanNamer spanNamer, Supplier<T> supplier, String name) {
+            this(tracer, tracer.currentSpan(), spanNamer, supplier, name);
         }
 
-        public TraceRunnable(Tracer tracer, Span parent, SpanNamer spanNamer, Runnable delegate, String name) {
+        public TraceSupplier(Tracer tracer, Span parent, SpanNamer spanNamer, Supplier<T> supplier, String name) {
             this.tracer = tracer;
-            this.delegate = delegate;
+            this.supplier = supplier;
             this.parent = parent;
-            this.spanName = name != null ? name : spanNamer.name(delegate, DEFAULT_SPAN_NAME);
+            this.spanName = name != null ? name : spanNamer.name(supplier, DEFAULT_SPAN_NAME);
         }
 
         @Override
-        public void run() {
+        public T get() {
             Span childSpan = this.tracer.nextSpan(this.parent).name(this.spanName);
             try (Tracer.SpanInScope ws = this.tracer.withSpan(childSpan.start())) {
-                this.delegate.run();
+                return this.supplier.get();
             } catch (Exception | Error e) {
                 childSpan.error(e);
                 throw e;

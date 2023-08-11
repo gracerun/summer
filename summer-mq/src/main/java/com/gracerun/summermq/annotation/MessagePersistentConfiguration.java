@@ -1,4 +1,4 @@
-package com.gracerun.summermq.spring.autoconfigure;
+package com.gracerun.summermq.annotation;
 
 import com.gracerun.summermq.producer.DataBaseProducer;
 import com.gracerun.summermq.producer.RedisMessageProducer;

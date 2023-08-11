@@ -41,7 +41,7 @@ public class MessageControllerTest {
     }
 
     @Test
-    public static void sendAndSave() {
+    public void sendAndSave() {
         for (int i = 0; i < 10; i++) {
             try {
                 final GraceMessage messageBody = new GraceMessage();

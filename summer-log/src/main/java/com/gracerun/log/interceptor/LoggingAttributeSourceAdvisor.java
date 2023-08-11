@@ -7,6 +7,11 @@ import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.AbstractPointcutAdvisor;
 import org.springframework.lang.Nullable;
 
+/**
+ * @author Tom
+ * @version 1.0.0
+ * @date 2023/8/4
+ */
 public class LoggingAttributeSourceAdvisor extends AbstractPointcutAdvisor {
 
     @Nullable
