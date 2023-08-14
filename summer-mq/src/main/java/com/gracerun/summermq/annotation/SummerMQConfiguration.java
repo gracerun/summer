@@ -1,7 +1,6 @@
 package com.gracerun.summermq.annotation;
 
 
-import com.gracerun.summermq.annotation.EnableSummerMQ;
 import com.gracerun.summermq.aop.MessageAspect;
 import com.gracerun.summermq.event.MessageEventListener;
 import com.gracerun.summermq.producer.RedisMessageProducer;
