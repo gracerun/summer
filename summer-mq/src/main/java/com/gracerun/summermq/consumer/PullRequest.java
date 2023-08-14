@@ -1,7 +1,7 @@
 
 package com.gracerun.summermq.consumer;
 
-import com.gracerun.log.util.NotNullStringStyle;
+import com.gracerun.summermq.util.NotNullStringStyle;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

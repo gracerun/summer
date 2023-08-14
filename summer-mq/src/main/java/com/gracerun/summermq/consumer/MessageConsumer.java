@@ -1,7 +1,7 @@
 package com.gracerun.summermq.consumer;
 
-import com.gracerun.log.util.IpUtil;
 import com.gracerun.log.core.TracerHolder;
+import com.gracerun.log.util.IpUtil;
 import com.gracerun.summermq.bean.DelayRule;
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.constant.ConsumeStatus;
@@ -51,8 +51,7 @@ public class MessageConsumer implements Runnable {
         } catch (Exception e) {
             consumeTime = System.currentTimeMillis() - startTime;
             message.setRemark(e.getMessage());
-            log.error("queueName:{}, msgId:{}, error:{}", pullRequest.getMessageQueueName(), message.getId(), e.getMessage());
-            log.error(e.getMessage(), e);
+            log.error("queueName:{}, msgId:{}, error", pullRequest.getMessageQueueName(), message.getId(), e);
         }
 
         try {
@@ -62,8 +61,7 @@ public class MessageConsumer implements Runnable {
                 return;
             }
         } catch (Exception e) {
-            log.error("updateMessage msgId:{}, error:{}", message.getId(), e.getMessage());
-            log.error(e.getMessage(), e);
+            log.error("updateMessage msgId:{}, error", message.getId(), e);
         }
 
         if (ConsumeStatus.RECONSUME_LATER == consumeStatus) {
@@ -92,6 +90,8 @@ public class MessageConsumer implements Runnable {
                     message.setNextExecuteTime(dateTime.toDate());
                 }
             }
+        } else if(ConsumeStatus.CONSUME_STOP == consumeStatus){
+            message.setStatus(MessageStatusConstant.STOP);
         }
 
         message.setIp(IpUtil.getIp());

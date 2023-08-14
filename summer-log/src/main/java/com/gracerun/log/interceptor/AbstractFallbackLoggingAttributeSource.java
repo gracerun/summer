@@ -1,5 +1,6 @@
 package com.gracerun.log.interceptor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.MethodClassKey;
 import org.springframework.lang.Nullable;
@@ -10,9 +11,17 @@ import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public abstract class AbstractFallbackLoggingAttributeSource implements LoggingAttributeSource {
 
     private final Map<Object, LoggingAttribute> attributeCache = new ConcurrentHashMap<>(1024);
+
+    private static final LoggingAttribute NULL_LOGGING_ATTRIBUTE = new LoggingAttribute() {
+        @Override
+        public String toString() {
+            return "null";
+        }
+    };
 
     @Override
     @Nullable
@@ -24,15 +33,22 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
         Object cacheKey = getCacheKey(method, targetClass);
         LoggingAttribute cached = this.attributeCache.get(cacheKey);
         if (cached != null) {
-            return cached;
+            if (cached == NULL_LOGGING_ATTRIBUTE) {
+                return null;
+            } else {
+                return cached;
+            }
         } else {
             LoggingAttribute logAttr = computeLoggingAttribute(method, targetClass);
             if (logAttr != null) {
                 String methodIdentification = ClassUtils.getQualifiedMethodName(method, targetClass);
                 logAttr.setMethodIdentification(methodIdentification);
                 this.attributeCache.put(cacheKey, logAttr);
+                return logAttr;
+            } else {
+                this.attributeCache.put(cacheKey, NULL_LOGGING_ATTRIBUTE);
+                return null;
             }
-            return logAttr;
         }
     }
 
@@ -75,13 +91,6 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
                 return logAttr;
             }
         }
-
-        // Last try is the logging attribute on the target class.
-        logAttr = findLoggingAttribute(targetClass, method.getDeclaringClass());
-        if (logAttr != null && ClassUtils.isUserLevelMethod(method)) {
-            return logAttr;
-        }
-
         return null;
     }
 

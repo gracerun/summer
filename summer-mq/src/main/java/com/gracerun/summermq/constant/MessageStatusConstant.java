@@ -23,4 +23,8 @@ public interface MessageStatusConstant {
      */
     String FAIL = "FAIL";
 
+    /**
+     * stop
+     */
+    String STOP = "STOP";
 }

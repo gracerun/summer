@@ -7,12 +7,13 @@
     <parent>
         <groupId>com.gracerun</groupId>
         <artifactId>summer-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.6-SNAPSHOT</version>
         <relativePath>../summer-parent/pom.xml</relativePath>
     </parent>
 
     <groupId>com.test</groupId>
     <artifactId>producer-test</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>${project.artifactId} ${project.version}</name>
 
@@ -21,22 +22,22 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-openfeign</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-loadbalancer</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.alibaba.cloud</groupId>-->
+        <!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.alibaba.cloud</groupId>-->
+        <!--            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.cloud</groupId>-->
+        <!--            <artifactId>spring-cloud-starter-openfeign</artifactId>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.cloud</groupId>-->
+        <!--            <artifactId>spring-cloud-starter-loadbalancer</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -69,11 +70,6 @@
             <version>${summer.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.gracerun</groupId>
-            <artifactId>summer-util</artifactId>
-            <version>${summer.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
             <version>2.2.3</version>
@@ -81,8 +77,12 @@
         <dependency>
             <groupId>com.test</groupId>
             <artifactId>api-test</artifactId>
-            <version>${summer.version}</version>
+            <version>1.0.0</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
         </dependency>
     </dependencies>
 
@@ -98,7 +98,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.7.5</version>
                 <configuration>
-                    <mainClass>com.test.Application</mainClass>
+                    <mainClass>com.gracerun.Application</mainClass>
                 </configuration>
                 <executions>
                     <execution>

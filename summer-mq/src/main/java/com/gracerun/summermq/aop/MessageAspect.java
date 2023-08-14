@@ -2,22 +2,22 @@
 
 package com.gracerun.summermq.aop;
 
-import cn.hutool.core.util.IdUtil;
-import com.gracerun.summermq.constant.MessageStatusConstant;
-import com.gracerun.summermq.producer.RedisMessageProducer;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.gracerun.log.core.TracerHolder;
 import com.gracerun.summermq.bean.MessageBody;
+import com.gracerun.summermq.constant.MessageStatusConstant;
 import com.gracerun.summermq.event.MessageEvent;
+import com.gracerun.summermq.producer.RedisMessageProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
@@ -35,10 +35,10 @@ import java.util.Objects;
 @Slf4j
 public class MessageAspect {
 
-    @Autowired
+    @Resource
     private ApplicationEventPublisher applicationEventPublisher;
 
-    @Autowired
+    @Resource
     public RedisMessageProducer redisMessageProducer;
 
     @Around("@annotation(com.gracerun.summermq.annotation.PushMessage)")
@@ -56,7 +56,7 @@ public class MessageAspect {
 
     private MessageBody initTask(MessageBody messageBody) {
         if (Objects.isNull(messageBody.getId())) {
-            messageBody.setId(IdUtil.getSnowflake(1, 1).nextId());
+            messageBody.setId(IdWorker.getId());
         }
         if (Objects.isNull(messageBody.getOptimistic())) {
             messageBody.setOptimistic(0);

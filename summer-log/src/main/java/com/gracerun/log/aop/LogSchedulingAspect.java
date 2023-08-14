@@ -21,7 +21,7 @@ import java.util.Objects;
  * @date 12/26/21
  */
 @Aspect
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.HIGHEST_PRECEDENCE + 101)
 public class LogSchedulingAspect {
 
     private static final ThreadLocal<String> categoryNameHolder = new ThreadLocal<>();

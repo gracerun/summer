@@ -1,9 +1,9 @@
 package com.gracerun.log.interceptor;
 
+import cn.hutool.core.lang.Singleton;
 import com.gracerun.log.annotation.Logging;
 import com.gracerun.log.annotation.ThrowableLog;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
@@ -30,7 +30,7 @@ public class LoggingAnnotationParser {
     }
 
     protected LoggingAttribute parseLoggingAnnotation(Logging logging, Class<?> clazz) {
-        LoggingAttribute loggingAttribute = new LoggingAttribute();
+        RuleBasedLoggingAttribute loggingAttribute = new RuleBasedLoggingAttribute();
         loggingAttribute.setName(logging.name());
         loggingAttribute.setLevel(logging.level());
 
@@ -41,20 +41,21 @@ public class LoggingAnnotationParser {
         }
 
         loggingAttribute.setMaxLength(logging.maxLength());
-
-        loggingAttribute.setSerializeArgsUsing(BeanUtils.instantiateClass(logging.serializeArgsUsing()));
-        loggingAttribute.setSerializeReturnUsing(BeanUtils.instantiateClass(logging.serializeReturnUsing()));
+        loggingAttribute.setSerializeArgsUsing(Singleton.get(logging.serializeArgsUsing()));
+        loggingAttribute.setSerializeReturnUsing(Singleton.get(logging.serializeReturnUsing()));
 
         final ThrowableLog[] throwableLogs = logging.throwableLog();
         if (throwableLogs.length > 0) {
-            final List<ThrowableLogAttribute> throwableLogAttributes = new ArrayList<>(throwableLogs.length);
+            final List<ThrowableLogRuleAttribute> logRuleAttributes = new ArrayList<>(throwableLogs.length);
             for (int i = 0; i < throwableLogs.length; i++) {
-                final ThrowableLogAttribute throwableLogAttribute = new ThrowableLogAttribute();
-                throwableLogAttribute.setThrowable(throwableLogs[i].throwable());
-                throwableLogAttribute.setMaxRow(throwableLogs[i].maxRow());
-                throwableLogAttributes.add(throwableLogAttribute);
+                Class<? extends Throwable>[] throwable = throwableLogs[i].throwable();
+                if (throwable.length > 0) {
+                    for (int j = 0; j < throwable.length; j++) {
+                        logRuleAttributes.add(new ThrowableLogRuleAttribute(throwable[j], throwableLogs[i].maxRow()));
+                    }
+                }
             }
-            loggingAttribute.setThrowableLogAttributes(throwableLogAttributes);
+            loggingAttribute.setLogRuleAttributes(logRuleAttributes);
         }
         return loggingAttribute;
     }

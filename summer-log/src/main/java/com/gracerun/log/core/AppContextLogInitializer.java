@@ -8,6 +8,7 @@ import org.slf4j.MDC;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
@@ -20,6 +21,7 @@ import java.util.Random;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class AppContextLogInitializer implements ApplicationContextInitializer {
 
+    public static final String CLIENT_LOG_USESLF4J = "rocketmq.client.logUseSlf4j";
     public static final String SPRING_LOCALHOST_IP_ADDRESS = "spring.localhost.ip-address";
     private static final Random RANDOM = new Random();
     private static final String LOCALHOST_IP = IpUtil.getIp();
@@ -37,6 +39,7 @@ public class AppContextLogInitializer implements ApplicationContextInitializer {
             }
         }
 
+        System.setProperty(AppContextLogInitializer.CLIENT_LOG_USESLF4J, Boolean.TRUE.toString());
         System.setProperty(LoggingSystem.SYSTEM_PROPERTY, LogbackCategoryLoggingSystem.class.getName());
         initSpan();
     }
@@ -49,11 +52,13 @@ public class AppContextLogInitializer implements ApplicationContextInitializer {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-        log.info(LOCALHOST_IP);
-        try {
-            printSystemProperties();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+        if (!(applicationContext instanceof AnnotationConfigApplicationContext)) {
+            log.info(LOCALHOST_IP);
+            try {
+                printSystemProperties();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
         }
     }
 

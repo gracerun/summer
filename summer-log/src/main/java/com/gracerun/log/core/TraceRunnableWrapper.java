@@ -26,22 +26,18 @@ public class TraceRunnableWrapper implements Runnable {
     private final Runnable delegate;
 
     public TraceRunnableWrapper(Runnable delegate) {
-        this(delegate, null);
+        this(delegate, false);
     }
 
     public TraceRunnableWrapper(Runnable delegate, boolean continueSpan) {
-        this(delegate, null, continueSpan);
+        this(delegate, continueSpan, null);
     }
 
-    public TraceRunnableWrapper(Runnable delegate, String name) {
-        this(delegate, name, false);
+    public TraceRunnableWrapper(Runnable delegate, boolean continueSpan, String logCategory) {
+        this(delegate, continueSpan, logCategory, null);
     }
 
-    public TraceRunnableWrapper(Runnable delegate, String name, boolean continueSpan) {
-        this(delegate, name, null, continueSpan);
-    }
-
-    public TraceRunnableWrapper(Runnable delegate, String name, String logCategory, boolean continueSpan) {
+    public TraceRunnableWrapper(Runnable delegate, boolean continueSpan, String logCategory, String name) {
         if (StringUtils.hasText(logCategory)) {
             this.logCategory = logCategory;
         } else {

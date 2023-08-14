@@ -2,6 +2,7 @@ package com.gracerun.summermq.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.QueryTimeoutException;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.connection.ReturnType;
 import org.springframework.data.redis.core.RedisCallback;
@@ -41,7 +42,6 @@ public class RedisService {
         String uuid = UUID.randomUUID().toString();
         boolean lockStatus = tryLock(lockKey, uuid, seconds);
         if (!lockStatus) {
-            log.info("{} lock fail", lockKey);
             return false;
         }
 
@@ -68,6 +68,8 @@ public class RedisService {
                             Expiration.from(seconds, TimeUnit.SECONDS),
                             RedisStringCommands.SetOption.ifAbsent())
             );
+        } catch (QueryTimeoutException e) {
+            log.error(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -92,6 +94,8 @@ public class RedisService {
                 }
                 return Boolean.FALSE;
             });
+        } catch (QueryTimeoutException e) {
+            log.error(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

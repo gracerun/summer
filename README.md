@@ -20,7 +20,7 @@ Maven
 <dependency>
     <groupId>com.gracerun</groupId>
     <artifactId>summer-spring-boot-starter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.6-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -126,11 +126,21 @@ public void delaySend(MessageBody messageBody) {
 
 对Logback日志组件进行增强，支持web请求日志标准化输出、换行日志与异常日志跟踪，请求日志、定时日志、自定义线程日志分类。
 
+在项目的pom.xml的dependencies中加入以下内容:
+
+```xml
+<dependency>
+    <groupId>com.gracerun</groupId>
+    <artifactId>summer-spring-boot-starter</artifactId>
+    <version>1.0.6-SNAPSHOT</version>
+</dependency>
+```
+
 内置`spring.localhost.ip-address`变量表示本机ip末尾两段地址
 
 内置`%X{CURRENT_METHOD_NAME}`变量表示当前线程调用的方法名称
 
-`<filter>`由`LogCategoryFilter`实现，value支持`DEFAULT`、`SCHEDULED`、`ASYNC`分别对应请求日志、定时日志、自定义线程日志
+`<filter>`由`LogCategoryFilter`实现，value支持`DEFAULT`、`SCHEDULED`、`ASYNC`分别对应业务请求日志、定时日志、自定义线程日志
 
 日志配置示例：
 

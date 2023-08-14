@@ -104,18 +104,25 @@ public class PatternWrapLayout extends PatternLayout {
 
     }
 
-    private String formatWrap(StringBuilder strBuilder, StringBuilder logPre) {
-        int index;
-        if (strBuilder.length() != 0 && (index = strBuilder.indexOf(CoreConstants.LINE_SEPARATOR)) != -1 && index != strBuilder.length() - 1) {
-            StringBuilder newStrBuilder = new StringBuilder(strBuilder.length() + BIG_STRING_BUILDER_SIZE);
-            newStrBuilder.append(strBuilder.substring(0, index + 1));
-            int lastIndex;
-            while ((lastIndex = strBuilder.indexOf(CoreConstants.LINE_SEPARATOR, index + 1)) != -1) {
-                newStrBuilder.append(logPre);
-                newStrBuilder.append(strBuilder.substring(index + 1, lastIndex + 1));
-                index = lastIndex;
+    public static String formatWrap(StringBuilder strBuilder, StringBuilder logPre) {
+        String lineSeparator = System.lineSeparator();
+        int lineLength = lineSeparator.length();
+        int startIndex;
+        if (strBuilder.length() > 0
+                && (startIndex = strBuilder.indexOf(lineSeparator)) > 0
+                && startIndex < strBuilder.length() - lineLength) {
+            StringBuilder strBuilderWrap = new StringBuilder(strBuilder.length() + BIG_STRING_BUILDER_SIZE);
+            strBuilderWrap.append(strBuilder.substring(0, startIndex + lineLength));
+            startIndex += lineLength;
+            int endIndex;
+            while ((endIndex = strBuilder.indexOf(lineSeparator, startIndex)) > 0) {
+                strBuilderWrap.append(logPre).append(strBuilder.substring(startIndex, endIndex + lineLength));
+                startIndex = endIndex + lineLength;
             }
-            return newStrBuilder.toString();
+            if (startIndex < strBuilder.length() - 1) {
+                strBuilderWrap.append(logPre).append(strBuilder.substring(startIndex));
+            }
+            return strBuilderWrap.toString();
         }
         return strBuilder.toString();
     }
@@ -124,4 +131,5 @@ public class PatternWrapLayout extends PatternLayout {
     protected String getPresentationHeaderPrefix() {
         return HEADER_PREFIX;
     }
+
 }

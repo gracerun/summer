@@ -6,16 +6,19 @@
 
     <groupId>com.gracerun</groupId>
     <artifactId>summer</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.6-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>${project.artifactId} ${project.version}</name>
 
     <modules>
         <module>summer-parent</module>
         <module>summer-log</module>
+        <module>summer-util</module>
+        <module>summer-idempotent</module>
         <module>summer-mq</module>
         <module>summer-spring-boot-autoconfigure</module>
         <module>summer-spring-boot-starter</module>
-        <module>summer-util</module>
     </modules>
-    <packaging>pom</packaging>
+
 
 </project>

@@ -35,7 +35,6 @@ public class DataBaseProducer {
      */
     @Scheduled(cron = "0 0/10 * * * ?")
     public void loadDB() {
-        log.info("LoadDB begin");
         try {
             String lockKey = QueueConstant.QUEUE_LOAD_LOCK;
             redisService.withRenderLock(lockKey, 600, () -> {
@@ -58,7 +57,6 @@ public class DataBaseProducer {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        log.info("LoadDB end");
     }
 
 }

@@ -1,7 +1,7 @@
 package com.gracerun.summermq.service;
 
-import com.gracerun.summermq.constant.QueueConstant;
 import com.gracerun.summermq.bean.DelayRule;
+import com.gracerun.summermq.constant.QueueConstant;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
 import java.util.concurrent.LinkedBlockingQueue;

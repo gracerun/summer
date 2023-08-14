@@ -16,9 +16,6 @@
 
 package com.gracerun.log.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.qos.logback.core.joran.action.Action;
 import ch.qos.logback.core.joran.event.InPlayListener;
 import ch.qos.logback.core.joran.event.SaxEvent;
@@ -26,12 +23,14 @@ import ch.qos.logback.core.joran.spi.ActionException;
 import ch.qos.logback.core.joran.spi.InterpretationContext;
 import ch.qos.logback.core.joran.spi.Interpreter;
 import ch.qos.logback.core.util.OptionHelper;
-import org.xml.sax.Attributes;
-
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import org.xml.sax.Attributes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Logback {@link Action} to support {@code <springProfile>} tags. Allows section of a

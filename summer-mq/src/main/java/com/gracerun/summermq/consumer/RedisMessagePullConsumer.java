@@ -14,7 +14,6 @@ import com.gracerun.summermq.service.ExecutorUtil;
 import com.gracerun.summermq.service.MessagePersistentService;
 import com.gracerun.summermq.service.QueueNameService;
 import com.gracerun.summermq.util.ThreadUtils;
-import io.lettuce.core.RedisCommandTimeoutException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.dao.QueryTimeoutException;
+import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.util.StringUtils;
@@ -140,13 +141,13 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
             case CREATE_JUST:
                 queueName = QueueNameService.fmtTopicQueueName(consumerNamespace, topic);
 
+                log.info("the consumer [{}] start beginning", queueName);
+
                 if (StringUtils.hasText(summerMQMessageListener.delayExpression())
                         && !QueueConstant.DELAY_EXPRESSION.equals(summerMQMessageListener.delayExpression())) {
                     delayRule = new DelayRule(summerMQMessageListener.delayExpression());
                 }
                 delayRule.setRepeatRetry(summerMQMessageListener.repeatRetry());
-
-                log.info("the consumer [{}] start beginning", queueName);
 
                 final Duration timeout = redisProperties.getTimeout();
                 final long seconds = timeout.getSeconds();
@@ -171,8 +172,8 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
 
                 mqClientInstance.start();
                 executePullRequestImmediately(new PullRequest(consumerNamespace, queueName).setBatchSize(batchRpopSize));
-                log.info("the consumer [{}] start OK.", queueName);
                 this.serviceState = ServiceState.RUNNING;
+                log.info("the consumer [{}] start OK.", queueName);
                 break;
             case RUNNING:
             case START_FAILED:
@@ -221,24 +222,15 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
 
         @Override
         public void run() {
-            if (!pullRequest.isBatchPull()) {
-                try {
+            try {
+                if (!pullRequest.isBatchPull()) {
                     String s = stringRedisTemplate.opsForList().rightPop(queueName, blockingTimeout, TimeUnit.SECONDS);
                     if (StringUtils.hasText(s)) {
                         pullRequest.setBatchPull(true);
                         submit(s);
                     }
                     RedisMessagePullConsumer.this.executePullRequestImmediately(pullRequest);
-                } catch (QueryTimeoutException | RedisCommandTimeoutException e) {
-                    RedisMessagePullConsumer.this.executePullRequestImmediately(pullRequest);
-                    return;
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                    executePullRequestLater(pullRequest, PULL_TIME_DELAY_MILLS_WHEN_EXCEPTION);
-                    return;
-                }
-            } else {
-                try {
+                } else {
                     long startTime = System.currentTimeMillis();
                     final Object results = stringRedisTemplate.execute(batchRpopScript, Arrays.asList(queueName), pullRequest.getBatchSize() + "");
                     if (Objects.nonNull(results) && results instanceof List && ((List) results).size() > 0) {
@@ -250,13 +242,14 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
                         pullRequest.setBatchPull(false);
                     }
                     RedisMessagePullConsumer.this.executePullRequestImmediately(pullRequest);
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                    executePullRequestLater(pullRequest, PULL_TIME_DELAY_MILLS_WHEN_EXCEPTION);
-                    return;
                 }
+            } catch (QueryTimeoutException | RedisConnectionFailureException | RedisSystemException e) {
+                log.error(e.getMessage());
+                executePullRequestLater(pullRequest, PULL_TIME_DELAY_MILLS_WHEN_EXCEPTION);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                executePullRequestLater(pullRequest, PULL_TIME_DELAY_MILLS_WHEN_EXCEPTION);
             }
-
         }
 
         private void submit(String s) {
@@ -271,7 +264,6 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
             } else {
                 log.debug("queueName:{}, msgId:{}, pullTime:{}ms, pullDelay:{}ms", queueName, messageBody.getId(), (endTime - startTime), (endTime - messageBody.getNextExecuteTime().getTime()));
             }
-
             consumerThread.submit(new TraceRunnableWrapper(new MessageConsumer(RedisMessagePullConsumer.this, redisMessageProducer, pullRequest, messageBody)));
         }
 

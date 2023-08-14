@@ -1,6 +1,5 @@
 package com.gracerun.log.interceptor;
 
-import com.gracerun.log.constant.Level;
 import com.gracerun.log.constant.MDCConstant;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -8,10 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.MDC;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.lang.Nullable;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StopWatch;
 
-import java.util.List;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
@@ -59,27 +57,14 @@ public class LoggingInterceptor implements MethodInterceptor {
     }
 
     private void printThrowable(LoggingInfo loggingInfo, Throwable e) {
-        if (loggingInfo.getLoggingAttribute().getLevel() != Level.OFF && printCondition(loggingInfo, e)) {
+        if (Objects.nonNull(loggingInfo.oldLoggingInfo) && Objects.nonNull(loggingInfo.throwable)) {
+            loggingInfo.oldLoggingInfo.throwable = loggingInfo.throwable;
+        }
+        if (loggingInfo.loggingAttribute.printCondition(e) && loggingInfo.throwable != e) {
             if (Objects.nonNull(loggingInfo.oldLoggingInfo)) {
                 loggingInfo.oldLoggingInfo.throwable = e;
             }
-            if (loggingInfo.throwable != e) {
-                loggingInfo.getTargetLog().error(e.getMessage(), e);
-            }
-        }
-    }
-
-    private boolean printCondition(LoggingInfo loggingInfo, Throwable e) {
-        if (Objects.nonNull(loggingInfo.loggingAttribute) && !ObjectUtils.isEmpty(loggingInfo.loggingAttribute.getThrowableLogAttributes())) {
-            final List<ThrowableLogAttribute> throwableLogAttributes = loggingInfo.loggingAttribute.getThrowableLogAttributes();
-            for (ThrowableLogAttribute attr : throwableLogAttributes) {
-                if (attr.throwable.isInstance(e) && attr.maxRow != 0) {
-                    return true;
-                }
-            }
-            return false;
-        } else {
-            return true;
+            loggingInfo.getTargetLog().error(e.getMessage(), e);
         }
     }
 
@@ -103,18 +88,20 @@ public class LoggingInterceptor implements MethodInterceptor {
         }
     }
 
-    protected LoggingInfo createLoggingIfNecessary(MethodInvocation invocation) {
+    public LoggingInfo createLoggingIfNecessary(MethodInvocation invocation) {
         Class<?> targetClass = (invocation.getThis() != null ? AopUtils.getTargetClass(invocation.getThis()) : null);
+        return createLoggingIfNecessary(invocation.getMethod(), targetClass);
+    }
 
+    public LoggingInfo createLoggingIfNecessary(Method method, Class<?> targetClass) {
         LoggingAttributeSource las = getLoggingAttributeSource();
-        final LoggingAttribute loggingAttribute = (las != null ? las.getLoggingAttribute(invocation.getMethod(), targetClass) : null);
-
-        LoggingInfo loggingInfo = new LoggingInfo(loggingAttribute, invocation);
+        final LoggingAttribute loggingAttribute = (las != null ? las.getLoggingAttribute(method, targetClass) : null);
+        LoggingInfo loggingInfo = new LoggingInfo(loggingAttribute, method);
         loggingInfo.bindToThread();
         return loggingInfo;
     }
 
-    protected void cleanupLoggingInfo(@Nullable LoggingInfo loggingInfo) {
+    public void cleanupLoggingInfo(@Nullable LoggingInfo loggingInfo) {
         if (loggingInfo != null) {
             loggingInfo.restoreThreadLocalStatus();
         }
@@ -133,11 +120,11 @@ public class LoggingInterceptor implements MethodInterceptor {
         return loggingInfoHolder.get();
     }
 
-    public static final class LoggingInfo {
+    public class LoggingInfo {
 
         private final LoggingAttribute loggingAttribute;
 
-        private final MethodInvocation invocation;
+        private final Method method;
 
         private final StopWatch stopWatch;
 
@@ -146,9 +133,9 @@ public class LoggingInterceptor implements MethodInterceptor {
         @Nullable
         private LoggingInfo oldLoggingInfo;
 
-        public LoggingInfo(LoggingAttribute loggingAttribute, MethodInvocation invocation) {
+        public LoggingInfo(LoggingAttribute loggingAttribute, Method method) {
             this.loggingAttribute = loggingAttribute;
-            this.invocation = invocation;
+            this.method = method;
             this.stopWatch = new StopWatch();
         }
 
@@ -161,15 +148,15 @@ public class LoggingInterceptor implements MethodInterceptor {
         }
 
         public int getThrowableLogPrintMaxRow(Throwable e) {
-            return loggingAttribute.getThrowableLogPrintMaxRow(e);
+            return loggingAttribute.getPrintMaxRow(e);
         }
 
         public String getMethodName() {
-            return invocation.getMethod().getName();
+            return method.getName();
         }
 
         public Class<?> getReturnType() {
-            return invocation.getMethod().getReturnType();
+            return method.getReturnType();
         }
 
         public long getTotalTimeMillis() {
