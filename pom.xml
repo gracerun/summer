@@ -8,7 +8,7 @@
     <artifactId>summer</artifactId>
     <version>1.0.6-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>${project.artifactId} ${project.version}</name>
+    <name>${project.artifactId}</name>
 
     <modules>
         <module>summer-parent</module>

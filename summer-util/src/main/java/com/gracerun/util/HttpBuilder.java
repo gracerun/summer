@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+@Slf4j
 public class HttpBuilder {
 
     private static XmlMapper XML_MAPPER = new XmlMapper();
@@ -190,6 +192,19 @@ public class HttpBuilder {
         public Builder setHeader(final Map<String, String> header) {
             this.header = header;
             return this;
+        }
+
+        public String executeQuietly() {
+            try {
+                if (StringUtils.hasText(downloadPath)) {
+                    return execute(new HttpUtil.StreamResponseHandler(downloadPath));
+                } else {
+                    return execute(HttpUtil.DEFAULT_HANDLER);
+                }
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+                return null;
+            }
         }
 
         public String execute() throws IOException {
