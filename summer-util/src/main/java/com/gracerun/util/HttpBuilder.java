@@ -196,11 +196,7 @@ public class HttpBuilder {
 
         public String executeQuietly() {
             try {
-                if (StringUtils.hasText(downloadPath)) {
-                    return execute(new HttpUtil.StreamResponseHandler(downloadPath));
-                } else {
-                    return execute(HttpUtil.DEFAULT_HANDLER);
-                }
+                return execute();
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
                 return null;
