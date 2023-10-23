@@ -1,4 +1,3 @@
-
 package com.gracerun.summermq.consumer;
 
 import com.gracerun.summermq.factory.MQClientInstance;

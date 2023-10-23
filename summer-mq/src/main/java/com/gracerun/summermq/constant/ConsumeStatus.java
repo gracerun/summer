@@ -1,4 +1,3 @@
-
 package com.gracerun.summermq.constant;
 
 public enum ConsumeStatus {

@@ -7,8 +7,8 @@ import org.springframework.context.ApplicationEvent;
  * 消息推送事件
  *
  * @author Tom
- * @date 12/26/21
  * @version 1.0.0
+ * @date 12/26/21
  */
 public class MessageEvent extends ApplicationEvent {
 

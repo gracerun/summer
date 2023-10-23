@@ -1,4 +1,3 @@
-
 package com.gracerun.log.serializer;
 
 public interface LogSerializer {

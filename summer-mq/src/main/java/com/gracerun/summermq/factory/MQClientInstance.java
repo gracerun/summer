@@ -1,4 +1,3 @@
-
 package com.gracerun.summermq.factory;
 
 import com.gracerun.summermq.constant.ServiceState;

@@ -2,9 +2,10 @@ package com.gracerun.summermq.constant;
 
 /**
  * 消息状态
+ *
  * @author Tom
- * @date 12/26/21
  * @version 1.0.0
+ * @date 12/26/21
  */
 public interface MessageStatusConstant {
 

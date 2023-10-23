@@ -1,5 +1,3 @@
-
-
 package com.gracerun.log.interceptor;
 
 import org.aopalliance.aop.Advice;

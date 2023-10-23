@@ -1,5 +1,3 @@
-
-
 package com.gracerun.log.interceptor;
 
 import java.lang.reflect.Method;

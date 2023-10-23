@@ -90,7 +90,7 @@ public class MessageConsumer implements Runnable {
                     message.setNextExecuteTime(dateTime.toDate());
                 }
             }
-        } else if(ConsumeStatus.CONSUME_STOP == consumeStatus){
+        } else if (ConsumeStatus.CONSUME_STOP == consumeStatus) {
             message.setStatus(MessageStatusConstant.STOP);
         }
 

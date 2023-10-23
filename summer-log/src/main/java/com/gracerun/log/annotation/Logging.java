@@ -1,4 +1,3 @@
-
 package com.gracerun.log.annotation;
 
 import com.gracerun.log.constant.Level;

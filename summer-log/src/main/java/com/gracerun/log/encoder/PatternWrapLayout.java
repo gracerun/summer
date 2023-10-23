@@ -1,4 +1,3 @@
-
 package com.gracerun.log.encoder;
 
 import ch.qos.logback.classic.PatternLayout;

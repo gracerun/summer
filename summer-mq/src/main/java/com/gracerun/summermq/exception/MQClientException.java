@@ -1,4 +1,3 @@
-
 package com.gracerun.summermq.exception;
 
 public class MQClientException extends RuntimeException {

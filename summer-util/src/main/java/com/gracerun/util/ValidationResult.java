@@ -4,6 +4,7 @@ import java.util.Map;
 
 /**
  * 校验结果
+ *
  * @author Tom
  * @version 1.0.0
  * @date 2023/4/11

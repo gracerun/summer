@@ -1,5 +1,3 @@
-
-
 package com.gracerun.summermq.annotation;
 
 import org.springframework.context.annotation.ImportSelector;

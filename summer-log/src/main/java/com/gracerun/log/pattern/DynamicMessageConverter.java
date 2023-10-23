@@ -1,4 +1,3 @@
-
 package com.gracerun.log.pattern;
 
 import ch.qos.logback.classic.pattern.MessageConverter;

@@ -1,5 +1,3 @@
-
-
 package com.gracerun.log.aop;
 
 import com.gracerun.log.constant.LogCategoryConstant;

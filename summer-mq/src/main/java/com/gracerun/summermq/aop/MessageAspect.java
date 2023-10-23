@@ -1,5 +1,3 @@
-
-
 package com.gracerun.summermq.aop;
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
