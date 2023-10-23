@@ -50,8 +50,8 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git://github.com/gracerun/summer.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:gracerun/summer.git</developerConnection>
+        <connection>scm:git:ssh://github.com/gracerun/summer.git</connection>
+        <developerConnection>scm:git:ssh://github.com/gracerun/summer.git</developerConnection>
         <url>https://github.com/gracerun/summer</url>
     </scm>
 
