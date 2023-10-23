@@ -51,8 +51,9 @@
     </licenses>
 
     <scm>
-        <connection>https://github.com/gracerun/summer.git</connection>
         <url>https://github.com/gracerun/summer</url>
+        <connection>https://github.com/gracerun/summer.git</connection>
+        <developerConnection>https://github.com/gracerun/summer.git</developerConnection>
     </scm>
 
     <developers>
@@ -214,7 +215,6 @@
             <id>release</id>
             <build>
                 <plugins>
-                    <!-- Source -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
@@ -271,18 +271,21 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <version>3.0</version>
                         <configuration>
-                            <source>1.8</source>
-                            <target>1.8</target>
+                            <source>${java.version}</source>
+                            <target>${java.version}</target>
                             <fork>true</fork>
                             <verbose>true</verbose>
                             <encoding>UTF-8</encoding>
                         </configuration>
                     </plugin>
-                    <!--Release -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-release-plugin</artifactId>
-                        <version>2.5.1</version>
+                        <version>3.0.1</version>
+                        <configuration>
+                            <autoVersionSubmodules>true</autoVersionSubmodules>
+                            <tagNameFormat>@{project.version}</tagNameFormat>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
