@@ -20,7 +20,7 @@ Maven
 <dependency>
     <groupId>com.gracerun</groupId>
     <artifactId>summer-spring-boot-starter</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.6</version>
 </dependency>
 ```
 
@@ -132,7 +132,7 @@ public void delaySend(MessageBody messageBody) {
 <dependency>
     <groupId>com.gracerun</groupId>
     <artifactId>summer-spring-boot-starter</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.6</version>
 </dependency>
 ```
 
