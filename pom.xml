@@ -6,7 +6,7 @@
 
     <groupId>com.gracerun</groupId>
     <artifactId>summer</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
 
@@ -20,5 +20,9 @@
         <module>summer-spring-boot-starter</module>
     </modules>
 
-
+    <scm>
+        <connection>scm:git:git://github.com/gracerun/summer.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:gracerun/summer.git</developerConnection>
+        <url>https://github.com/gracerun/summer</url>
+    </scm>
 </project>
