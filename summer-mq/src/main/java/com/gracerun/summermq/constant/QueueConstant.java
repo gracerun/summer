@@ -12,7 +12,7 @@ public interface QueueConstant {
     /**
      * 默认消息组
      */
-    String DEFAULT_NAMASPACE = "summer.mq.queue";
+    String DEFAULT_NAMESPACE = "summer.mq.queue";
 
     /**
      * 分隔符
@@ -39,7 +39,7 @@ public interface QueueConstant {
     /**
      * 默认重试间隔
      */
-    String DELAY_EXPRESSION = "1s 3s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h";
+    String DELAY_EXPRESSION = "3s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h";
 
     /**
      * 可用处理器数量

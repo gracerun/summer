@@ -2,17 +2,25 @@ package com.gracerun.log.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.MethodClassKey;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-public abstract class AbstractFallbackLoggingAttributeSource implements LoggingAttributeSource {
+public abstract class AbstractFallbackLoggingAttributeSource implements LoggingAttributeSource, ApplicationContextAware {
 
     private final Map<Object, LoggingAttribute> attributeCache = new ConcurrentHashMap<>(1024);
 
@@ -22,6 +30,26 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
             return "null";
         }
     };
+
+    private ConfigurableApplicationContext applicationContext;
+
+    private String startAppPackageName;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = (ConfigurableApplicationContext) applicationContext;
+    }
+
+    @PostConstruct
+    public void init() {
+        Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(SpringBootApplication.class);
+        if (!CollectionUtils.isEmpty(beansWithAnnotation)) {
+            beansWithAnnotation.forEach((k, v) -> {
+                startAppPackageName = v.getClass().getPackage().getName();
+                log.info("startAppPackageName={}", startAppPackageName);
+            });
+        }
+    }
 
     @Override
     @Nullable
@@ -39,12 +67,18 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
                 return cached;
             }
         } else {
-            LoggingAttribute logAttr = computeLoggingAttribute(method, targetClass);
-            if (logAttr != null) {
-                String methodIdentification = ClassUtils.getQualifiedMethodName(method, targetClass);
-                logAttr.setMethodIdentification(methodIdentification);
-                this.attributeCache.put(cacheKey, logAttr);
-                return logAttr;
+            if (!StringUtils.hasText(startAppPackageName)
+                    || method.getDeclaringClass().getName().startsWith(startAppPackageName)) {
+                LoggingAttribute logAttr = computeLoggingAttribute(method, targetClass);
+                if (logAttr != null) {
+                    String methodIdentification = ClassUtils.getQualifiedMethodName(method, targetClass);
+                    logAttr.setMethodIdentification(methodIdentification);
+                    this.attributeCache.put(cacheKey, logAttr);
+                    return logAttr;
+                } else {
+                    this.attributeCache.put(cacheKey, NULL_LOGGING_ATTRIBUTE);
+                    return null;
+                }
             } else {
                 this.attributeCache.put(cacheKey, NULL_LOGGING_ATTRIBUTE);
                 return null;
@@ -91,6 +125,12 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
                 return logAttr;
             }
         }
+
+        // 获取全局配置
+        logAttr = findGlobalLoggingAttribute(specificMethod, method.getDeclaringClass());
+        if (logAttr != null) {
+            return logAttr;
+        }
         return null;
     }
 
@@ -99,6 +139,9 @@ public abstract class AbstractFallbackLoggingAttributeSource implements LoggingA
 
     @Nullable
     protected abstract LoggingAttribute findLoggingAttribute(Method method, Class<?> userClazz);
+
+    @Nullable
+    protected abstract LoggingAttribute findGlobalLoggingAttribute(Method method, Class<?> userClazz);
 
     protected boolean allowPublicMethodsOnly() {
         return false;

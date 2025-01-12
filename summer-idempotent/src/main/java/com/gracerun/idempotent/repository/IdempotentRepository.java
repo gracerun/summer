@@ -26,4 +26,11 @@ public interface IdempotentRepository {
     @Transactional(propagation = Propagation.MANDATORY, rollbackFor = Exception.class)
     boolean create(IdempotentEntity entity);
 
+    /**
+     * 删除历史数据
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    default void clearHistory() {
+
+    }
 }

@@ -1,15 +1,16 @@
 package com.gracerun.summermq.producer;
 
+import com.gracerun.component.service.RedisService;
 import com.gracerun.summermq.bean.MessagePage;
 import com.gracerun.summermq.bean.MessageQuery;
 import com.gracerun.summermq.constant.MessageStatusConstant;
 import com.gracerun.summermq.constant.QueueConstant;
 import com.gracerun.summermq.service.MessagePersistentService;
-import com.gracerun.summermq.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+
+import javax.annotation.Resource;
 
 /**
  * 数据库消息生产者
@@ -21,13 +22,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 @Slf4j
 public class DataBaseProducer {
 
-    @Autowired
+    @Resource
     private MessagePersistentService messagePersistentService;
 
-    @Autowired
+    @Resource
     private RedisMessageProducer redisMessageProducer;
 
-    @Autowired
+    @Resource
     private RedisService redisService;
 
     /**
@@ -40,7 +41,7 @@ public class DataBaseProducer {
             redisService.withRenderLock(lockKey, 600, () -> {
                 MessageQuery messageQuery = new MessageQuery();
                 messageQuery.setStatus(MessageStatusConstant.INIT);
-                messageQuery.setNextExecuteTime(new DateTime().plusSeconds(-60).toDate());
+                messageQuery.setNextExecuteTime(new DateTime().plusSeconds(-30 * 60).toDate());
                 messageQuery.setPageNum(1);
                 messageQuery.setPageSize(500);
                 MessagePage page = messagePersistentService.findByPage(messageQuery);

@@ -5,6 +5,7 @@ import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.service.MessagePersistentService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.util.Objects;
 
 public class SummerMQTemplate {
@@ -12,7 +13,7 @@ public class SummerMQTemplate {
     @Autowired(required = false)
     public MessagePersistentService messagePersistentService;
 
-    @Autowired
+    @Resource
     public RedisMessageProducer redisMessageProducer;
 
     @PushMessage

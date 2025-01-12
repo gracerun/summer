@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/info${NAME_SUFFIX}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HISTORY_HOME}/%d{yyyyMM, aux}/info%d{yyyyMMdd}${NAME_SUFFIX}.log.gz</fileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${BIZ_LOG}</pattern>
+        </encoder>
+        <filter>
+            <value>DEFAULT</value>
+        </filter>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="infoAppender"/>
+    </root>
+</included>

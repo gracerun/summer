@@ -4,6 +4,7 @@ import com.gracerun.idempotent.annotation.Idempotent;
 import com.gracerun.idempotent.exception.IdempotentException;
 import com.gracerun.idempotent.pojo.IdempotentEntity;
 import com.gracerun.idempotent.repository.IdempotentRepository;
+import com.gracerun.tool.util.SpelParameterParser;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,7 +14,6 @@ import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
@@ -40,10 +40,10 @@ public class IdempotentAspect {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
         Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
-        String[] paramNames = IdempotentAnnotationProvider.getParameterNames(specificMethod);
-        EvaluationContext context = buildContext(paramNames, pjp.getArgs());
-        String primaryNo = IdempotentAnnotationProvider.parse(idempotent.primaryNo(), context);
-        String primaryType = IdempotentAnnotationProvider.parse(idempotent.primaryType(), context);
+        String[] paramNames = SpelParameterParser.getParameterNames(specificMethod);
+        EvaluationContext context = SpelParameterParser.buildContext(paramNames, pjp.getArgs());
+        String primaryNo = SpelParameterParser.parse(idempotent.primaryNo(), context);
+        String primaryType = SpelParameterParser.parse(idempotent.primaryType(), context);
 
         IdempotentEntity entity = IdempotentEntity.builder()
                 .createTime(new Date())
@@ -62,26 +62,6 @@ public class IdempotentAspect {
             }
         }
         return pjp.proceed();
-    }
-
-    /**
-     * <p>
-     * 根据参数名和参数值构建EvaluationContext
-     * </p>
-     *
-     * @param paramNames  参数名称集合
-     * @param paramValues 参数值集合
-     * @return org.springframework.expression.EvaluationContext
-     */
-    private EvaluationContext buildContext(String[] paramNames, Object[] paramValues) {
-        EvaluationContext context = new StandardEvaluationContext();
-        if (paramNames == null || paramValues == null) {
-            return context;
-        }
-        for (int i = 0; i < paramValues.length; i++) {
-            context.setVariable(paramNames[i], paramValues[i]);
-        }
-        return context;
     }
 
 }

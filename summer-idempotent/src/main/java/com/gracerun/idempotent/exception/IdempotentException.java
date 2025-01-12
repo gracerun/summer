@@ -1,5 +1,6 @@
 package com.gracerun.idempotent.exception;
 
+import com.gracerun.tool.bean.ResponseBean;
 import lombok.Data;
 
 /**
@@ -12,12 +13,16 @@ import lombok.Data;
 @Data
 public class IdempotentException extends RuntimeException {
 
+    private String code;
+
     public IdempotentException() {
         super();
+        this.code = ResponseBean.DB_ERR;
     }
 
     public IdempotentException(String message) {
         super(message);
+        this.code = ResponseBean.DB_ERR;
     }
 
 

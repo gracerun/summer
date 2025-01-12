@@ -18,6 +18,7 @@ import java.util.Objects;
  * @author Tom
  * @version 1.0.0
  * @date 4/13/22
+ * @see SummerLoggingAutoConfiguration#loggingAdvisor(LoggingAttributeSource, LoggingInterceptor)
  */
 public class LoggingInterceptor implements MethodInterceptor {
 

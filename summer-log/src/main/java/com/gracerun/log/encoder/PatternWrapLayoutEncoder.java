@@ -3,6 +3,10 @@ package com.gracerun.log.encoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.pattern.PatternLayoutEncoderBase;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+
 /**
  * 扩展PatternLayoutEncoderWrap
  * 解决日志换行导致TraceId丢失的问题
@@ -21,6 +25,10 @@ public class PatternWrapLayoutEncoder extends PatternLayoutEncoderBase<ILoggingE
         patternLayout.setOutputPatternAsHeader(this.outputPatternAsHeader);
         patternLayout.start();
         this.layout = patternLayout;
+        Charset charset = this.getCharset();
+        if (Objects.isNull(charset)) {
+            this.setCharset(StandardCharsets.UTF_8);
+        }
         super.start();
     }
 

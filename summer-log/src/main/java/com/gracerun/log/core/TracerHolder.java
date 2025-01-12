@@ -1,34 +1,35 @@
 package com.gracerun.log.core;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.CurrentTraceContext;
 import org.springframework.cloud.sleuth.SpanNamer;
 import org.springframework.cloud.sleuth.TraceContext;
 import org.springframework.cloud.sleuth.Tracer;
+import org.springframework.cloud.sleuth.brave.bridge.BraveTracer;
 
+import javax.annotation.Resource;
 import java.util.Objects;
 
 public class TracerHolder {
 
-    private static Tracer tracer;
+    private static BraveTracer braveTracer;
 
     private static SpanNamer spanNamer;
 
     private static String instanceIpAddress;
 
-    @Autowired
-    public void setTracer(Tracer tracer) {
-        TracerHolder.tracer = tracer;
+    @Resource
+    public void setBraveTracer(BraveTracer braveTracer) {
+        TracerHolder.braveTracer = braveTracer;
     }
 
-    @Autowired
+    @Resource
     public void setSpanNamer(SpanNamer spanNamer) {
         TracerHolder.spanNamer = spanNamer;
     }
 
-    public static Tracer getTracer() {
-        return tracer;
+    public static Tracer getBraveTracer() {
+        return braveTracer;
     }
 
     public static SpanNamer getSpanNamer() {
@@ -42,8 +43,8 @@ public class TracerHolder {
      * @return
      */
     public static String getSanToString() {
-        if (Objects.nonNull(tracer)) {
-            CurrentTraceContext currentTraceContext = tracer.currentTraceContext();
+        if (Objects.nonNull(braveTracer)) {
+            CurrentTraceContext currentTraceContext = braveTracer.currentTraceContext();
             TraceContext traceContext = currentTraceContext.context();
             if (Objects.nonNull(traceContext)) {
                 return instanceIpAddress + "," + traceContext.spanId() + "," + traceContext.traceId();

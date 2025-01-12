@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gracerun.business.mapper.BusinessMsgMapper">
+
+    <!-- 通用查询结果列 -->
+    <!--
+    <sql id="Base_Column_List">
+        a.id, a.optimistic, a.status, a.create_time, a.last_update_time, a.business_no, a.namespace, a.business_type, a.times, a.content, a.remark, a.next_execute_time, a.time, a.ip, a.create_span_id, a.last_update_span_id, a.timeout
+    </sql>
+    -->
+</mapper>

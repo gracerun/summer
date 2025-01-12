@@ -5,13 +5,13 @@ import com.gracerun.summermq.bean.MessagePage;
 import com.gracerun.summermq.bean.MessageQuery;
 import com.gracerun.summermq.service.MessagePersistentService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -30,7 +30,7 @@ public class DefaultMessagePersistentService implements MessagePersistentService
     private String insertSql = "insert into business_msg ( id, optimistic, status, create_time, last_update_time, business_no, namespace, business_type, times, content, remark, next_execute_time, create_span_id, timeout ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
     private String updateSql = "update business_msg SET status = ?, create_time = ?, last_update_time = ?, business_no = ?, namespace = ?, business_type = ?, times = ?, content = ?, remark = ?, next_execute_time = ?, time = ?, ip = ?, create_span_id = ?, last_update_span_id = ?, timeout = ?, optimistic = optimistic + 1 where id = ? and optimistic = ?";
 
-    @Autowired
+    @Resource
     private JdbcTemplate jdbcTemplate;
 
     @Override

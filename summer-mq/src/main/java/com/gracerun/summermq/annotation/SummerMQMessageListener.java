@@ -11,7 +11,7 @@ public @interface SummerMQMessageListener {
 
     String topic();
 
-    String consumerNamespace() default "${spring.profiles.active:" + QueueConstant.DEFAULT_NAMASPACE + "}";
+    String consumerNamespace() default "${spring.profiles.active:" + QueueConstant.DEFAULT_NAMESPACE + "}";
 
     String delayExpression() default QueueConstant.DELAY_EXPRESSION;
 
@@ -27,16 +27,12 @@ public @interface SummerMQMessageListener {
     /**
      * Set ExecutorService params -- maximumPoolSize
      */
-    int maximumPoolSize() default 4;
+    int maximumPoolSize() default 10;
 
     /**
      * Set ExecutorService params -- keepAliveTime
      */
     int keepAliveTime() default 60; //60s
 
-    /**
-     * Set ExecutorService params -- blockingQueueSize
-     */
-    int blockingQueueSize() default 2000;
 
 }

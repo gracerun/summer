@@ -44,11 +44,11 @@ public class TraceSupplierWrapper<T> implements Supplier<T> {
         } else {
             this.logCategory = LogCategoryConstant.ASYNC;
         }
-        if (Objects.nonNull(TracerHolder.getTracer())) {
+        if (Objects.nonNull(TracerHolder.getBraveTracer())) {
             if (continueSpan) {
-                this.supplier = new TraceSupplier(TracerHolder.getTracer(), TracerHolder.getSpanNamer(), supplier, name);
+                this.supplier = new TraceSupplier(TracerHolder.getBraveTracer(), TracerHolder.getSpanNamer(), supplier, name);
             } else {
-                this.supplier = new TraceSupplier(TracerHolder.getTracer(), null, TracerHolder.getSpanNamer(), supplier, name);
+                this.supplier = new TraceSupplier(TracerHolder.getBraveTracer(), null, TracerHolder.getSpanNamer(), supplier, name);
             }
         } else {
             this.supplier = supplier;

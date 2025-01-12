@@ -2,7 +2,7 @@ package com.gracerun.log.core;
 
 import brave.baggage.BaggageFields;
 import brave.propagation.TraceContext;
-import com.gracerun.log.util.IpUtil;
+import com.gracerun.tool.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.boot.logging.LoggingSystem;
@@ -27,15 +27,19 @@ public class AppContextLogInitializer implements ApplicationContextInitializer {
     private static final String LOCALHOST_IP = IpUtil.getIp();
 
     static {
-        if (StringUtils.hasText(LOCALHOST_IP)) {
-            int index = LOCALHOST_IP.lastIndexOf(".");
+        String localhostIP = System.getProperty(SPRING_LOCALHOST_IP_ADDRESS);
+        if (!StringUtils.hasText(localhostIP)) {
+            localhostIP = LOCALHOST_IP;
+        }
+        if (StringUtils.hasText(localhostIP)) {
+            int index = localhostIP.lastIndexOf(".");
             if (index > -1) {
-                index = LOCALHOST_IP.lastIndexOf(".", index - 1);
+                index = localhostIP.lastIndexOf(".", index - 1);
             }
             if (index > -1) {
-                System.setProperty(SPRING_LOCALHOST_IP_ADDRESS, LOCALHOST_IP.substring(index + 1));
+                System.setProperty(SPRING_LOCALHOST_IP_ADDRESS, localhostIP.substring(index + 1));
             } else {
-                System.setProperty(SPRING_LOCALHOST_IP_ADDRESS, LOCALHOST_IP);
+                System.setProperty(SPRING_LOCALHOST_IP_ADDRESS, localhostIP);
             }
         }
 
@@ -52,6 +56,7 @@ public class AppContextLogInitializer implements ApplicationContextInitializer {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
+        log.info("{}", applicationContext.getClass().getName());
         if (!(applicationContext instanceof AnnotationConfigApplicationContext)) {
             log.info(LOCALHOST_IP);
             try {

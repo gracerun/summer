@@ -1,5 +1,6 @@
 package com.gracerun.log.interceptor;
 
+import com.gracerun.log.spring.autoconfigure.SummerLoggingAutoConfiguration;
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.AbstractPointcutAdvisor;
@@ -9,6 +10,7 @@ import org.springframework.lang.Nullable;
  * @author Tom
  * @version 1.0.0
  * @date 2023/8/4
+ * @see SummerLoggingAutoConfiguration#loggingAdvisor(LoggingAttributeSource, LoggingInterceptor)
  */
 public class LoggingAttributeSourceAdvisor extends AbstractPointcutAdvisor {
 

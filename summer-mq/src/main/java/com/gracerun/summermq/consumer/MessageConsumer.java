@@ -1,12 +1,12 @@
 package com.gracerun.summermq.consumer;
 
 import com.gracerun.log.core.TracerHolder;
-import com.gracerun.log.util.IpUtil;
 import com.gracerun.summermq.bean.DelayRule;
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.constant.ConsumeStatus;
 import com.gracerun.summermq.constant.MessageStatusConstant;
 import com.gracerun.summermq.producer.RedisMessageProducer;
+import com.gracerun.tool.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 

@@ -28,6 +28,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
@@ -65,16 +66,16 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
     private ThreadPoolExecutor consumerThread;
 
     @Getter
-    @Autowired
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
+    @Resource
     private RedisProperties redisProperties;
 
-    @Autowired
+    @Resource
     private RedisMessageProducer redisMessageProducer;
 
-    @Autowired
+    @Resource
     @Qualifier("batchRpopScript")
     private DefaultRedisScript batchRpopScript;
 
@@ -120,7 +121,7 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
 
     @Getter
     @Setter
-    private int blockingQueueSize = 2000;
+    private int blockingQueueSize = maximumPoolSize * 2;
 
     @Getter
     @Setter
@@ -149,6 +150,7 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
                 }
                 delayRule.setRepeatRetry(summerMQMessageListener.repeatRetry());
 
+                blockingQueueSize = maximumPoolSize * 2;
                 final Duration timeout = redisProperties.getTimeout();
                 final long seconds = timeout.getSeconds();
                 if (seconds <= 2) {
@@ -193,7 +195,7 @@ public class RedisMessagePullConsumer<M extends MessageListener> implements Disp
 
     public void pullMessage(PullRequest pullRequest) {
         int cachedMessageCount = consumerThread.getQueue().size();
-        if (cachedMessageCount > blockingQueueSize) {
+        if (cachedMessageCount >= blockingQueueSize) {
             this.executePullRequestLater(pullRequest, PULL_TIME_DELAY_MILLS_WHEN_FLOW_CONTROL);
             if ((queueFlowControlTimes++ % 1000) == 0) {
                 log.warn("the cached message count exceeds the threshold {}, so do flow control, count={}, pullRequest={}, flowControlTimes={}",

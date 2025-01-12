@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <appender name="rocketmqClientAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/rocketmq_client${NAME_SUFFIX}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HISTORY_HOME}/%d{yyyyMM, aux}/rocketmq_client%d{yyyyMMdd}${NAME_SUFFIX}.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${BIZ_LOG}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="RocketmqClient" additivity="false" level="WARN">
+        <appender-ref ref="rocketmqClientAppender"/>
+    </logger>
+    <logger name="RocketmqRemoting" additivity="false" level="WARN">
+        <appender-ref ref="rocketmqClientAppender"/>
+    </logger>
+    <logger name="RocketmqCommon" additivity="false" level="WARN">
+        <appender-ref ref="rocketmqClientAppender"/>
+    </logger>
+</included>

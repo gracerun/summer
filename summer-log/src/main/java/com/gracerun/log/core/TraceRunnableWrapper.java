@@ -43,11 +43,11 @@ public class TraceRunnableWrapper implements Runnable {
         } else {
             this.logCategory = LogCategoryConstant.ASYNC;
         }
-        if (Objects.nonNull(TracerHolder.getTracer())) {
+        if (Objects.nonNull(TracerHolder.getBraveTracer())) {
             if (continueSpan) {
-                this.delegate = new TraceRunnable(TracerHolder.getTracer(), TracerHolder.getSpanNamer(), delegate, name);
+                this.delegate = new TraceRunnable(TracerHolder.getBraveTracer(), TracerHolder.getSpanNamer(), delegate, name);
             } else {
-                this.delegate = new TraceRunnable(TracerHolder.getTracer(), null, TracerHolder.getSpanNamer(), delegate, name);
+                this.delegate = new TraceRunnable(TracerHolder.getBraveTracer(), null, TracerHolder.getSpanNamer(), delegate, name);
             }
         } else {
             this.delegate = delegate;

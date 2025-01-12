@@ -13,7 +13,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.QueryTimeoutException;
 import org.springframework.data.redis.RedisConnectionFailureException;
@@ -24,6 +23,7 @@ import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -46,17 +46,17 @@ public class MessageDelayPullConsumer implements InitializingBean, DisposableBea
 
     private final Map<Integer, ThreadPoolExecutor> delayQueueExecutorMap = new HashMap<>();
 
-    @Autowired
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
+    @Resource
     private RedisMessageProducer redisMessageProducer;
 
-    @Autowired
+    @Resource
     @Qualifier("resetMessageSizeScript")
     private DefaultRedisScript resetMessageSizeScript;
 
-    @Autowired
+    @Resource
     @Qualifier("batchRpopByIndexScript")
     private DefaultRedisScript batchRpopByIndexScript;
 

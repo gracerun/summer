@@ -2,9 +2,10 @@ package com.gracerun.summermq.event;
 
 import com.gracerun.summermq.bean.MessageBody;
 import com.gracerun.summermq.producer.RedisMessageProducer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
+
+import javax.annotation.Resource;
 
 /**
  * 消息监听
@@ -15,7 +16,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
  */
 public class MessageEventListener {
 
-    @Autowired
+    @Resource
     private RedisMessageProducer redisMessageProducer;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)

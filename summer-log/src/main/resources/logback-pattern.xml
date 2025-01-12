@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <springProperty name="SPRING_APPLICATION_NAME" source="spring.application.name" defaultValue="localhost"/>
+    <springProperty name="MAX_HISTORY" source="spring.logback.max.history" defaultValue="3650"/>
+    <springProperty name="LOG_HOME_DIR" source="spring.logback.log.dir"
+                    defaultValue="/opt/${SPRING_APPLICATION_NAME}/logs"/>
+    <springProperty name="LOCALHOST_IP" source="spring.localhost.ip-address" defaultValue="127.0.0.1"/>
+    <property name="NAME_SUFFIX" value="_${LOCALHOST_IP}"/>
+
+    <property name="LOG_HOME" value="${LOG_HOME_DIR}"/>
+    <property name="LOG_HISTORY_HOME" value="${LOG_HOME}/history"/>
+    <property name="BIZ_LOG"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${LOCALHOST_IP},%X{spanId},%X{traceId}] %-5level %-32.32logger{32} %X{CURRENT_METHOD_NAME} %msg%n"/>
+</included>

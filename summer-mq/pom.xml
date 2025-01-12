@@ -5,9 +5,9 @@
 
     <parent>
         <groupId>com.gracerun</groupId>
-        <artifactId>summer-parent</artifactId>
-        <version>1.0.6</version>
-        <relativePath>../summer-parent/pom.xml</relativePath>
+        <artifactId>parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>summer-mq</artifactId>
@@ -24,29 +24,13 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -54,7 +38,17 @@
         </dependency>
         <dependency>
             <groupId>com.gracerun</groupId>
+            <artifactId>common-repository</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gracerun</groupId>
             <artifactId>summer-log</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gracerun</groupId>
+            <artifactId>common-component</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <appender name="nacosClientAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/nacos_client${NAME_SUFFIX}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HISTORY_HOME}/%d{yyyyMM, aux}/nacos_client%d{yyyyMMdd}${NAME_SUFFIX}.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${BIZ_LOG}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.alibaba.nacos" additivity="false" level="INFO">
+        <appender-ref ref="nacosClientAppender"/>
+    </logger>
+</included>

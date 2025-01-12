@@ -1,6 +1,7 @@
 package com.gracerun.log.filter;
 
-import com.gracerun.log.util.NetworkUtil;
+import com.gracerun.log.spring.autoconfigure.SummerLogSchedulingAutoConfiguration;
+import com.gracerun.tool.util.NetworkUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -16,6 +17,8 @@ import java.io.IOException;
  * @author Tom
  * @version 1.0.0
  * @date 4/27/22
+ * Order = Ordered.HIGHEST_PRECEDENCE
+ * @see SummerLogSchedulingAutoConfiguration#httpTraceFilter()
  */
 @Slf4j
 public class HttpTraceFilter extends OncePerRequestFilter {
